@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Model.Auth.Login.Model;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Roles.Dto;
 using Sun.DatingApp.Services.Services.BaseServices;
@@ -92,9 +93,14 @@ namespace Sun.DatingApp.Services.Services.RoleServices
                         };
                         entitys.Add(entity);
                     }
+
+                    await _dataContext.RolePermissions.AddRangeAsync(entitys);
                 }
 
                 await _dataContext.SaveChangesAsync();
+
+                var account = _catchService.Get<AccessDataModel>(accountId.ToString());
+                account.Permissions = dto.PermissionNames;
             }
             catch (Exception ex)
             {
@@ -160,10 +166,10 @@ namespace Sun.DatingApp.Services.Services.RoleServices
         /// <summary>
         /// 删除角色
         /// </summary>
-        /// <param name="RoleId"></param>
+        /// <param name="roleId"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        public async Task<WebApiResult> DeleteRole(Guid RoleId, Guid accountId)
+        public async Task<WebApiResult> DeleteRole(Guid roleId, Guid accountId)
         {
             var result = new WebApiResult();
             try

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
 
 namespace Sun.DatingApp.Api.Controllers
 {
@@ -16,10 +17,10 @@ namespace Sun.DatingApp.Api.Controllers
             {
                 if (User != null && User.Claims.Any())
                 {
-                    var idClaim = User.Claims.FirstOrDefault(c => c.Type == "sub");
+                    var idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
                     if (idClaim != null)
                     {
-                        var id = Guid.Parse(idClaim.ToString());
+                        var id = Guid.Parse(idClaim.Value.ToString());
                         if (id != Guid.Empty)
                         {
                             return id;
