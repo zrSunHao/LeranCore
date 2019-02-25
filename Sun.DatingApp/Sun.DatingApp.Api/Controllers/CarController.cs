@@ -2,6 +2,7 @@
 using Sun.DatingApp.Model.Cars;
 using System;
 using System.Collections.Generic;
+using Sun.DatingApp.Api.Extensions.Authorization;
 
 namespace Sun.DatingApp.Api.Controllers
 {
@@ -12,6 +13,7 @@ namespace Sun.DatingApp.Api.Controllers
         }
 
         [HttpGet("cars")]
+        [PermissionFilter(Permissions.UserRead)]
         public IActionResult Cars()
         {
             var ipp = @"";

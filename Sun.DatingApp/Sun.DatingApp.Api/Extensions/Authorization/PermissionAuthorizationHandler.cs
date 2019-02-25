@@ -14,7 +14,7 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
     {
         private readonly ICacheService _catchService;
 
-        public PermissionAuthorizationHandler(MemoryCacheService catchService)
+        public PermissionAuthorizationHandler(ICacheService catchService)
         {
             _catchService = catchService;
         }
@@ -32,8 +32,8 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
                     var userIdClaim = context.User.FindFirst(_ => _.Type == ClaimTypes.NameIdentifier);
                     if (userIdClaim != null)
                     {
-                        var account = _catchService.Get<AccessDataModel>(userIdClaim.ToString());
-                        if (account.Permissions.Any())
+                        var account = _catchService.Get<AccessDataModel>(userIdClaim.Value.ToString());
+                        if (account != null && account.Permissions.Any())
                         {
                             var permissionName = requirement.Name;
                             var exist = account.Permissions.Any(x =>

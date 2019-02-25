@@ -108,7 +108,7 @@ namespace Sun.DatingApp.Services.Services.AuthServices
                 var role = _dataContext.Roles.FirstOrDefault(x => x.Id == account.RoleId);
                 if (role != null)
                 {
-                    data.Role = role.Name;
+                    data.Role = role.Code;
                 }
                 data.Permissions = permissions;
                 _catchService.Add(data.Id.ToString(), data);

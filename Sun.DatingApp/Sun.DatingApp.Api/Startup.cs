@@ -17,7 +17,10 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
+using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Services.Services.OrganizationServices;
 using Sun.DatingApp.Services.Services.PromptServices;
 using Sun.DatingApp.Services.Services.RoleServices;
@@ -44,7 +47,13 @@ namespace Sun.DatingApp.Api
                 options.UseSqlServer(connectionString);
             });
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
+                .AddCookie();
 
             //配置AutoMapper
             services.AddAutoMapper();
@@ -147,6 +156,8 @@ namespace Sun.DatingApp.Api
                return cache;
            });
             services.AddSingleton<ICacheService, MemoryCacheService>();
+
+            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
             //系统
             services.AddScoped<IAuthService, AuthService>();

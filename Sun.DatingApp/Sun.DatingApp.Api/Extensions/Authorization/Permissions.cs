@@ -18,5 +18,8 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
         public const string UserRead = "User.Read";
         public const string UserUpdate = "User.Update";
         public const string UserDelete = "User.Delete";
+
+        public const string Car = "Car";
+        public const string CarRead = "Car.Read";
     }
 }
