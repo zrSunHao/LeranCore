@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Roles\Model\" />
     <Folder Include="Users\" />
   </ItemGroup>
 
