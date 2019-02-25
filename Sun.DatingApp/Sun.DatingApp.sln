@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sun.DatingApp.Api", "Sun.DatingApp.Api\Sun.DatingApp.Api.csproj", "{7EB1BC5C-8479-4989-8E89-5B42CD8DBA9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{8BA21CE5-3DEC-4CA1-B646-F3A09DE3E12C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{37CA7876-FAB9-4EA9-BDE0-AC0ADBD2DCB0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sun.DatingApp.Data", "Sun.DatingApp.Data\Sun.DatingApp.Data.csproj", "{FF6FE8AD-2619-4CCC-AA5A-9D81320B2944}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sun.DatingApp.Model", "Sun.DatingApp.Model\Sun.DatingApp.Model.csproj", "{7716CA8C-76AB-49E3-94B7-0F9B0785AFD9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sun.DatingApp.Services", "Sun.DatingApp.Services\Sun.DatingApp.Services.csproj", "{A1D595E6-2E5D-413D-B97E-D331B716C5F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sun.DatingApp.Utility", "Sun.DatingApp.Utility\Sun.DatingApp.Utility.csproj", "{89B4A8FB-9960-4E96-955A-100496070284}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EB1BC5C-8479-4989-8E89-5B42CD8DBA9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EB1BC5C-8479-4989-8E89-5B42CD8DBA9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EB1BC5C-8479-4989-8E89-5B42CD8DBA9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EB1BC5C-8479-4989-8E89-5B42CD8DBA9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF6FE8AD-2619-4CCC-AA5A-9D81320B2944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF6FE8AD-2619-4CCC-AA5A-9D81320B2944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF6FE8AD-2619-4CCC-AA5A-9D81320B2944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF6FE8AD-2619-4CCC-AA5A-9D81320B2944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7716CA8C-76AB-49E3-94B7-0F9B0785AFD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7716CA8C-76AB-49E3-94B7-0F9B0785AFD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7716CA8C-76AB-49E3-94B7-0F9B0785AFD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7716CA8C-76AB-49E3-94B7-0F9B0785AFD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D595E6-2E5D-413D-B97E-D331B716C5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D595E6-2E5D-413D-B97E-D331B716C5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D595E6-2E5D-413D-B97E-D331B716C5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D595E6-2E5D-413D-B97E-D331B716C5F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89B4A8FB-9960-4E96-955A-100496070284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B4A8FB-9960-4E96-955A-100496070284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B4A8FB-9960-4E96-955A-100496070284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B4A8FB-9960-4E96-955A-100496070284}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37CA7876-FAB9-4EA9-BDE0-AC0ADBD2DCB0} = {8BA21CE5-3DEC-4CA1-B646-F3A09DE3E12C}
+		{FF6FE8AD-2619-4CCC-AA5A-9D81320B2944} = {37CA7876-FAB9-4EA9-BDE0-AC0ADBD2DCB0}
+		{7716CA8C-76AB-49E3-94B7-0F9B0785AFD9} = {37CA7876-FAB9-4EA9-BDE0-AC0ADBD2DCB0}
+		{A1D595E6-2E5D-413D-B97E-D331B716C5F3} = {37CA7876-FAB9-4EA9-BDE0-AC0ADBD2DCB0}
+		{89B4A8FB-9960-4E96-955A-100496070284} = {37CA7876-FAB9-4EA9-BDE0-AC0ADBD2DCB0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {006F9389-DB3D-41D0-8B03-0EBD46B042D1}
+	EndGlobalSection
+EndGlobal
