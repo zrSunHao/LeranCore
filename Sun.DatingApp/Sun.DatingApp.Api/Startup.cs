@@ -13,12 +13,15 @@ using Sun.DatingApp.Services.Services.UserServices;
 using Sun.DatingApp.Services.SignalRHubs;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Text;
+using Microsoft.Extensions.Caching.Memory;
 using Sun.DatingApp.Services.Services.OrganizationServices;
 using Sun.DatingApp.Services.Services.PromptServices;
 using Sun.DatingApp.Services.Services.RoleServices;
+using Sun.DatingApp.Utility.CacheUtility;
 
 namespace Sun.DatingApp.Api
 {
@@ -91,7 +94,7 @@ namespace Sun.DatingApp.Api
                     {
                         Name = "Use under LICX",
                         Url = "https://example.com/license"
-                    }
+                    },
                 });
 
                 option.SwaggerDoc("v2", new Info
@@ -115,13 +118,36 @@ namespace Sun.DatingApp.Api
 
                 option.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "datingApi.Swagger.xml"));
 
+                //添加header验证信息
+                //c.OperationFilter<SwaggerHeader>();
+                var security = new Dictionary<string, IEnumerable<string>> { { "Bearer", new string[] { } }, };
+                option.AddSecurityRequirement(security);//添加一个必须的全局安全信息，和AddSecurityDefinition方法指定的方案名称要一致，这里是Bearer。
+                option.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",//jwt默认的参数名称
+                    In = "header",//jwt默认存放Authorization信息的位置(请求头中)
+                    Type = "apiKey"
+                });
+
             });
 
             services.AddSignalR();
 
+            //配置缓存
+            services.AddMemoryCache();
+
             #endregion
 
             #region Service注册
+            //缓存
+            services.AddSingleton<IMemoryCache>(factory =>
+           {
+               var cache = new MemoryCache(new MemoryCacheOptions());
+               return cache;
+           });
+            services.AddSingleton<ICacheService, MemoryCacheService>();
+
             //系统
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
@@ -160,12 +186,11 @@ namespace Sun.DatingApp.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.SwaggerEndpoint("/swagger/v2/swagger.json", "My API V2");
             });
-
+            
             app.UseSignalR(routes =>
             {
                 routes.MapHub<TaskHub>("/taskhub");//taskhub供前端调用
             });
-
             app.UseHttpsRedirection();
             app.UseMvc();
         }

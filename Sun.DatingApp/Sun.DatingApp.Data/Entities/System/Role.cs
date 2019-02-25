@@ -24,8 +24,7 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("账号")]
         public virtual ICollection<Account> Accounts { get; set; }
 
-        [Description("组织")]
-        public virtual ICollection<RoleOrgItem> RoleOrgItems { get; set; }
+        public virtual ICollection<RolePermission> RolePermissions { get; set; }
 
         #endregion
 

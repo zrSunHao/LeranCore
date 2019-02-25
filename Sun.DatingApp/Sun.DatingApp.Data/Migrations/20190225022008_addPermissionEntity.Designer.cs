@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sun.DatingApp.Data.Database;
 
 namespace Sun.DatingApp.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190225022008_addPermissionEntity")]
+    partial class addPermissionEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,6 +155,38 @@ namespace Sun.DatingApp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Accounts","System");
+                });
+
+            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.AccountPermission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AccountId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<Guid?>("CreatedById");
+
+                    b.Property<bool>("Deleted");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<Guid?>("DeletedById");
+
+                    b.Property<string>("PermissionName")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.Property<Guid?>("UpdatedById");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("AccountPermissions","System");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Organization", b =>
@@ -309,27 +343,27 @@ namespace Sun.DatingApp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("03658210-23cc-44e6-9b77-1d56e6cb6a9b"),
+                            Id = new Guid("37a9acb7-340a-4a5e-ba98-14633ea504a7"),
                             Code = "SuperAdmin",
-                            CreatedAt = new DateTime(2019, 2, 25, 10, 36, 40, 895, DateTimeKind.Local).AddTicks(240),
+                            CreatedAt = new DateTime(2019, 2, 25, 10, 20, 7, 605, DateTimeKind.Local).AddTicks(1472),
                             Deleted = false,
                             Intro = "超级管理员拥有所有的权限",
                             Name = "超级管理员"
                         },
                         new
                         {
-                            Id = new Guid("0125afe0-195b-4aae-8003-d12f69495840"),
+                            Id = new Guid("25a0ded5-e752-4bbe-acde-c3978272d74d"),
                             Code = "Admin",
-                            CreatedAt = new DateTime(2019, 2, 25, 10, 36, 40, 895, DateTimeKind.Local).AddTicks(9893),
+                            CreatedAt = new DateTime(2019, 2, 25, 10, 20, 7, 606, DateTimeKind.Local).AddTicks(7894),
                             Deleted = false,
                             Intro = "管理员用于管理用户权限",
                             Name = "管理员"
                         },
                         new
                         {
-                            Id = new Guid("7bc3bd23-379b-4bdf-9367-b0e05afaf50f"),
+                            Id = new Guid("67f066c6-e884-46f8-8a1d-4e009171d878"),
                             Code = "User",
-                            CreatedAt = new DateTime(2019, 2, 25, 10, 36, 40, 895, DateTimeKind.Local).AddTicks(9900),
+                            CreatedAt = new DateTime(2019, 2, 25, 10, 20, 7, 606, DateTimeKind.Local).AddTicks(7906),
                             Deleted = false,
                             Intro = "可以使用基本功能",
                             Name = "用户"
@@ -364,38 +398,6 @@ namespace Sun.DatingApp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RoleOrgItems","System");
-                });
-
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.RolePermission", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<Guid?>("CreatedById");
-
-                    b.Property<bool>("Deleted");
-
-                    b.Property<DateTime?>("DeletedAt");
-
-                    b.Property<Guid?>("DeletedById");
-
-                    b.Property<string>("PermissionName")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<Guid>("RoleId");
-
-                    b.Property<DateTime?>("UpdatedAt");
-
-                    b.Property<Guid?>("UpdatedById");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RolePermissions","System");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.UserInfo", b =>
@@ -480,6 +482,14 @@ namespace Sun.DatingApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.AccountPermission", b =>
+                {
+                    b.HasOne("Sun.DatingApp.Data.Entities.System.Account", "Account")
+                        .WithMany("AccountPermissions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Organization", b =>
                 {
                     b.HasOne("Sun.DatingApp.Data.Entities.System.Organization", "Parent")
@@ -498,15 +508,7 @@ namespace Sun.DatingApp.Data.Migrations
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.RoleOrgItem", b =>
                 {
                     b.HasOne("Sun.DatingApp.Data.Entities.System.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.RolePermission", b =>
-                {
-                    b.HasOne("Sun.DatingApp.Data.Entities.System.Role", "Role")
-                        .WithMany("RolePermissions")
+                        .WithMany("RoleOrgItems")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

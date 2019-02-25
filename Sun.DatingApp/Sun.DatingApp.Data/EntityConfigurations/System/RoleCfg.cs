@@ -23,7 +23,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.Deleted).IsRequired();
 
-            builder.HasMany<RoleOrgItem>(x => x.RoleOrgItems).WithOne(x => x.Role).HasForeignKey(x => x.RoleId);
+            builder.HasMany<RolePermission>(x => x.RolePermissions).WithOne(x => x.Role).HasForeignKey(x => x.RoleId);
             builder.HasMany<Account>(x => x.Accounts).WithOne(x => x.Role).HasForeignKey(x => x.RoleId);
 
             builder.HasData(new List<Role>()

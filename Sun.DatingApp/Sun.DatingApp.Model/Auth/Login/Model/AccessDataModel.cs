@@ -17,7 +17,9 @@ namespace Sun.DatingApp.Model.Auth.Login.Model
 
         public string Pic { get; set; }
 
-        public IEnumerable<string> Roles { get; set; }
+        public string Role { get; set; }
+
+        public IEnumerable<string> Permissions { get; set; }
 
     }
 }

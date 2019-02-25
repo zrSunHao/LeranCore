@@ -33,6 +33,14 @@ namespace Sun.DatingApp.Api.Controllers
             //_service.SetCurrentUserId(CurrentUserId);
         }
 
+
+        [HttpGet("test")]
+        [AllowAnonymous]
+        public IActionResult Get()
+        {
+            return Ok("This is datingApp Api!");
+        }
+
         /// <summary>
         /// 注册
         /// </summary>
@@ -74,7 +82,8 @@ namespace Sun.DatingApp.Api.Controllers
                         new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()),
                         new Claim(ClaimTypes.Name, model.UserName),
                         new Claim(ClaimTypes.Email, model.Email),
-                    }),
+                        new Claim(ClaimTypes.Role, model.Role),
+            }),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha512Signature)
@@ -83,10 +92,6 @@ namespace Sun.DatingApp.Api.Controllers
                 var accessTokenString = tokenHandler.WriteToken(accessToken);
 
                 model.AccessToken = accessTokenString;
-
-                var roles = new List<string>();
-                roles.Add("ADMIN");
-                model.Roles = roles;
                 result.Data = model;
             }
             catch (Exception e)
@@ -126,6 +131,7 @@ namespace Sun.DatingApp.Api.Controllers
                         new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()),
                         new Claim(ClaimTypes.Name, model.UserName),
                         new Claim(ClaimTypes.Email, model.Email),
+                        new Claim(ClaimTypes.Role, model.Role),
                     }),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -135,11 +141,6 @@ namespace Sun.DatingApp.Api.Controllers
                 var accessTokenString = tokenHandler.WriteToken(accessToken);
 
                 model.AccessToken = accessTokenString;
-
-                var roles = new List<string>();
-                roles.Add("0");
-                model.Roles = roles;
-                result.Data = model;
             }
             catch (Exception e)
             {

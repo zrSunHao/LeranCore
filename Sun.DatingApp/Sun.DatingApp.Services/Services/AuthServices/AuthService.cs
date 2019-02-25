@@ -8,18 +8,21 @@ using Sun.DatingApp.Model.Auth.Login.Model;
 using Sun.DatingApp.Model.Auth.Register.Dto;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Services.Services.BaseServices;
+using Sun.DatingApp.Utility.CacheUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Sun.DatingApp.Services.Services.AuthServices
 {
     public class AuthService : BaseService ,IAuthService
     {
-        public AuthService(DataContext dataContext, IMapper mapper) : base(dataContext, mapper)
+        public AuthService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
         {
         }
 
@@ -98,7 +101,18 @@ namespace Sun.DatingApp.Services.Services.AuthServices
                 account.RefreshToken = refreshToken;
                 await _dataContext.SaveChangesAsync();
 
-                result.Data = _mapper.Map<Account, AccessDataModel>(account);
+                var permissions = _dataContext.RolePermissions.Where(x => x.RoleId == account.RoleId)
+                    .Select(x => x.PermissionName).ToList();
+
+                var data = _mapper.Map<Account, AccessDataModel>(account);
+                var role = _dataContext.Roles.FirstOrDefault(x => x.Id == account.RoleId);
+                if (role != null)
+                {
+                    data.Role = role.Name;
+                }
+                data.Permissions = permissions;
+                _catchService.Add(data.Id.ToString(), data);
+                result.Data = data;
                 return result;
             }
             catch (Exception e)
@@ -336,5 +350,7 @@ namespace Sun.DatingApp.Services.Services.AuthServices
 
         #endregion
 
+
+        
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Sun.DatingApp.Data.Entities.System
@@ -48,7 +49,6 @@ namespace Sun.DatingApp.Data.Entities.System
 
         [Description("角色")]
         public virtual Role Role { get; set; }
-
         #endregion
 
     }

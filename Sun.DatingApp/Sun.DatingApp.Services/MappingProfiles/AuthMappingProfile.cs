@@ -17,7 +17,8 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
                 .ForMember(x => x.UserName, x => x.MapFrom(y => y.UserName))
-                .ForMember(x => x.RefreshToken, x => x.MapFrom(y => y.RefreshToken));
+                .ForMember(x => x.RefreshToken, x => x.MapFrom(y => y.RefreshToken))
+                .ForMember(x => x.Permissions, x => x.Ignore());
 
             //注册
             CreateMap<RegisterDto, Account>()
