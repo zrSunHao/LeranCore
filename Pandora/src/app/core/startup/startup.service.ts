@@ -41,8 +41,8 @@ export class StartupService {
     ).pipe(
       // 接收其他拦截器后产生的异常消息
       catchError(([langData, appData]) => {
-          resolve(null);
-          return [langData, appData];
+        resolve(null);
+        return [langData, appData];
       })
     ).subscribe(([langData, appData]) => {
       // setting language data
@@ -51,6 +51,7 @@ export class StartupService {
 
       // application data
       const res: any = appData;
+      console.log(res);
       // 应用信息：包括站点名、描述、年份
       this.settingService.setApp(res.app);
       // 用户信息：包括姓名、头像、邮箱地址
@@ -62,23 +63,23 @@ export class StartupService {
       // 设置页面标题的后缀
       this.titleService.suffix = res.app.name;
     },
-    () => { },
-    () => {
-      resolve(null);
-    });
+      () => { },
+      () => {
+        resolve(null);
+      });
   }
-  
+
   private viaMockI18n(resolve: any, reject: any) {
     this.httpClient
-      .get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`)
+      .get(`http://localhost:4200/assets/tmp/i18n/${this.i18n.defaultLang}.json`)
       .subscribe(langData => {
         this.translate.setTranslation(this.i18n.defaultLang, langData);
         this.translate.setDefaultLang(this.i18n.defaultLang);
 
-        this.viaMock(resolve, reject);
+        // this.viaMock(resolve, reject);
       });
   }
-  
+
   private viaMock(resolve: any, reject: any) {
     // const tokenData = this.tokenService.get();
     // if (!tokenData.token) {
@@ -87,6 +88,7 @@ export class StartupService {
     //   return;
     // }
     // mock
+
     const app: any = {
       name: `ng-alain`,
       description: `Ng-zorro admin panel front-end framework`
@@ -135,8 +137,46 @@ export class StartupService {
       // http
       // this.viaHttp(resolve, reject);
       // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
-      this.viaMockI18n(resolve, reject);
+      // this.viaMockI18n(resolve, reject);
 
+      // this.translate.setTranslation(this.i18n.defaultLang, langData);
+      // 应用信息：包括站点名、描述、年份
+      this.viaMockI18n(resolve, reject);
+      const appInfo = {
+        name: 'ng alialn',
+        description: '自定义'
+      };
+      this.settingService.setApp(appInfo);
+      // 用户信息：包括姓名、头像、邮箱地址
+      const userInfo = {
+        name: 'Admin',
+        avatar: './assets/tmp/img/avatar.jpg',
+        email: 'cipchk@qq.com'
+      };
+      this.settingService.setUser(userInfo);
+      // ACL：设置权限为全量
+      this.aclService.setFull(true);
+      // 初始化菜单
+      const menuInfo = [{
+        text: '主导航',
+        i18n: 'menu.main',
+        group: true,
+        hideInBreadcrumb: true,
+        children: [
+          {
+            text: '快捷菜单',
+            i18n: 'menu.shortcut',
+            icon: 'anticon anticon-rocket',
+            shortcutRoot: true,
+            children: []
+          },
+        ]
+      }
+      ];
+      this.menuService.add(menuInfo);
+      // 设置页面标题的后缀
+      this.titleService.suffix = appInfo.name;
+      resolve(null);
     });
   }
 }
