@@ -26,7 +26,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘' } },
       { path: 'exception', loadChildren: './exception/exception.module#ExceptionModule' },
       // 业务子模块
-      // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
+      { path: 'sys', loadChildren: './sys/sys.module#SysModule' }
     ]
   },
   // 全屏布局
@@ -50,6 +50,14 @@ const routes: Routes = [
   // 单页不包裹Layout
   { path: 'callback/:type', component: CallbackComponent },
   { path: '**', redirectTo: 'exception/404' },
+
+  {
+    path: 'sys',
+    component: LayoutDefaultComponent,
+    children: [
+      { path: 'sys', loadChildren: './sys/sys.module#SysModule' }
+    ]
+  }
 ];
 
 @NgModule({
