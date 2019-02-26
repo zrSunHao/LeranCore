@@ -9,6 +9,7 @@ import { SFSchema } from '@delon/form';
 })
 export class SysRoleRoleListComponent implements OnInit {
   url = `/user`;
+  datas: Array<any> = [];
   searchSchema: SFSchema = {
     properties: {
       no: {
@@ -26,7 +27,7 @@ export class SysRoleRoleListComponent implements OnInit {
     {
       title: '操作',
       buttons: [
-         { text: '查看', click: (item: any) => `/form/${item.id}` },
+        { text: '查看', click: (item: any) => `/form/${item.id}` },
         // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
       ]
     }
@@ -40,6 +41,20 @@ export class SysRoleRoleListComponent implements OnInit {
     // this.modal
     //   .createStatic(FormEditComponent, { i: { id: 0 } })
     //   .subscribe(() => this.st.reload());
+  }
+
+  loadRoles() {
+    this.http
+      .post('role/getroles', {
+        name: '',
+      })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          console.log(res);
+          return;
+        }
+        this.datas = res.data;
+      });
   }
 
 }
