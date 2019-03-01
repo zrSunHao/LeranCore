@@ -10,6 +10,8 @@
   "menu.dashboard.analysis": "分析页",
   "menu.dashboard.monitor": "监控页",
   "menu.dashboard.workplace": "工作台",
+  "menu.role.management":"角色管理",
+  "menu.role.management.list":"角色管理列表",
   "menu.shortcut": "快捷菜单",
   "menu.widgets": "小部件",
   "menu.alain": "Alain",

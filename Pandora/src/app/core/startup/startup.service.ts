@@ -71,7 +71,8 @@ export class StartupService {
 
   private viaMockI18n(resolve: any, reject: any) {
     this.httpClient
-      .get(`http://localhost:4200/assets/tmp/i18n/${this.i18n.defaultLang}.json`)
+      // .get(`http://localhost:4200/assets/tmp/i18n/${this.i18n.defaultLang}.json`)
+      .get(`http://localhost:4200/assets/tmp/i18n/zh-CN.json`)
       .subscribe(langData => {
         this.translate.setTranslation(this.i18n.defaultLang, langData);
         this.translate.setDefaultLang(this.i18n.defaultLang);
@@ -164,11 +165,17 @@ export class StartupService {
         hideInBreadcrumb: true,
         children: [
           {
-            text: '快捷菜单',
-            i18n: 'menu.shortcut',
+            text: '角色管理',
+            i18n: 'menu.role.management',
             icon: 'anticon anticon-rocket',
             shortcutRoot: true,
-            children: []
+            children: [
+              {
+                text: '角色列表',
+                link: '/sys/role-list',
+                i18n: 'menu.role.management.list'
+              },
+            ]
           },
         ]
       }
