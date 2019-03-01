@@ -35,7 +35,9 @@ export class SysRoleRoleListComponent implements OnInit {
 
   constructor(private http: _HttpClient, private modal: ModalHelper) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.loadRoles();
+  }
 
   add() {
     // this.modal
@@ -46,6 +48,7 @@ export class SysRoleRoleListComponent implements OnInit {
   loadRoles() {
     this.http
       .post('role/getroles', {
+        type: 0,
         name: '',
       })
       .subscribe((res: any) => {
@@ -54,6 +57,7 @@ export class SysRoleRoleListComponent implements OnInit {
           return;
         }
         this.datas = res.data;
+        console.log(this.datas);
       });
   }
 

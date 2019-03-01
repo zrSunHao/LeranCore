@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Roles.Dto;
+using Sun.DatingApp.Model.Roles.Model;
 using Sun.DatingApp.Services.Services.RoleServices;
 
 namespace Sun.DatingApp.Api.Controllers
@@ -33,6 +35,12 @@ namespace Sun.DatingApp.Api.Controllers
                 result.AddError("当前用户信息获取失败");
             }
             return result;
+        }
+
+        [HttpPost("getroles")]
+        public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
+        {
+            return await _service.GetRoles(dto);
         }
     }
 }

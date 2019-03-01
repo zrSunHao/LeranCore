@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Roles.Dto;
+using Sun.DatingApp.Model.Roles.Model;
 using Sun.DatingApp.Services.Services.BaseServices;
 
 namespace Sun.DatingApp.Services.Services.RoleServices
@@ -19,5 +20,7 @@ namespace Sun.DatingApp.Services.Services.RoleServices
         Task<WebApiResult> UpdateRole(CreateOrUpdateRoleDto dto, Guid accountId);
 
         Task<WebApiResult> DeleteRole(Guid roleId, Guid accountId);
+
+        Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto);
     }
 }

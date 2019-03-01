@@ -123,7 +123,7 @@ export class UserLoginComponent implements OnDestroy {
         // 设置用户Token信息
         console.log();
         const model = {
-          token : res.data.accessToken
+          token: res.data.accessToken
         };
         this.tokenService.set(model);
         // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响

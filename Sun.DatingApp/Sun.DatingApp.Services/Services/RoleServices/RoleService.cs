@@ -10,6 +10,7 @@ using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Auth.Login.Model;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Roles.Dto;
+using Sun.DatingApp.Model.Roles.Model;
 using Sun.DatingApp.Services.Services.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
 
@@ -175,6 +176,28 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             try
             {
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
+        {
+            var result = new WebApiResult<List<RoleListModel>>();
+            try
+            {
+                result.Data = await _dataContext.Roles.Select(x => new RoleListModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Code = x.Code,
+                    Intro = x.Intro,
+                    CreatedAt = x.CreatedAt
+                }).ToListAsync();
             }
             catch (Exception ex)
             {
