@@ -123,6 +123,7 @@ export class UserLoginComponent implements OnDestroy {
         // 设置用户Token信息
         console.log();
         const model = {
+          key: 'jwt',
           token: res.data.accessToken
         };
         this.tokenService.set(model);
