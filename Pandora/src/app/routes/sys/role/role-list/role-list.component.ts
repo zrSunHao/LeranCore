@@ -32,11 +32,23 @@ export class SysRoleRoleListComponent implements OnInit {
     { title: '时间', type: 'date', index: 'createdAt' },
     {
       title: '操作',
+      // buttons: [
+      //   // { text: '查看', click: (item: any) => `/form/${item.id}` },
+      //   { text: '查看', type: 'static', component: SysRoleListRoleViewComponent, click: 'reload' },
+      //   { text: '编辑', type: 'static', component: SysRoleListRoleAddComponent, click: 'reload' },
+      // ]
       buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
-        { text: '查看', type: 'static', component: SysRoleListRoleViewComponent, click: 'reload' },
-        { text: '编辑', type: 'static', component: SysRoleListRoleAddComponent, click: 'reload' },
-      ]
+        {
+          text: '查看',
+          click: (item: any) => this.check(item),
+        },
+        {
+          text: '编辑',
+          click: (item: any) => this.edit(item),
+        },
+      ],
+
+
     }
   ];
 
@@ -70,8 +82,30 @@ export class SysRoleRoleListComponent implements OnInit {
   }
 
   add() {
+    const entity = {
+      id: '1111',
+      name: '超级管理员',
+      code: 'admin',
+      date: '',
+      intro: '这是超级管理员'
+    };
+
     this.modal
-      .createStatic(SysRoleListRoleViewComponent, { i: { id: 0 } })
+      .createStatic(SysRoleListRoleAddComponent, { entity })
+      .subscribe(() => this.st.reload());
+  }
+
+  edit(item: any) {
+    const entity = item;
+    this.modal
+      .createStatic(SysRoleListRoleAddComponent, { entity })
+      .subscribe(() => this.st.reload());
+  }
+
+  check(item: any) {
+    const entity = item;
+    this.modal
+      .createStatic(SysRoleListRoleViewComponent, { entity })
       .subscribe(() => this.st.reload());
   }
 

@@ -1,9 +1,9 @@
 <div class="modal-header">
-  <div class="modal-title">查看 {{ record.id }} 信息</div>
+  <div class="modal-title">{{opration}} </div>
 </div>
 <nz-spin *ngIf="false" class="modal-spin"></nz-spin>
 <div sv-container *ngIf="true">
-  <sv label="姓名">{{ i.owner }}</sv>
+  <sv label="姓名">{{ entity.name }}</sv>
   <sv label="会员卡号">32943898021309809423</sv>
   <sv label="身份证">3321944288191034921</sv>
   <sv label="联系方式">18112345678</sv>

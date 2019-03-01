@@ -7,7 +7,7 @@ import { _HttpClient } from '@delon/theme';
   templateUrl: './role-view.component.html',
 })
 export class SysRoleListRoleViewComponent implements OnInit {
-  record: any = {};
+  entity: any = {};
   i: any;
 
   constructor(
@@ -17,7 +17,7 @@ export class SysRoleListRoleViewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.http.get(`/user/${this.record.id}`).subscribe(res => this.i = res);
+    // this.http.get(`/user/${this.record.id}`).subscribe(res => this.i = res);
   }
 
   close() {
