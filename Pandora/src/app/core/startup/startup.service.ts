@@ -166,14 +166,27 @@ export class StartupService {
         children: [
           {
             text: '角色管理',
-            i18n: 'menu.role.management',
+            // i18n: 'menu.role.management',
             icon: 'anticon anticon-rocket',
             shortcutRoot: true,
             children: [
               {
-                text: '角色列表',
+                text: '角色管理列表',
                 link: '/sys/role-list',
-                i18n: 'menu.role.management.list'
+                // i18n: 'menu.role.management.list'
+              },
+            ]
+          },
+          {
+            text: '用户管理',
+            // i18n: 'menu.role.management',
+            icon: 'anticon anticon-rocket',
+            shortcutRoot: true,
+            children: [
+              {
+                text: '用户管理列表',
+                link: '/sys/user-list',
+                // i18n: 'menu.role.management.list'
               },
             ]
           },
