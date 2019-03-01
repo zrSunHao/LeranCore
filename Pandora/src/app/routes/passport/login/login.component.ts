@@ -24,6 +24,10 @@ export class UserLoginComponent implements OnDestroy {
   error = '';
   type = 0;
 
+  count = 0;
+  interval$: any;
+
+
   constructor(
     fb: FormBuilder,
     modalSrv: NzModalService,
@@ -70,9 +74,6 @@ export class UserLoginComponent implements OnDestroy {
   }
 
   // #region get captcha
-
-  count = 0;
-  interval$: any;
 
   getCaptcha() {
     if (this.mobile.invalid) {

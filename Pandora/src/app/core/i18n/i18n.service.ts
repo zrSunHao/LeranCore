@@ -61,9 +61,11 @@ const LANGS: { [key: string]: LangData } = {
 
 @Injectable({ providedIn: 'root' })
 export class I18NService implements AlainI18NService {
+  // tslint:disable-next-line:variable-name
   private _default = DEFAULT;
   private change$ = new BehaviorSubject<string>(null);
 
+  // tslint:disable-next-line:variable-name
   private _langs = Object.keys(LANGS).map(code => {
     const item = LANGS[code];
     return { code, text: item.text, abbr: item.abbr };
@@ -107,6 +109,7 @@ export class I18NService implements AlainI18NService {
     return this._langs;
   }
   /** 翻译 */
+  // tslint:disable-next-line:ban-types
   fanyi(key: string, interpolateParams?: Object) {
     return this.translate.instant(key, interpolateParams);
   }
