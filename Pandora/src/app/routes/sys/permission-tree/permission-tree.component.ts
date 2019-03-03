@@ -41,7 +41,10 @@ export class PermissionTreeComponent implements OnInit {
     }]
   }];
 
-  dropdown: NzDropdownContextComponent;
+  /**
+   * 右键菜单
+   */
+  contextMenu: NzDropdownContextComponent;
   /**
    * 激活的节点，只能激活一个
    */
@@ -63,6 +66,7 @@ export class PermissionTreeComponent implements OnInit {
 
   nzEvent(event: NzFormatEmitEvent): void {
     console.log(event);
+    this.activedNode = event.node;
   }
 
   nzCheck(event: NzFormatEmitEvent): void {
@@ -74,10 +78,6 @@ export class PermissionTreeComponent implements OnInit {
     console.log(keys, this.treeCom.getSelectedNodeList());
   }
 
-  nzMenu(event: NzFormatEmitEvent): void {
-    console.log(event);
-  }
-
   openFolder(data: NzTreeNode | NzFormatEmitEvent): void {
     // do something if u want
     if (data instanceof NzTreeNode) {
@@ -87,9 +87,28 @@ export class PermissionTreeComponent implements OnInit {
     }
   }
 
-  activeNode(data: NzFormatEmitEvent): void {
-    data.node.setExpanded(true);
-    this.activedNode = data.node;
+
+  add() {
+    const newNode = new NzTreeNode({
+      title: 'parent 1-2',
+      key: '1099',
+      icon: 'anticon anticon-meh-o',
+      isLeaf: true
+    });
+    console.log(this.activedNode);
+    this.activedNode.isLeaf = false;
+    this.activedNode.children.push(newNode);
+
+  }
+
+  edit() {
+    this.activedNode.title = 'sjdhfsjfs';
+  }
+
+  delete() {
+    const child = this.activedNode.children;
+    child.splice(0);
+    this.activedNode.isLeaf = true;
   }
 
 
