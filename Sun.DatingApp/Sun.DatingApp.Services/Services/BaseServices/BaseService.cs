@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
@@ -48,6 +50,24 @@ namespace Sun.DatingApp.Services.Services.BaseServices
                 }
                 return null;
             }
+        }
+
+        public async Task<List<Permission>> GetPerssionEntitys()
+        {
+            var entitys = new List<Permission>();
+            var catchKey = "PerssionEntitys";
+            var exist = this._catchService.Exists(catchKey);
+            if (exist)
+            {
+                entitys = this._catchService.Get<List<Permission>>(catchKey);
+            }
+            else
+            {
+                entitys = await _dataContext.Permissions.Where(x => !x.Deleted).ToListAsync();
+                this._catchService.Add(catchKey, entitys);
+            }
+            return entitys;
+
         }
     }
 }

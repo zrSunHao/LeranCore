@@ -27,7 +27,49 @@ namespace Sun.DatingApp.Services.Services.Permissions
             var result = new WebApiResult<List<PermissionTreeModel>>();
             try
             {
+                var datas = new List<PermissionTreeModel>();
 
+                var entitys = await this.GetPerssionEntitys();
+                var parents = entitys.Where(x => !x.ParentId.HasValue).ToList();
+
+                foreach (var parent in parents)
+                {
+                    var parentModel = new PermissionTreeModel
+                    {
+
+                        Key = parent.Id,
+                        Title = parent.Name,
+                        IsLeaf = true,
+                        Icon = parent.Icon,
+                        Code = parent.Code,
+                        Intro = parent.Intro,
+                    };
+
+                    var childrenDatas = new List<PermissionTreeModel>();
+                    var childrens = entitys.Where(x => x.ParentId == parent.Id);
+                    foreach (var children in childrens)
+                    {
+                        var childrenModel = new PermissionTreeModel
+                        {
+                            Key = parent.Id,
+                            Title = parent.Name,
+                            IsLeaf = true,
+                            Icon = parent.Icon,
+                            Code = parent.Code,
+                            Intro = parent.Intro,
+                            ParentKey = parent.ParentId
+                        };
+                        childrenDatas.Add(childrenModel);
+                    }
+
+                    if (childrenDatas.Any())
+                    {
+                        parentModel.IsLeaf = false;
+                        parentModel.Children = childrenDatas;
+                    }
+                    
+                    datas.Add(parentModel);
+                }
             }
             catch (Exception ex)
             {

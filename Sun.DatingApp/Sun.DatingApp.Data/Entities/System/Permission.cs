@@ -13,5 +13,9 @@ namespace Sun.DatingApp.Data.Entities.System
         public string Intro { get; set; }
 
         public string Icon { get; set; }
+
+        public Guid? ParentId { get; set; }
+
+        public virtual Permission Parent { get; set; }
     }
 }
