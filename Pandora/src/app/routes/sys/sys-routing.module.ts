@@ -1,4 +1,4 @@
-import { PermissionTreeComponent } from './permission-tree/permission-tree.component';
+import { PermissionTreeComponent } from './permission/permission-tree/permission-tree.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SysRoleRoleListComponent } from './role/role-list/role-list.component';

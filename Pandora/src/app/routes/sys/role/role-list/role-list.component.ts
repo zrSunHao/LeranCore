@@ -52,7 +52,10 @@ export class SysRoleRoleListComponent implements OnInit {
     }
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  constructor(
+    private http: _HttpClient,
+    private modal: ModalHelper
+    ) { }
 
   ngOnInit() {
     this.loadRoles();

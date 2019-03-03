@@ -43,6 +43,7 @@ namespace Sun.DatingApp.Api.Controllers
             return await _service.GetRoles(dto);
         }
 
+        [HttpPost("createrole")]
         public async Task<WebApiResult> CreateRole(CreateOrUpdateRoleDto dto)
         {
             var result = new WebApiResult();
