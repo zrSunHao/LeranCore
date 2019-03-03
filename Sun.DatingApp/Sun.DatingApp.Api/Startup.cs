@@ -1,30 +1,30 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Services.Services.AuthServices;
-using Sun.DatingApp.Services.Services.UserServices;
-using Sun.DatingApp.Services.SignalRHubs;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Caching.Memory;
-using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Services.Services.OrganizationServices;
 using Sun.DatingApp.Services.Services.PromptServices;
 using Sun.DatingApp.Services.Services.RoleServices;
+using Sun.DatingApp.Services.Services.UserServices;
+using Sun.DatingApp.Services.SignalRHubs;
 using Sun.DatingApp.Utility.CacheUtility;
+using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using Sun.DatingApp.Services.Services.Permissions;
 
 namespace Sun.DatingApp.Api
 {
@@ -165,6 +165,7 @@ namespace Sun.DatingApp.Api
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPromptService, PromptService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPermissionService, PermissionService>();
 
             //
             #endregion
