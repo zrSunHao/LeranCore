@@ -6,9 +6,35 @@
     <button nz-button nzType="primary" (click)="loadDatas()">重载</button>
   </ng-template>
 </page-header>
-<nz-card>
+<nz-card *ngIf="false">
   <h4 *ngIf="nodes === null">当前数据为空！</h4>
-  <nz-tree [nzData]="nodes" nzShowLine="true" nzCheckable [nzCheckedKeys]="defaultCheckedKeys" [nzExpandedKeys]="defaultExpandedKeys"
-    [nzSelectedKeys]="defaultSelectedKeys" (nzCheckBoxChange)="nzCheck($event)" (nzClick)="nzEvent($event)">
+  <nz-tree [nzData]="nodes" nzShowLine="true" nzCheckable [nzCheckedKeys]="defaultCheckedKeys"
+    [nzExpandedKeys]="defaultExpandedKeys" [nzSelectedKeys]="defaultSelectedKeys" (nzCheckBoxChange)="nzCheck($event)"
+    (nzClick)="nzEvent($event)">
   </nz-tree>
+</nz-card>
+<nz-card>
+  <nz-table #basicTable [nzData]="listOfData">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>
+          <label nz-checkbox [(ngModel)]="data.ckecked" (click)="hhhhhh1(data)">
+            {{data.name}}
+          </label>
+        </td>
+        <td>
+          <label nz-checkbox [(ngModel)]="children.ckecked" *ngFor="let children of data.children"
+            (click)="hhhhhh(children)">
+            {{children.name}}
+          </label>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
 </nz-card>

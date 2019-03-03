@@ -13,6 +13,8 @@ export class PermissionTreeComponent implements OnInit {
 
   nodes = [];
 
+  isCheckedButton: any;
+
   node1s = [{
     title: 'parent 1',
     key: '100',
@@ -45,6 +47,69 @@ export class PermissionTreeComponent implements OnInit {
       ]
     }]
   }];
+
+  listOfData = [
+    {
+      key: '1',
+      name: 32,
+      ckecked: false,
+      children: [{
+        key: '12',
+        name: 12,
+        ckecked: false,
+      },
+      {
+        key: '13',
+        name: 325,
+        ckecked: false,
+      },
+      {
+        key: '14',
+        name: 326,
+        ckecked: false,
+      }]
+    },
+    {
+      key: '2',
+      name: 42,
+      ckecked: false,
+      children: [{
+        key: '62',
+        name: 12,
+        ckecked: false,
+      },
+      {
+        key: '63',
+        name: 325,
+        ckecked: false,
+      },
+      {
+        key: '64',
+        name: 326,
+        ckecked: false,
+      }]
+    },
+    {
+      key: '3',
+      name: 32,
+      ckecked: false,
+      children: [{
+        key: '22',
+        name: 12,
+        ckecked: false,
+      },
+      {
+        key: '23',
+        name: 325,
+        ckecked: false,
+      },
+      {
+        key: '34',
+        name: 326,
+        ckecked: false,
+      }]
+    }
+  ];
 
   /**
    * 激活的节点，只能激活一个
@@ -95,6 +160,28 @@ export class PermissionTreeComponent implements OnInit {
   // nzSelectedKeys change
   nzSelect(keys: string[]): void {
     console.log(keys, this.treeCom.getSelectedNodeList());
+  }
+
+  hhhhhh(data) {
+    console.log(data);
+    const ddd = this.listOfData[0];
+    ddd.ckecked = true;
+  }
+
+  hhhhhh1(data) {
+    data.children[0].ckecked = data.ckecked;
+    data.children[1].ckecked = data.ckecked;
+    data.children[2].ckecked = data.ckecked;
+    const yyyyyy = data.children as [];
+    for (let i = 0; i < yyyyyy.length; i++) {
+      data.children[i].ckecked = data.ckecked;
+    }
+    const yyy = {
+      key: '1787',
+      name: 353535,
+      ckecked: false,
+    };
+    data.children.push(yyy);
   }
 
 
