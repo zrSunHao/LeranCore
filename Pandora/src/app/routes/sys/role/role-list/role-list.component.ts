@@ -39,12 +39,12 @@ export class SysRoleRoleListComponent implements OnInit {
       // ]
       buttons: [
         {
-          text: '查看',
-          click: (item: any) => this.check(item),
-        },
-        {
           text: '编辑',
           click: (item: any) => this.edit(item),
+        },
+        {
+          text: '权限',
+          click: (item: any) => this.perssion(item),
         },
       ],
 
@@ -83,11 +83,9 @@ export class SysRoleRoleListComponent implements OnInit {
 
   add() {
     const entity = {
-      id: '1111',
-      name: '超级管理员',
-      code: 'admin',
-      date: '',
-      intro: '这是超级管理员'
+      name: null,
+      code: null,
+      intro: null
     };
 
     this.modal
@@ -102,7 +100,7 @@ export class SysRoleRoleListComponent implements OnInit {
       .subscribe(() => this.st.reload());
   }
 
-  check(item: any) {
+  perssion(item: any) {
     const entity = item;
     this.modal
       .createStatic(SysRoleListRoleViewComponent, { entity })

@@ -1,0 +1,11 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>
+    <button nz-button nzType="primary">新建</button>
+  </ng-template>
+</page-header>
+<nz-card>
+  <nz-tree [nzData]="nodes" nzShowLine="true" nzCheckable [nzCheckedKeys]="defaultCheckedKeys" [nzExpandedKeys]="defaultExpandedKeys"
+    [nzSelectedKeys]="defaultSelectedKeys" (nzCheckBoxChange)="nzCheck($event)" (nzClick)="nzEvent($event)">
+    
+  </nz-tree>
+</nz-card>

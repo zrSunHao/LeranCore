@@ -107,24 +107,24 @@ export class StartupService {
     // ACL：设置权限为全量
     this.aclService.setFull(true);
     // 初始化菜单
-    this.menuService.add([
-      {
-        text: '主导航',
-        group: true,
-        children: [
-          {
-            text: '仪表盘',
-            link: '/dashboard',
-            icon: { type: 'icon', value: 'appstore' }
-          },
-          {
-            text: '快捷菜单',
-            icon: { type: 'icon', value: 'rocket' },
-            shortcutRoot: true
-          }
-        ]
-      }
-    ]);
+    // this.menuService.add([
+    //   {
+    //     text: '主导航',
+    //     group: true,
+    //     children: [
+    //       {
+    //         text: '仪表盘',
+    //         link: '/dashboard',
+    //         icon: { type: 'icon', value: 'appstore' }
+    //       },
+    //       {
+    //         text: '快捷菜单',
+    //         icon: { type: 'icon', value: 'rocket' },
+    //         shortcutRoot: true
+    //       }
+    //     ]
+    //   }
+    // ]);
     // 设置页面标题的后缀
     this.titleService.suffix = app.name;
 
@@ -160,7 +160,7 @@ export class StartupService {
       // 初始化菜单
       const menuInfo = [{
         text: '主导航',
-        i18n: 'menu.main',
+        // i18n: 'menu.main',
         group: true,
         hideInBreadcrumb: true,
         children: [
@@ -178,14 +178,14 @@ export class StartupService {
             ]
           },
           {
-            text: '用户管理',
+            text: '权限管理',
             // i18n: 'menu.role.management',
             icon: 'anticon anticon-rocket',
             shortcutRoot: true,
             children: [
               {
-                text: '用户管理列表',
-                link: '/sys/user-list',
+                text: '权限管理',
+                link: '/sys/permission-tree',
                 // i18n: 'menu.role.management.list'
               },
             ]
