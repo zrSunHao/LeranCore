@@ -23,95 +23,6 @@ namespace Sun.DatingApp.Services.Services.RoleServices
         }
 
         /// <summary>
-        /// 修改账号所属角色
-        /// </summary>
-        /// <param name="newRoleId">新角色Id</param>
-        /// <param name="accountId">当前账号Id</param>
-        /// <returns></returns>
-        public async Task<WebApiResult> UpdateAccountRole(Guid newRoleId,Guid accountId)
-        {
-            var result = new WebApiResult();
-            try
-            {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == accountId);
-                account.RoleId = newRoleId;
-                await _dataContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                result.AddError(ex.Message);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 修改角色权限
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="accountId"></param>
-        /// <returns></returns>
-        public async Task<WebApiResult> UpdateRolePermission(UpdateRolePermissionDto dto, Guid accountId)
-        {
-            var result = new WebApiResult();
-            try
-            {
-                var allPermissions = await _dataContext.RolePermissions.Where(x => x.RoleId == dto.RoleId).ToListAsync();
-                var dataPermissions = allPermissions;
-
-                if (allPermissions.Any())
-                {
-                    var deleteIds = allPermissions.Where(x => !dto.PermissionNames.Contains(x.PermissionName)).Select(x => x.Id)
-                        .ToList();
-                    if (deleteIds.Any())
-                    {
-                        await _dataContext.RolePermissions.Where(x => deleteIds.Contains(x.Id)).ForEachAsync(x =>
-                        {
-                            x.Deleted = false;
-                            x.DeletedAt = DateTime.Now;
-                            x.DeletedById = accountId;
-                        });
-                    }
-
-                    dataPermissions = allPermissions.Where(x => dto.PermissionNames.Contains(x.PermissionName)).ToList();
-                }
-
-                var dataPermissionNames = dataPermissions.Select(x => x.PermissionName).ToList();
-                var newPermissionNames = dto.PermissionNames.Where(x => !dataPermissionNames.Contains(x)).ToList();
-                if (newPermissionNames.Any())
-                {
-                    var entitys = new List<RolePermission>();
-                    foreach (var newPermissionName in newPermissionNames)
-                    {
-                        var entity = new RolePermission
-                        {
-                            Id = Guid.NewGuid(),
-                            RoleId = dto.RoleId,
-                            PermissionName = newPermissionName,
-                            Deleted = false,
-                            CreatedAt = DateTime.Now,
-                            CreatedById = accountId,
-                        };
-                        entitys.Add(entity);
-                    }
-
-                    await _dataContext.RolePermissions.AddRangeAsync(entitys);
-                }
-
-                await _dataContext.SaveChangesAsync();
-
-                var account = _catchService.Get<AccessDataModel>(accountId.ToString());
-                account.Permissions = dto.PermissionNames;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                result.AddError(ex.Message);
-            }
-            return result;
-        }
-
-        /// <summary>
         /// 新建角色
         /// </summary>
         /// <param name="dto"></param>
@@ -154,7 +65,26 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             var result = new WebApiResult();
             try
             {
+                if (!dto.Id.HasValue)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
 
+                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                if (role == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                role.Code = dto.Code;
+                role.Name = dto.Name;
+                role.Intro = dto.Intro;
+                role.UpdatedAt = DateTime.Now;
+                role.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -175,7 +105,18 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             var result = new WebApiResult();
             try
             {
+                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+                if (role == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
 
+                role.Deleted = true;
+                role.DeletedAt = DateTime.Now;
+                role.DeletedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -185,6 +126,11 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             return result;
         }
 
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
         {
             var result = new WebApiResult<List<RoleListModel>>();
@@ -206,5 +152,164 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             }
             return result;
         }
+
+        /// <summary>
+        /// 修改账号所属角色
+        /// </summary>
+        /// <param name="newRoleId">新角色Id</param>
+        /// <param name="accountId">当前账号Id</param>
+        /// <returns></returns>
+        public async Task<WebApiResult> UpdateAccountRole(Guid newRoleId, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == accountId);
+                account.RoleId = newRoleId;
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取角色权限数据
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WebApiResult<List<RolePermissionModel>>> GetRolePermissions(Guid id)
+        {
+            var result = new WebApiResult<List<RolePermissionModel>>();
+            try
+            {
+                var datas = new List<RolePermissionModel>();
+
+                var rolePermissions = await this.GetRolePerssionEntitys(id);
+                var rolePermissionIds = rolePermissions.Select(x => x.PermissionId).ToList();
+
+                var permissionEntitys = await this.GetPerssionEntitys();
+                var parents = permissionEntitys.Where(x => !x.ParentId.HasValue).ToList();
+
+                foreach (var parent in parents)
+                {
+                    var parentModel = new RolePermissionModel
+                    {
+
+                        Key = parent.Id,
+                        Title = parent.Name,
+                        IsLeaf = true,
+                        Icon = parent.Icon,
+                        Code = parent.Code,
+                        Intro = parent.Intro,
+                        IsChecked = rolePermissionIds.Contains(parent.Id)
+                    };
+
+                    var childrenDatas = new List<RolePermissionModel>();
+                    var childrens = permissionEntitys.Where(x => x.ParentId == parent.Id);
+                    foreach (var children in childrens)
+                    {
+                        var childrenModel = new RolePermissionModel
+                        {
+                            Key = parent.Id,
+                            Title = parent.Name,
+                            IsLeaf = true,
+                            Icon = parent.Icon,
+                            Code = parent.Code,
+                            Intro = parent.Intro,
+                            ParentKey = parent.ParentId,
+                            IsChecked = rolePermissionIds.Contains(children.Id)
+                        };
+                        childrenDatas.Add(childrenModel);
+                    }
+
+                    if (childrenDatas.Any())
+                    {
+                        parentModel.IsLeaf = false;
+                        parentModel.Children = childrenDatas;
+                    }
+
+                    datas.Add(parentModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 修改角色权限
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public async Task<WebApiResult> UpdateRolePermission(UpdateRolePermissionDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var allPermissions = await _dataContext.RolePermissions.Where(x => x.RoleId == dto.RoleId && !x.Deleted).ToListAsync();
+                var dataPermissions = allPermissions;
+                var dtoPermissionIds = dto.Permissions.Select(x => x.Id).ToList();
+
+                if (allPermissions.Any())
+                {
+                    var deleteIds = allPermissions.Where(x => !dtoPermissionIds.Contains(x.Id)).Select(x => x.Id)
+                        .ToList();
+                    if (deleteIds.Any())
+                    {
+                        await _dataContext.RolePermissions.Where(x => deleteIds.Contains(x.Id)).ForEachAsync(x =>
+                        {
+                            x.Deleted = false;
+                            x.DeletedAt = DateTime.Now;
+                            x.DeletedById = accountId;
+                        });
+                    }
+
+                    dataPermissions = allPermissions.Where(x => dtoPermissionIds.Contains(x.Id)).ToList();
+                }
+
+                var dataPermissionIds = dataPermissions.Select(x => x.Id).ToList();
+                var newRolePermissions = dto.Permissions.Where(x => !dataPermissionIds.Contains(x.Id)).ToList();
+                if (newRolePermissions.Any())
+                {
+                    var entitys = new List<RolePermission>();
+                    foreach (var newRolePermission in newRolePermissions)
+                    {
+                        var entity = new RolePermission
+                        {
+                            Id = Guid.NewGuid(),
+                            RoleId = dto.RoleId,
+                            PermissionId = newRolePermission.Id,
+                            PermissionName = newRolePermission.Name,
+                            Deleted = false,
+                            CreatedAt = DateTime.Now,
+                            CreatedById = accountId,
+                        };
+                        entitys.Add(entity);
+                    }
+
+                    await _dataContext.RolePermissions.AddRangeAsync(entitys);
+                }
+
+                await _dataContext.SaveChangesAsync();
+
+                var account = _catchService.Get<AccessDataModel>(accountId.ToString());
+                account.Permissions = dto.Permissions.Select(x=>x.Name).ToList();
+                _catchService.Replace(accountId.ToString(), account);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result.AddError(ex.Message);
+            }
+            return result;
+        }
+
     }
 }

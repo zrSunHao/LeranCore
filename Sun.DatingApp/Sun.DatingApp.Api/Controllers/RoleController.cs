@@ -42,5 +42,19 @@ namespace Sun.DatingApp.Api.Controllers
         {
             return await _service.GetRoles(dto);
         }
+
+        public async Task<WebApiResult> CreateRole(CreateOrUpdateRoleDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.CreateRole(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
     }
 }

@@ -8,6 +8,6 @@ namespace Sun.DatingApp.Model.Roles.Dto
     {
         public Guid RoleId { get; set; }
 
-        public List<string> PermissionNames { get; set; }
+        public List<RolePermissionDto> Permissions { get; set; }
     }
 }
