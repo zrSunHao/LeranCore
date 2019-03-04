@@ -3,6 +3,7 @@ import { SFSchema } from '@delon/form';
 import { STComponent, STColumn, STColumnTag } from '@delon/abc';
 import { ModalHelper } from '@delon/theme';
 import { PermissionAddComponent } from '../permission-add/permission-add.component';
+import { PermissionOperationComponent } from '../permission-operation/permission-operation.component';
 
 const TAG: STColumnTag = {
   1: { text: '开启', color: 'green' },
@@ -15,7 +16,7 @@ const TAG: STColumnTag = {
   styles: [],
 })
 export class PermissionListComponent implements OnInit {
-
+  @ViewChild('pmsopt') pmsopt: PermissionOperationComponent;
   @ViewChild('st') st: STComponent;
   // 列表数据
   datas: Array<any> = [{
@@ -23,7 +24,8 @@ export class PermissionListComponent implements OnInit {
     code: 1212,
     incon: 34535,
     intro: 'sdfsgfsgs',
-    active: 1
+    active: 1,
+    check: true
   }];
   // 列表搜索条件
   searchSchema: SFSchema = {
@@ -37,8 +39,12 @@ export class PermissionListComponent implements OnInit {
   columns: STColumn[] = [
     { title: '模块名称', index: 'name' },
     { title: '备注', index: 'intro' },
-    // { title: '状态', index: 'code', render: 'code' },
-     { title: '状态', index: 'active', type: 'tag', tag: TAG },
+    {
+      title: '自定义',
+      render: 'custom',
+      click: (item: any) => this.forbidModule(item),
+    },
+    { title: '状态', index: 'active', type: 'tag', tag: TAG },
     {
       title: '操作', buttons: [
         { text: '编辑', icon: 'anticon anticon-edit', click: (item: any) => this.editModule(item), },
@@ -63,6 +69,11 @@ export class PermissionListComponent implements OnInit {
 
   reset(event) {
     console.log(event);
+  }
+
+  rowClick(event) {
+    // console.log(event);
+    this.pmsopt.test(event);
   }
 
   addModule() {
@@ -106,7 +117,7 @@ export class PermissionListComponent implements OnInit {
     item.active = 2;
     this.st.reload();
     console.log(item);
-   }
+  }
 
   addOperation(item: any) {
     const entity = {

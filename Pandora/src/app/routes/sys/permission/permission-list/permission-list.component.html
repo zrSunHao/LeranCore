@@ -7,16 +7,16 @@
 <div nz-row>
   <div nz-col nzSpan="12">
     <nz-card>
-      <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)">
-        
-      </sf>
-      <st #st [data]="datas" [columns]="columns">
-        
+      <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
+      <st #st [data]="datas" [columns]="columns" (change)="rowClick($event)">
+        <ng-template st-row="custom" let-item let-index="index">
+            <nz-switch [ngModel]="item.check" nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
+        </ng-template>
       </st>
     </nz-card>
   </div>
   <div nz-col nzSpan="1"></div>
   <div nz-col nzSpan="11">
-    <app-permission-operation></app-permission-operation>
+    <app-permission-operation #pmsopt></app-permission-operation>
   </div>
 </div>

@@ -52,4 +52,8 @@ export class PermissionOperationComponent implements OnInit {
 
   }
 
+  public test(event: any) {
+    console.log(event);
+  }
+
 }
