@@ -55,7 +55,7 @@ export class SysRoleRoleListComponent implements OnInit {
   constructor(
     private http: _HttpClient,
     private modal: ModalHelper
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.loadRoles();
@@ -88,6 +88,7 @@ export class SysRoleRoleListComponent implements OnInit {
     const entity = {
       name: null,
       code: null,
+      icon: null,
       intro: null
     };
 

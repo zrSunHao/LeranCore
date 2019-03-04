@@ -2,14 +2,18 @@
   <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
     [nzRenderItem]="item">
     <ng-template #item let-item>
-      <nz-list-item [nzContent]="item.loading?'':'content'" [nzActions]="item.loading?[]:[editAction,moreAction]">
+      <nz-list-item [nzContent]="forbidAction" [nzActions]="item.loading?[]:[editAction,deleteAction]">
         <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
-          <ng-template #editAction><a (click)="edit(item)">edit</a></ng-template>
-          <ng-template #moreAction><a (click)="edit(item)">more</a></ng-template>
-          <nz-list-item-meta [nzTitle]="nzTitle" nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+          <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
+          <ng-template #forbidAction>
+            <nz-switch [ngModel]="true" (click)='forbid(item)' nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
+          </ng-template>
+          <ng-template #deleteAction><a (click)="delete(item)">删除</a></ng-template>
+          <nz-list-item-meta [nzTitle]="nzTitle"
             nzDescription="Ant Design, a design language for background applications, is refined by Ant UED Team">
             <ng-template #nzTitle>
-              <a href="#">{{item.name}}</a>
+              <!-- <a href="#">{{item.name}}</a> -->
+              <nz-tag [nzColor]="'lime'">lime</nz-tag>
             </ng-template>
           </nz-list-item-meta>
         </nz-skeleton>

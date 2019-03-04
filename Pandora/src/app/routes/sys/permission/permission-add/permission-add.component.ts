@@ -22,7 +22,8 @@ export class PermissionAddComponent implements OnInit {
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
         type: 'string',
-        title: '描述',
+        title: '备注',
+        maxLength: 200,
         ui: {
           widget: 'textarea',
           autosize: { minRows: 2, maxRows: 6 },

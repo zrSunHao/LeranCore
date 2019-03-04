@@ -1,6 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { SFSchema } from '@delon/form';
-import { STComponent, STColumn } from '@delon/abc';
+import { STComponent, STColumn, STColumnTag } from '@delon/abc';
+import { ModalHelper } from '@delon/theme';
+import { PermissionAddComponent } from '../permission-add/permission-add.component';
+
+const TAG: STColumnTag = {
+  1: { text: '开启', color: 'green' },
+  2: { text: '关闭', color: 'red' },
+};
 
 @Component({
   selector: 'app-permission-list',
@@ -8,137 +15,135 @@ import { STComponent, STColumn } from '@delon/abc';
   styles: [],
 })
 export class PermissionListComponent implements OnInit {
-  listOfData = [
-    {
-      key: '1',
-      name: 32,
-      ckecked: false,
-      children: [
-        {
-          key: '12',
-          name: 12,
-          ckecked: false,
-        },
-        {
-          key: '13',
-          name: 325,
-          ckecked: false,
-        },
-        {
-          key: '14',
-          name: 326,
-          ckecked: false,
-        },
-      ],
-    },
-    {
-      key: '2',
-      name: 42,
-      ckecked: false,
-      children: [
-        {
-          key: '62',
-          name: 12,
-          ckecked: false,
-        },
-        {
-          key: '63',
-          name: 325,
-          ckecked: false,
-        },
-        {
-          key: '64',
-          name: 326,
-          ckecked: false,
-        },
-      ],
-    },
-    {
-      key: '3',
-      name: 32,
-      ckecked: false,
-      children: [
-        {
-          key: '22',
-          name: 12,
-          ckecked: false,
-        },
-        {
-          key: '23',
-          name: 325,
-          ckecked: false,
-        },
-        {
-          key: '34',
-          name: 326,
-          ckecked: false,
-        },
-      ],
-    },
-  ];
-
-  datas: Array<any> = [];
-  searchSchema: SFSchema = {
-    properties: {
-      name: {
-        type: 'string',
-        title: '模块名称',
-      },
-    },
-  };
 
   @ViewChild('st') st: STComponent;
+  // 列表数据
+  datas: Array<any> = [{
+    name: 123,
+    code: 1212,
+    incon: 34535,
+    intro: 'sdfsgfsgs',
+    active: 1
+  }];
+  // 列表搜索条件
+  searchSchema: SFSchema = {
+    properties: {
+      name: { type: 'string', title: '模块名称', },
+    },
+  };
+  // template: TemplateRef<'<nz-switch [ngModel]="true" nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>'>;
+  template = '<nz-switch [ngModel]="true" nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>';
+  // 列表行列格式
   columns: STColumn[] = [
     { title: '模块名称', index: 'name' },
     { title: '备注', index: 'intro' },
+    // { title: '状态', index: 'code', render: 'code' },
+     { title: '状态', index: 'active', type: 'tag', tag: TAG },
     {
-      title: '操作',
-      buttons: [
-        {
-          text: '编辑',
-          click: (item: any) => this.edit(),
-        },
-        {
-          text: '权限',
-          click: (item: any) => this.forbid(item),
-        },
+      title: '操作', buttons: [
+        { text: '编辑', icon: 'anticon anticon-edit', click: (item: any) => this.editModule(item), },
+        { text: '添加权限', icon: 'anticon anticon-plus', click: (item: any) => this.forbidModule(item), },
+        { text: '禁用', icon: 'anticon anticon-stop', click: (item: any) => this.forbidModule(item), },
+        { text: '删除', icon: 'anticon anticon-delete', click: (item: any) => this.deleteModule(item), },
       ],
     },
   ];
 
-  constructor() {}
+  constructor(
+    private modal: ModalHelper
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  hhhhhh(data) {
-    console.log(data);
-    const ddd = this.listOfData[0];
-    ddd.ckecked = true;
+  loadDatas() { }
+
+  search(event) {
+    console.log(event);
   }
 
-  hhhhhh1(data) {
-    data.children[0].ckecked = data.ckecked;
-    data.children[1].ckecked = data.ckecked;
-    data.children[2].ckecked = data.ckecked;
-    const yyyyyy = data.children as [];
-    for (let i = 0; i < yyyyyy.length; i++) {
-      data.children[i].ckecked = data.ckecked;
-    }
-    const yyy = {
-      key: '1787',
-      name: 353535,
-      ckecked: false,
+  reset(event) {
+    console.log(event);
+  }
+
+  addModule() {
+    const entity = {
+      name: null,
+      code: null,
+      icon: null,
+      intro: null
     };
-    data.children.push(yyy);
+
+    this.modal
+      .createStatic(PermissionAddComponent, { entity })
+      .subscribe((res) => {
+        this.datas.push(res);
+        this.st.reload();
+        console.log(res);
+      });
   }
 
-  add() {}
 
-  edit() {}
 
-  delete() {}
+  editModule(item: any) {
+    const entity = {
+      name: item.name,
+      code: item.code,
+      icon: item.icon,
+      intro: item.intro
+    };
 
-  loadDatas() {}
+    this.modal
+      .createStatic(PermissionAddComponent, { entity })
+      .subscribe((res) => {
+        this.st.reload();
+        console.log(res);
+      });
+  }
 
-  forbid(item: any) {}
+  deleteModule(item: any) { }
+
+  forbidModule(item: any) {
+    item.active = 2;
+    this.st.reload();
+    console.log(item);
+   }
+
+  addOperation(item: any) {
+    const entity = {
+      name: null,
+      code: null,
+      icon: null,
+      intro: null,
+      parentId: null
+    };
+
+    this.modal
+      .createStatic(PermissionAddComponent, { entity })
+      .subscribe((res) => {
+        this.datas.push(res);
+        console.log(res);
+      });
+  }
+
+
+
+  apiSearchModule(data: any) {
+    const url = '';
+  }
+
+  apiAddModule(data: any) {
+    const url = '';
+  }
+
+  apiEditModule(data: any) {
+    const url = '';
+  }
+
+  apiDeleteModule(id: any) {
+    const url = '';
+  }
+
+  apiAddhModuleOperation(data: any) {
+    const url = '';
+  }
 }
