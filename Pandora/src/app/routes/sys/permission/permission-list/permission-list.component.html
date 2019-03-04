@@ -1,0 +1,22 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>
+    <button nz-button nzType="primary" (click)="add()">添加模块</button>
+  </ng-template>
+</page-header>
+<nz-row>
+
+
+</nz-row>
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-card>
+      <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
+      <st #st [data]="datas" [columns]="columns"></st>
+    </nz-card>
+  </div>
+  <div nz-col nzSpan="1"></div>
+  <div nz-col nzSpan="11">
+    <app-permission-operation></app-permission-operation>
+  </div>
+
+</div>

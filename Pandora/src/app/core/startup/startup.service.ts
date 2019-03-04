@@ -3,7 +3,12 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { zip } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { MenuService, SettingsService, TitleService, ALAIN_I18N_TOKEN } from '@delon/theme';
+import {
+  MenuService,
+  SettingsService,
+  TitleService,
+  ALAIN_I18N_TOKEN,
+} from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { ACLService } from '@delon/acl';
 import { TranslateService } from '@ngx-translate/core';
@@ -29,7 +34,7 @@ export class StartupService {
     private titleService: TitleService,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
     private httpClient: HttpClient,
-    private injector: Injector
+    private injector: Injector,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
   }
@@ -37,36 +42,40 @@ export class StartupService {
   private viaHttp(resolve: any, reject: any) {
     zip(
       this.httpClient.get(`assets/tmp/i18n/${this.i18n.defaultLang}.json`),
-      this.httpClient.get('assets/tmp/app-data.json')
-    ).pipe(
-      // 接收其他拦截器后产生的异常消息
-      catchError(([langData, appData]) => {
-        resolve(null);
-        return [langData, appData];
-      })
-    ).subscribe(([langData, appData]) => {
-      // setting language data
-      this.translate.setTranslation(this.i18n.defaultLang, langData);
-      this.translate.setDefaultLang(this.i18n.defaultLang);
+      this.httpClient.get('assets/tmp/app-data.json'),
+    )
+      .pipe(
+        // 接收其他拦截器后产生的异常消息
+        catchError(([langData, appData]) => {
+          resolve(null);
+          return [langData, appData];
+        }),
+      )
+      .subscribe(
+        ([langData, appData]) => {
+          // setting language data
+          this.translate.setTranslation(this.i18n.defaultLang, langData);
+          this.translate.setDefaultLang(this.i18n.defaultLang);
 
-      // application data
-      const res: any = appData;
-      console.log(res);
-      // 应用信息：包括站点名、描述、年份
-      this.settingService.setApp(res.app);
-      // 用户信息：包括姓名、头像、邮箱地址
-      this.settingService.setUser(res.user);
-      // ACL：设置权限为全量
-      this.aclService.setFull(true);
-      // 初始化菜单
-      this.menuService.add(res.menu);
-      // 设置页面标题的后缀
-      this.titleService.suffix = res.app.name;
-    },
-      () => { },
-      () => {
-        resolve(null);
-      });
+          // application data
+          const res: any = appData;
+          console.log(res);
+          // 应用信息：包括站点名、描述、年份
+          this.settingService.setApp(res.app);
+          // 用户信息：包括姓名、头像、邮箱地址
+          this.settingService.setUser(res.user);
+          // ACL：设置权限为全量
+          this.aclService.setFull(true);
+          // 初始化菜单
+          this.menuService.add(res.menu);
+          // 设置页面标题的后缀
+          this.titleService.suffix = res.app.name;
+        },
+        () => {},
+        () => {
+          resolve(null);
+        },
+      );
   }
 
   private viaMockI18n(resolve: any, reject: any) {
@@ -92,13 +101,13 @@ export class StartupService {
 
     const app: any = {
       name: `ng-alain`,
-      description: `Ng-zorro admin panel front-end framework`
+      description: `Ng-zorro admin panel front-end framework`,
     };
     const user: any = {
       name: 'Admin',
       avatar: './assets/tmp/img/avatar.jpg',
       email: 'cipchk@qq.com',
-      token: '123456789'
+      token: '123456789',
     };
     // 应用信息：包括站点名、描述、年份
     this.settingService.setApp(app);
@@ -145,53 +154,56 @@ export class StartupService {
       this.viaMockI18n(resolve, reject);
       const appInfo = {
         name: 'ng alialn',
-        description: '自定义'
+        description: '自定义',
       };
       this.settingService.setApp(appInfo);
       // 用户信息：包括姓名、头像、邮箱地址
       const userInfo = {
         name: 'Admin',
         avatar: './assets/tmp/img/avatar.jpg',
-        email: 'cipchk@qq.com'
+        email: 'cipchk@qq.com',
       };
       this.settingService.setUser(userInfo);
       // ACL：设置权限为全量
       this.aclService.setFull(true);
       // 初始化菜单
-      const menuInfo = [{
-        text: '主导航',
-        // i18n: 'menu.main',
-        group: true,
-        hideInBreadcrumb: true,
-        children: [
-          {
-            text: '角色管理',
-            // i18n: 'menu.role.management',
-            icon: 'anticon anticon-rocket',
-            shortcutRoot: true,
-            children: [
-              {
-                text: '角色管理列表',
-                link: '/sys/role-list',
-                // i18n: 'menu.role.management.list'
-              },
-            ]
-          },
-          {
-            text: '权限管理',
-            // i18n: 'menu.role.management',
-            icon: 'anticon anticon-rocket',
-            shortcutRoot: true,
-            children: [
-              {
-                text: '权限管理',
-                link: '/sys/permission-tree',
-                // i18n: 'menu.role.management.list'
-              },
-            ]
-          },
-        ]
-      }
+      const menuInfo = [
+        {
+          text: '主导航',
+          // i18n: 'menu.main',
+          group: true,
+          hideInBreadcrumb: true,
+          children: [
+            {
+              text: '角色管理',
+              // i18n: 'menu.role.management',
+              icon: 'anticon anticon-rocket',
+              shortcutRoot: true,
+              children: [
+                {
+                  text: '角色管理列表',
+                  link: '/sys/role-list',
+                  // i18n: 'menu.role.management.list'
+                },
+              ],
+            },
+            {
+              text: '权限管理',
+              icon: 'anticon anticon-rocket',
+              shortcutRoot: true,
+              children: [
+                {
+                  text: '权限管理',
+                  link: '/sys/permission-tree',
+                },
+                {
+                  text: '权限管理列表',
+                  link: '/sys/permission-list',
+                },
+              ],
+            },
+          ],
+        },
       ];
       this.menuService.add(menuInfo);
       // 设置页面标题的后缀
