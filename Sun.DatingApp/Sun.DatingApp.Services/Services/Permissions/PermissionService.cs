@@ -22,49 +22,48 @@ namespace Sun.DatingApp.Services.Services.Permissions
 
         }
 
-        public async Task<WebApiResult<List<PermissionTreeModel>>> GetPermissions()
+        public async Task<WebApiResult<List<PermissionListModel>>> GetPermissions()
         {
-            var result = new WebApiResult<List<PermissionTreeModel>>();
+            var result = new WebApiResult<List<PermissionListModel>>();
             try
             {
-                var datas = new List<PermissionTreeModel>();
+                var datas = new List<PermissionListModel>();
 
                 var entitys = await this.GetPerssionEntitys();
                 var parents = entitys.Where(x => !x.ParentId.HasValue).ToList();
 
                 foreach (var parent in parents)
                 {
-                    var parentModel = new PermissionTreeModel
+                    var parentModel = new PermissionListModel
                     {
 
-                        Key = parent.Id,
-                        Title = parent.Name,
-                        IsLeaf = true,
+                        Id = parent.Id,
+                        Name = parent.Name,
                         Icon = parent.Icon,
                         Code = parent.Code,
                         Intro = parent.Intro,
+                        Active = parent.Active
                     };
 
-                    var childrenDatas = new List<PermissionTreeModel>();
+                    var childrenDatas = new List<PermissionListModel>();
                     var childrens = entitys.Where(x => x.ParentId == parent.Id);
                     foreach (var children in childrens)
                     {
-                        var childrenModel = new PermissionTreeModel
+                        var childrenModel = new PermissionListModel
                         {
-                            Key = parent.Id,
-                            Title = parent.Name,
-                            IsLeaf = true,
+                            Id = parent.Id,
+                            Name = parent.Name,
                             Icon = parent.Icon,
                             Code = parent.Code,
                             Intro = parent.Intro,
-                            ParentKey = parent.ParentId
+                            Active = parent.Active,
+                            ParentId = parent.ParentId
                         };
                         childrenDatas.Add(childrenModel);
                     }
 
                     if (childrenDatas.Any())
                     {
-                        parentModel.IsLeaf = false;
                         parentModel.Children = childrenDatas;
                     }
                     
@@ -79,9 +78,9 @@ namespace Sun.DatingApp.Services.Services.Permissions
             return result;
         }
 
-        public async Task<WebApiResult<PermissionTreeModel>> Create(PermissionEditDto dto, Guid accountId)
+        public async Task<WebApiResult<PermissionListModel>> Create(PermissionEditDto dto, Guid accountId)
         {
-            var result = new WebApiResult<PermissionTreeModel>();
+            var result = new WebApiResult<PermissionListModel>();
             try
             {
                 var entity = new Permission

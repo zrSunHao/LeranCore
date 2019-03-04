@@ -23,7 +23,7 @@ namespace Sun.DatingApp.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getpermissions")]
-        public async Task<WebApiResult<List<PermissionTreeModel>>> GetPermissions()
+        public async Task<WebApiResult<List<PermissionListModel>>> GetPermissions()
         {
             return await _service.GetPermissions();
         }
@@ -34,9 +34,9 @@ namespace Sun.DatingApp.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("create")]
-        public async Task<WebApiResult<PermissionTreeModel>> Create(PermissionEditDto dto)
+        public async Task<WebApiResult<PermissionListModel>> Create(PermissionEditDto dto)
         {
-            var result = new WebApiResult<PermissionTreeModel>();
+            var result = new WebApiResult<PermissionListModel>();
             if (CurrentUserId.HasValue)
             {
                 result = await _service.Create(dto, CurrentUserId.Value);

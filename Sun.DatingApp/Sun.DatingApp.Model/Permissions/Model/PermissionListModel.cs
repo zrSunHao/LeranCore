@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sun.DatingApp.Model.Roles.Model
+namespace Sun.DatingApp.Model.Permissions.Model
 {
-    public class RolePermissionModel
+    public class PermissionListModel
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
 
-        public bool Checked { get; set; }
+        public bool Active { get; set; }
 
         public string Icon { get; set; }
 
@@ -18,8 +18,8 @@ namespace Sun.DatingApp.Model.Roles.Model
 
         public string Intro { get; set; }
 
-        public Guid? ParentId { get; set; }
+        public Guid? ParentId { get; set; } 
 
-        public List<RolePermissionModel> Children { get; set; }
+        public List<PermissionListModel> Children { get; set; }
     }
 }

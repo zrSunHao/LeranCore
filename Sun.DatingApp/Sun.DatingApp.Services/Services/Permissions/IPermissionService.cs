@@ -14,7 +14,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
         /// 获取权限树数据
         /// </summary>
         /// <returns></returns>
-        Task<WebApiResult<List<PermissionTreeModel>>> GetPermissions();
+        Task<WebApiResult<List<PermissionListModel>>> GetPermissions();
 
         /// <summary>
         /// 新建权限树节点
@@ -22,7 +22,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult<PermissionTreeModel>> Create(PermissionEditDto dto, Guid accountId);
+        Task<WebApiResult<PermissionListModel>> Create(PermissionEditDto dto, Guid accountId);
 
         /// <summary>
         /// 修改权限节点

@@ -198,13 +198,12 @@ namespace Sun.DatingApp.Services.Services.RoleServices
                     var parentModel = new RolePermissionModel
                     {
 
-                        Key = parent.Id,
-                        Title = parent.Name,
-                        IsLeaf = true,
+                        Id = parent.Id,
+                        Name = parent.Name,
                         Icon = parent.Icon,
                         Code = parent.Code,
                         Intro = parent.Intro,
-                        IsChecked = rolePermissionIds.Contains(parent.Id)
+                        Checked = rolePermissionIds.Contains(parent.Id)
                     };
 
                     var childrenDatas = new List<RolePermissionModel>();
@@ -213,21 +212,19 @@ namespace Sun.DatingApp.Services.Services.RoleServices
                     {
                         var childrenModel = new RolePermissionModel
                         {
-                            Key = parent.Id,
-                            Title = parent.Name,
-                            IsLeaf = true,
+                            Id = parent.Id,
+                            Name = parent.Name,
                             Icon = parent.Icon,
                             Code = parent.Code,
                             Intro = parent.Intro,
-                            ParentKey = parent.ParentId,
-                            IsChecked = rolePermissionIds.Contains(children.Id)
+                            ParentId = parent.ParentId,
+                            Checked = rolePermissionIds.Contains(children.Id)
                         };
                         childrenDatas.Add(childrenModel);
                     }
 
                     if (childrenDatas.Any())
                     {
-                        parentModel.IsLeaf = false;
                         parentModel.Children = childrenDatas;
                     }
 
