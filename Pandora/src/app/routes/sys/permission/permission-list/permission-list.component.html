@@ -10,7 +10,7 @@
       <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
       <st #st [data]="datas" [columns]="columns" (change)="rowClick($event)" [bordered]="true">
         <ng-template st-row="name" let-item let-index="index">
-            <nz-tag [nzColor]="item.tagColor">{{item.name}}</nz-tag>
+            <nz-tag [nzColor]="item.tagColor"><i nz-icon type="warning" theme="outline"></i>&nbsp;{{item.name}}</nz-tag>
         </ng-template>
         <ng-template st-row="custom" let-item let-index="index">
           <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>

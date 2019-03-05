@@ -110,6 +110,7 @@ export class PermissionListComponent implements OnInit {
       name: null,
       code: null,
       icon: null,
+      tagColor: null,
       intro: null,
       isModule: true,
     };
@@ -128,6 +129,7 @@ export class PermissionListComponent implements OnInit {
       name: item.name,
       code: item.code,
       icon: item.icon,
+      tagColor: item.tagColor,
       intro: item.intro,
     };
 

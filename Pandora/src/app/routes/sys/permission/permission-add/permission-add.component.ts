@@ -19,6 +19,7 @@ export class PermissionAddComponent implements OnInit {
       name: { type: 'string', title: '权限名称', maxLength: 100 },
       code: { type: 'string', title: '编码', maxLength: 100 },
       icon: { type: 'string', title: '图标', maxLength: 100 },
+      tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       intro: {
         type: 'string',
         title: '备注',
@@ -29,7 +30,7 @@ export class PermissionAddComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'code', 'icon', 'intro'],
+    required: ['name', 'code', 'icon', 'intro', 'tagColor'],
     ui: {
       spanLabelFixed: 150,
       grid: { span: 24 },
