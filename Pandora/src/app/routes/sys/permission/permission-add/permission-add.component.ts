@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SFSchema } from '@delon/form';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
+import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 
 @Component({
@@ -11,8 +11,7 @@ import { _HttpClient } from '@delon/theme';
 export class PermissionAddComponent implements OnInit {
   entity: any = {};
   isEdit = false;
-  i: any;
-  title = '新建角色';
+  title = '';
 
   record: any = {};
   schema: SFSchema = {
@@ -39,9 +38,7 @@ export class PermissionAddComponent implements OnInit {
   };
 
   constructor(
-    private modal: NzModalRef,
-    public msgSrv: NzMessageService,
-    public http: _HttpClient,
+    private modal: NzModalRef, public http: _HttpClient, private notification: NzNotificationService
   ) { }
 
   ngOnInit() { }
@@ -56,26 +53,26 @@ export class PermissionAddComponent implements OnInit {
 
   add(entity: any) {
     const url = 'permission/create';
+
     this.http.post(url, entity).subscribe((res: any) => {
       if (!res.success) {
-        console.log(res);
-        this.msgSrv.error('保存失败');
+        this.notification.create('error', '添加失败', res.allMessages);
         return;
       }
-      this.msgSrv.success('保存成功');
+      this.notification.create('success', '添加成功', res.allMessages);
       this.modal.close(res);
     });
   }
 
   edit(entity: any) {
     const url = 'permission/edit';
+
     this.http.post(url, entity).subscribe((res: any) => {
       if (!res.success) {
-        console.log(res);
-        this.msgSrv.error('保存失败');
+        this.notification.create('error', '更新失败', res.allMessages);
         return;
       }
-      this.msgSrv.success('保存成功');
+      this.notification.create('success', '更新成功', res.allMessages);
       this.modal.close(res);
     });
   }

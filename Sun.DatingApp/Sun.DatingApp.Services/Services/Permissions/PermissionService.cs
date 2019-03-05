@@ -141,7 +141,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
             {
                 var datas = await (from p in _dataContext.Permissions
                     where String.IsNullOrEmpty(name) || p.Name == name
-                    where !p.Deleted
+                    where !p.Deleted && !p.ParentId.HasValue
                     select new PermissionListModel
                     {
                         Id = p.Id,
@@ -180,7 +180,8 @@ namespace Sun.DatingApp.Services.Services.Permissions
                         Icon = p.Icon,
                         TagColor = p.TagColor,
                         Code = p.Code,
-                        Intro = p.Intro
+                        Intro = p.Intro,
+                        ParentId = p.ParentId
                     }).ToListAsync();
 
                 result.Data = datas;

@@ -6,14 +6,14 @@
         <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
           <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
           <ng-template #forbidAction>
-            <nz-switch [ngModel]="true" (click)='forbid(item)' nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
+            <nz-switch [ngModel]="true" (click)='active(item)' nzCheckedChildren="开" nzUnCheckedChildren="关">
+            </nz-switch>
           </ng-template>
           <ng-template #deleteAction><a (click)="delete(item)">删除</a></ng-template>
-          <nz-list-item-meta [nzTitle]="nzTitle"
-            nzDescription="Ant Design, a design language for background applications, is refined by Ant UED Team">
+          <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.intro">
             <ng-template #nzTitle>
               <!-- <a href="#">{{item.name}}</a> -->
-              <nz-tag [nzColor]="'lime'">lime</nz-tag>
+              <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>{{item.name}}</nz-tag>
             </ng-template>
           </nz-list-item-meta>
         </nz-skeleton>

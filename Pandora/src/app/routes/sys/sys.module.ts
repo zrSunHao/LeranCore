@@ -10,7 +10,6 @@ import { SysRoleListRoleAddComponent } from './role/role-add/role-add.component'
 import { RolePermissionComponent } from './role/role-permission/role-permission.component';
 
 // 权限管理模块组件
-import { PermissionTreeComponent } from './permission/permission-tree/permission-tree.component';
 import { PermissionAddComponent } from './permission/permission-add/permission-add.component';
 import { PermissionListComponent} from './permission/permission-list/permission-list.component';
 import { PermissionOperationComponent } from './permission/permission-operation/permission-operation.component';
@@ -23,7 +22,6 @@ const COMPONENTS_NOROUNT = [
   SysRoleListRoleViewComponent,
   SysRoleListRoleAddComponent,
   RolePermissionComponent,
-  PermissionTreeComponent,
   PermissionAddComponent,
   PermissionListComponent,
   PermissionOperationComponent

@@ -71,7 +71,7 @@ export class StartupService {
           // 设置页面标题的后缀
           this.titleService.suffix = res.app.name;
         },
-        () => {},
+        () => { },
         () => {
           resolve(null);
         },
@@ -192,10 +192,6 @@ export class StartupService {
               icon: 'anticon anticon-rocket',
               shortcutRoot: true,
               children: [
-                {
-                  text: '权限管理',
-                  link: '/sys/permission-tree',
-                },
                 {
                   text: '权限管理列表',
                   link: '/sys/permission-list',
