@@ -19,7 +19,5 @@ namespace Sun.DatingApp.Model.Permissions.Model
         public string Intro { get; set; }
 
         public Guid? ParentId { get; set; } 
-
-        public List<PermissionListModel> Children { get; set; }
     }
 }

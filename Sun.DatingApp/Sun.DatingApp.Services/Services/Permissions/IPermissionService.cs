@@ -11,10 +11,17 @@ namespace Sun.DatingApp.Services.Services.Permissions
     public interface IPermissionService
     {
         /// <summary>
-        /// 获取权限树数据
+        /// 获取操作模块权限数据
         /// </summary>
         /// <returns></returns>
-        Task<WebApiResult<List<PermissionListModel>>> GetPermissions();
+        Task<WebApiPagingResult<List<PermissionListModel>>> GetModulePermission(string name);
+
+        /// <summary>
+        /// 获取对应模块下的操作权限
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<WebApiResult<List<PermissionListModel>>> GetOperatePermission(Guid id);
 
         /// <summary>
         /// 新建权限树节点

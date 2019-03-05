@@ -19,17 +19,27 @@ namespace Sun.DatingApp.Api.Controllers
         }
 
         /// <summary>
-        /// 获取权限树数据
+        /// 获取操作模块权限数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getpermissions")]
-        public async Task<WebApiResult<List<PermissionListModel>>> GetPermissions()
+        [HttpGet("getmodulepermission")]
+        public async Task<WebApiResult<List<PermissionListModel>>> GetModulePermission(string name)
         {
-            return await _service.GetPermissions();
+            return await _service.GetModulePermission(name);
         }
 
         /// <summary>
-        /// 新建权限树节点
+        /// 获取对应模块下的操作权限
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getoperatepermission")]
+        public async Task<WebApiResult<List<PermissionListModel>>> GetOperatePermission(Guid id)
+        {
+            return await _service.GetOperatePermission(id);
+        }
+
+        /// <summary>
+        /// 新建权限
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>

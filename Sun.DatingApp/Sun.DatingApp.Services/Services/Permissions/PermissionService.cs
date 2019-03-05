@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -22,67 +23,17 @@ namespace Sun.DatingApp.Services.Services.Permissions
 
         }
 
-        public async Task<WebApiResult<List<PermissionListModel>>> GetPermissions()
-        {
-            var result = new WebApiResult<List<PermissionListModel>>();
-            try
-            {
-                var datas = new List<PermissionListModel>();
-
-                var entitys = await this.GetPerssionEntitys();
-                var parents = entitys.Where(x => !x.ParentId.HasValue).ToList();
-
-                foreach (var parent in parents)
-                {
-                    var parentModel = new PermissionListModel
-                    {
-
-                        Id = parent.Id,
-                        Name = parent.Name,
-                        Icon = parent.Icon,
-                        Code = parent.Code,
-                        Intro = parent.Intro,
-                        Active = parent.Active
-                    };
-
-                    var childrenDatas = new List<PermissionListModel>();
-                    var childrens = entitys.Where(x => x.ParentId == parent.Id);
-                    foreach (var children in childrens)
-                    {
-                        var childrenModel = new PermissionListModel
-                        {
-                            Id = parent.Id,
-                            Name = parent.Name,
-                            Icon = parent.Icon,
-                            Code = parent.Code,
-                            Intro = parent.Intro,
-                            Active = parent.Active,
-                            ParentId = parent.ParentId
-                        };
-                        childrenDatas.Add(childrenModel);
-                    }
-
-                    if (childrenDatas.Any())
-                    {
-                        parentModel.Children = childrenDatas;
-                    }
-                    
-                    datas.Add(parentModel);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                result.AddError(ex.Message);
-            }
-            return result;
-        }
-
         public async Task<WebApiResult<PermissionListModel>> Create(PermissionEditDto dto, Guid accountId)
         {
             var result = new WebApiResult<PermissionListModel>();
             try
             {
+                if (!dto.IsModule && !dto.ParentId.HasValue)
+                {
+                    result.AddError("该操作权限所属模块信息为空");
+                    return result;
+                }
+
                 var entity = new Permission
                 {
                     Id = Guid.NewGuid(),
@@ -94,6 +45,12 @@ namespace Sun.DatingApp.Services.Services.Permissions
                     CreatedById = accountId,
                     Deleted = false
                 };
+
+                if (!dto.IsModule && dto.ParentId.HasValue)
+                {
+                    entity.ParentId = dto.ParentId;
+                }
+
                 _dataContext.Permissions.Add(entity);
 
                 await _dataContext.SaveChangesAsync();
@@ -170,6 +127,63 @@ namespace Sun.DatingApp.Services.Services.Permissions
             {
                 Console.WriteLine(ex);
                 result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiPagingResult<List<PermissionListModel>>> GetModulePermission(string name)
+        {
+            var result = new WebApiPagingResult<List<PermissionListModel>>();
+            try
+            {
+                var datas = await (from p in _dataContext.Permissions
+                    where String.IsNullOrEmpty(name) || p.Name == name
+                    where !p.Deleted
+                    select new PermissionListModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Active = p.Active,
+                        Icon = p.Icon,
+                        Code = p.Code,
+                        Intro = p.Intro
+                    }).ToListAsync();
+
+                result.RowsCount = datas.Count();
+                result.Data = datas;
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<List<PermissionListModel>>> GetOperatePermission(Guid id)
+        {
+            var result = new WebApiResult<List<PermissionListModel>>();
+            try
+            {
+                var datas = await (from p in _dataContext.Permissions
+                    where p.ParentId.HasValue && p.ParentId == id
+                    where !p.Deleted
+                    select new PermissionListModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Active = p.Active,
+                        Icon = p.Icon,
+                        Code = p.Code,
+                        Intro = p.Intro
+                    }).ToListAsync();
+
+                result.Data = datas;
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
             }
             return result;
         }
