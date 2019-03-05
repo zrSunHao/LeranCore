@@ -59,7 +59,7 @@ namespace Sun.DatingApp.Api.Controllers
         }
 
         /// <summary>
-        /// 修改权限节点
+        /// 修改权限
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -79,7 +79,7 @@ namespace Sun.DatingApp.Api.Controllers
         }
 
         /// <summary>
-        /// 删除权限节点
+        /// 删除权限
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -90,6 +90,26 @@ namespace Sun.DatingApp.Api.Controllers
             if (CurrentUserId.HasValue)
             {
                 result = await _service.Delete(id, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 权限开启或关闭
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("active")]
+        public async Task<WebApiResult> Active(PermissionActiveDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.Active(dto, CurrentUserId.Value);
             }
             else
             {

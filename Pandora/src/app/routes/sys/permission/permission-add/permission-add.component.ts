@@ -10,6 +10,7 @@ import { _HttpClient } from '@delon/theme';
 })
 export class PermissionAddComponent implements OnInit {
   entity: any = {};
+  isEdit = false;
   i: any;
   title = '新建角色';
 
@@ -41,21 +42,41 @@ export class PermissionAddComponent implements OnInit {
     private modal: NzModalRef,
     public msgSrv: NzMessageService,
     public http: _HttpClient,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   save(value: any) {
-    console.log(value);
+    if (this.isEdit) {
+      this.edit(value);
+    } else {
+      this.add(value);
+    }
+  }
+
+  add(entity: any) {
     const url = 'permission/create';
-    this.http.post(url, value).subscribe((res: any) => {
+    this.http.post(url, entity).subscribe((res: any) => {
       if (!res.success) {
         console.log(res);
         this.msgSrv.error('保存失败');
         return;
       }
       this.msgSrv.success('保存成功');
-      this.modal.close(value);
+      this.modal.close(res);
+    });
+  }
+
+  edit(entity: any) {
+    const url = 'permission/edit';
+    this.http.post(url, entity).subscribe((res: any) => {
+      if (!res.success) {
+        console.log(res);
+        this.msgSrv.error('保存失败');
+        return;
+      }
+      this.msgSrv.success('保存成功');
+      this.modal.close(res);
     });
   }
 

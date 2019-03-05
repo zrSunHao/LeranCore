@@ -4,6 +4,7 @@ import { STComponent, STColumn, STColumnTag } from '@delon/abc';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { PermissionAddComponent } from '../permission-add/permission-add.component';
 import { PermissionOperationComponent } from '../permission-operation/permission-operation.component';
+import { NzMessageService } from 'ng-zorro-antd';
 
 const TAG: STColumnTag = {
   1: { text: '开启', color: 'green' },
@@ -19,15 +20,7 @@ export class PermissionListComponent implements OnInit {
   @ViewChild('pmsopt') pmsopt: PermissionOperationComponent;
   @ViewChild('st') st: STComponent;
   // 列表数据
-  datas: Array<any> = [
-    // {
-    //   name: 'dsfsd',
-    //   code: 'fsdfsdf',
-    //   incon: 'fsdfsd',
-    //   active: true,
-    //   tag: 1,
-    // },
-  ];
+  datas: Array<any> = [];
   // 列表搜索条件
   searchSchema: SFSchema = {
     properties: {
@@ -40,10 +33,10 @@ export class PermissionListComponent implements OnInit {
     { title: '模块名称', render: 'name', className: 'text-center' },
     { title: '备注', index: 'intro', className: 'text-center' },
     {
-      title: '启用',
+      title: '是否启用',
       render: 'custom',
       className: 'text-center',
-      click: (item: any) => this.forbidModule(item),
+      click: (item: any) => this.activeModule(item),
     },
     {
       title: '操作',
@@ -58,7 +51,7 @@ export class PermissionListComponent implements OnInit {
         {
           text: '添加权限',
           icon: 'anticon anticon-plus',
-          click: (item: any) => this.forbidModule(item),
+          click: (item: any) => this.addOperation(item),
         },
         {
           text: '删除',
@@ -69,7 +62,7 @@ export class PermissionListComponent implements OnInit {
     },
   ];
 
-  constructor(private modal: ModalHelper, private http: _HttpClient) {}
+  constructor(private modal: ModalHelper, private http: _HttpClient, public msgSrv: NzMessageService, ) { }
 
   ngOnInit() {
     this.loadDatas('');
@@ -106,6 +99,7 @@ export class PermissionListComponent implements OnInit {
   }
 
   addModule() {
+    const isEdit = false;
     const entity = {
       name: null,
       code: null,
@@ -116,16 +110,18 @@ export class PermissionListComponent implements OnInit {
     };
 
     this.modal
-      .createStatic(PermissionAddComponent, { entity })
+      .createStatic(PermissionAddComponent, { entity, isEdit })
       .subscribe(res => {
-        this.datas.push(res);
-        this.st.reload();
+        // this.datas.push(res);
+        this.loadDatas('');
         console.log(res);
       });
   }
 
   editModule(item: any) {
+    const isEdit = true;
     const entity = {
+      id: item.id,
       name: item.name,
       code: item.code,
       icon: item.icon,
@@ -134,19 +130,40 @@ export class PermissionListComponent implements OnInit {
     };
 
     this.modal
-      .createStatic(PermissionAddComponent, { entity })
+      .createStatic(PermissionAddComponent, { entity, isEdit })
       .subscribe(res => {
-        this.st.reload();
+        this.loadDatas('');
         console.log(res);
       });
   }
 
-  deleteModule(item: any) {}
+  deleteModule(item: any) {
+    const url = 'permission/delete';
+    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+      if (!res.success) {
+        console.log(res);
+        this.msgSrv.error('删除失败');
+        return;
+      }
+      this.msgSrv.success('删除成功');
+      this.loadDatas('');
+    });
+  }
 
-  forbidModule(item: any) {
-    item.active = 2;
-    this.st.reload();
-    console.log(item);
+  activeModule(item: any) {
+    const url = 'permission/active';
+    const active = item.active;
+
+    this.http.post(url, { id: item.id, active: !active }).subscribe((res: any) => {
+      if (!res.success) {
+        console.log(res);
+        this.msgSrv.error('保存失败');
+        item.active = active;
+        return;
+      }
+      this.msgSrv.success('保存成功');
+      this.st.reload();
+    });
   }
 
   addOperation(item: any) {
@@ -161,28 +178,9 @@ export class PermissionListComponent implements OnInit {
     this.modal
       .createStatic(PermissionAddComponent, { entity })
       .subscribe(res => {
-        this.datas.push(res);
+        // this.datas.push(res);
+        this.loadDatas('');
         console.log(res);
       });
-  }
-
-  apiSearchModule(data: any) {
-    const url = '';
-  }
-
-  apiAddModule(data: any) {
-    const url = '';
-  }
-
-  apiEditModule(data: any) {
-    const url = '';
-  }
-
-  apiDeleteModule(id: any) {
-    const url = '';
-  }
-
-  apiAddhModuleOperation(data: any) {
-    const url = '';
   }
 }

@@ -46,5 +46,13 @@ namespace Sun.DatingApp.Services.Services.Permissions
         /// <param name="accountId"></param>
         /// <returns></returns>
         Task<WebApiResult> Delete(Guid id, Guid accountId);
+
+        /// <summary>
+        /// 权限启用或关闭
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        Task<WebApiResult> Active(PermissionActiveDto dto,Guid accountId);
     }
 }

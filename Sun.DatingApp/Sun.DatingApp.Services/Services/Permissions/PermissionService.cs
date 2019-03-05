@@ -192,5 +192,39 @@ namespace Sun.DatingApp.Services.Services.Permissions
             }
             return result;
         }
+
+        public async Task<WebApiResult> Active(PermissionActiveDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Permissions.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                if (dto.Active == entity.Active)
+                {
+                    var errMsg = "";
+                    if (entity.Active) errMsg = "权限早已开启"; else errMsg = "权限早已关闭";
+                    result.AddError(errMsg);
+                    return result;
+                }
+
+                entity.Active = dto.Active;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
     }
 }
