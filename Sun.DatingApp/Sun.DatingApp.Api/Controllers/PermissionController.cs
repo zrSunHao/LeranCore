@@ -22,7 +22,7 @@ namespace Sun.DatingApp.Api.Controllers
         /// 获取操作模块权限数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getmodulepermission")]
+        [HttpPost("getmodulepermission")]
         public async Task<WebApiResult<List<PermissionListModel>>> GetModulePermission(string name)
         {
             return await _service.GetModulePermission(name);
