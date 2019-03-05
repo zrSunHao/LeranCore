@@ -41,6 +41,8 @@ namespace Sun.DatingApp.Services.Services.Permissions
                     Code = dto.Code,
                     Intro = dto.Intro,
                     Icon = dto.Icon,
+                    TagColor = dto.TagColor,
+                    Active = true,
                     CreatedAt = DateTime.Now,
                     CreatedById = accountId,
                     Deleted = false
@@ -92,6 +94,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
                 entity.Code = dto.Code;
                 entity.Intro = dto.Intro;
                 entity.Icon = dto.Icon;
+                entity.TagColor = dto.TagColor;
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdatedById = accountId;
 
@@ -145,6 +148,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
                         Name = p.Name,
                         Active = p.Active,
                         Icon = p.Icon,
+                        TagColor = p.TagColor,
                         Code = p.Code,
                         Intro = p.Intro
                     }).ToListAsync();
@@ -174,6 +178,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
                         Name = p.Name,
                         Active = p.Active,
                         Icon = p.Icon,
+                        TagColor = p.TagColor,
                         Code = p.Code,
                         Intro = p.Intro
                     }).ToListAsync();

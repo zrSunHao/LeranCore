@@ -6,10 +6,9 @@ import { _HttpClient } from '@delon/theme';
 @Component({
   selector: 'app-permission-add',
   templateUrl: './permission-add.component.html',
-  styles: []
+  styles: [],
 })
 export class PermissionAddComponent implements OnInit {
-
   entity: any = {};
   i: any;
   title = '新建角色';
@@ -40,21 +39,26 @@ export class PermissionAddComponent implements OnInit {
   constructor(
     private modal: NzModalRef,
     public msgSrv: NzMessageService,
-    public http: _HttpClient
-  ) { }
+    public http: _HttpClient,
+  ) {}
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   save(value: any) {
     console.log(value);
-    this.msgSrv.success('保存成功');
-    this.modal.close(value);
+    const url = 'permission/create';
+    this.http.post(url, value).subscribe((res: any) => {
+      if (!res.success) {
+        console.log(res);
+        this.msgSrv.error('保存失败');
+        return;
+      }
+      this.msgSrv.success('保存成功');
+      this.modal.close(value);
+    });
   }
 
   close() {
     this.modal.destroy();
   }
-
 }

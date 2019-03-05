@@ -14,6 +14,8 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public string Icon { get; set; }
 
+        public string TagColor { get; set; }
+
         public bool Active { get; set; }
 
         public Guid? ParentId { get; set; }

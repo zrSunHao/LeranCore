@@ -14,6 +14,8 @@ namespace Sun.DatingApp.Model.Permissions.Model
 
         public string Icon { get; set; }
 
+        public string TagColor { get; set; }
+
         public string Code { get; set; }
 
         public string Intro { get; set; }
