@@ -6,33 +6,41 @@ import { PermissionAddComponent } from '../permission-add/permission-add.compone
 @Component({
   selector: 'app-permission-operation',
   templateUrl: './permission-operation.component.html',
-  styles: []
+  styles: [],
 })
 export class PermissionOperationComponent implements OnInit {
-
   initLoading = false; // bug
   loadingMore = false;
   item: any;
+  alertMsgShow = false;
+  alertMsgTitle = '';
+  alertMsgContent = '';
 
   list = [];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper, private notification: NzNotificationService) { }
+  constructor(
+    private http: _HttpClient,
+    private modal: ModalHelper,
+    private notification: NzNotificationService,
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   public loadData(item: any) {
     const url = 'permission/getoperatepermission';
     this.item = item;
 
-    this.http.get(url, { id: item.id })
-      .subscribe((res: any) => {
-        if (!res.success) {
-          console.log(res);
-          return;
-        }
-        this.list = res.data;
-      });
+    this.alertMsgShow = true;
+    this.alertMsgTitle = `${item.name}模块`;
+    this.alertMsgContent = `注：列表显示内容为${item.name}模块下的操作权限`;
+
+    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+      if (!res.success) {
+        console.log(res);
+        return;
+      }
+      this.list = res.data;
+    });
   }
 
   onLoadMore(): void {
@@ -41,7 +49,7 @@ export class PermissionOperationComponent implements OnInit {
 
   edit(item: any): void {
     const isEdit = true;
-    const title = '修改操作权限';
+    const title = '添加操作权限';
     const entity = {
       id: item.id,
       name: item.name,
@@ -49,7 +57,7 @@ export class PermissionOperationComponent implements OnInit {
       icon: item.icon,
       tagColor: item.tagColor,
       intro: item.intro,
-      parentId: item.parentId
+      parentId: item.parentId,
     };
 
     this.modal
@@ -70,15 +78,17 @@ export class PermissionOperationComponent implements OnInit {
       msg = '开启';
     }
 
-    this.http.post(url, { id: item.id, active: !active }).subscribe((res: any) => {
-      if (!res.success) {
-        item.active = active;
-        this.notification.create('error', msg + '失败', res.allMessages);
-        return;
-      }
-      this.notification.create('success', msg + '成功', res.allMessages);
-      this.loadData(this.item);
-    });
+    this.http
+      .post(url, { id: item.id, active: !active })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          item.active = active;
+          this.notification.create('error', msg + '失败', res.allMessages);
+          return;
+        }
+        this.notification.create('success', msg + '成功', res.allMessages);
+        this.loadData(this.item);
+      });
   }
 
   delete(item: any): void {
@@ -93,7 +103,4 @@ export class PermissionOperationComponent implements OnInit {
       this.loadData(this.item);
     });
   }
-
-
-
 }

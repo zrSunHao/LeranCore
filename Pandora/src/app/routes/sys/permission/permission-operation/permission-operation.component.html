@@ -1,4 +1,7 @@
 <nz-card>
+  <nz-alert *ngIf="alertMsgShow" nzType="info" [nzMessage]="alertMsgTitle" [nzDescription]="alertMsgContent"
+    nzShowIcon>
+  </nz-alert>
   <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
     [nzRenderItem]="item">
     <ng-template #item let-item>

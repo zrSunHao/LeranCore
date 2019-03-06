@@ -174,7 +174,7 @@ export class PermissionListComponent implements OnInit {
       .createStatic(PermissionAddComponent, { entity, isEdit, title })
       .subscribe(res => {
         // this.datas.push(res);
-        this.loadDatas('');
+        this.pmsopt.loadData(item);
         console.log(res);
       });
   }
