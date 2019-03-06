@@ -9,6 +9,7 @@ using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Auth.Login.Model;
 using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.Permissions.Model;
 using Sun.DatingApp.Model.Roles.Dto;
 using Sun.DatingApp.Model.Roles.Model;
 using Sun.DatingApp.Services.Services.BaseServices;
@@ -136,14 +137,42 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             var result = new WebApiResult<List<RoleListModel>>();
             try
             {
-                result.Data = await _dataContext.Roles.Select(x => new RoleListModel
+                var datas = await _dataContext.Roles.Select(x => new RoleListModel
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Code = x.Code,
+                    Active = x.Active,
                     Intro = x.Intro,
-                    CreatedAt = x.CreatedAt
                 }).ToListAsync();
+                
+                if (datas.Any())
+                {
+                    var roleIds = datas.Select(x => x.Id).ToList();
+
+                    var modules = await (from rp in _dataContext.RolePermissions
+                        join p in _dataContext.Permissions on rp.RoleId equals p.Id into tp
+                        from prp in tp.DefaultIfEmpty()
+                        where roleIds.Contains(rp.RoleId) && !rp.Deleted
+                        select new RoleListPermissionModel
+                        {
+                            Id = prp.Id,
+                            Name = prp.Name,
+                            Icon = prp.Icon,
+                            TagColor = prp.Active ? prp.TagColor : "",
+                            RoleId = rp.RoleId
+                        }).ToListAsync();
+
+                    if (modules.Any())
+                    {
+                        foreach (var data in datas)
+                        {
+                            data.Modules = modules.Where(x => x.RoleId == data.Id).ToList();
+                        }
+                    }
+                }
+
+                result.Data = datas;
             }
             catch (Exception ex)
             {
@@ -283,7 +312,6 @@ namespace Sun.DatingApp.Services.Services.RoleServices
                             Id = Guid.NewGuid(),
                             RoleId = dto.RoleId,
                             PermissionId = newRolePermission.Id,
-                            PermissionName = newRolePermission.Name,
                             Deleted = false,
                             CreatedAt = DateTime.Now,
                             CreatedById = accountId,

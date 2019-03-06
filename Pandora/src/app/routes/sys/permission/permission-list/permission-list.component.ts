@@ -40,7 +40,6 @@ export class PermissionListComponent implements OnInit {
         {
           text: '编辑',
           icon: 'anticon anticon-edit',
-
           click: (item: any) => this.editModule(item),
         },
         {

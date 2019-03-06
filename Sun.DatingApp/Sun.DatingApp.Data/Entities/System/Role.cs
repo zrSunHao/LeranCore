@@ -18,6 +18,9 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("简介")]
         public string Intro { get; set; }
 
+        [Description("是否启用")]
+        public bool Active { get; set; }
+
 
         #region 索引
 

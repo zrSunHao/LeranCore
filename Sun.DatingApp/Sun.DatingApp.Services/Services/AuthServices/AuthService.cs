@@ -99,8 +99,11 @@ namespace Sun.DatingApp.Services.Services.AuthServices
                 account.RefreshToken = refreshToken;
                 await _dataContext.SaveChangesAsync();
 
-                var permissions = _dataContext.RolePermissions.Where(x => x.RoleId == account.RoleId)
-                    .Select(x => x.PermissionName).ToList();
+                var permissions = await (from rp in _dataContext.RolePermissions
+                    join p in _dataContext.Permissions on rp.RoleId equals p.Id into tp
+                    from prp in tp.DefaultIfEmpty()
+                    where !rp.Deleted && rp.RoleId == account.RoleId
+                    select prp.Code).ToListAsync();
 
                 var data = _mapper.Map<Account, AccessDataModel>(account);
                 var role = _dataContext.Roles.FirstOrDefault(x => x.Id == account.RoleId);

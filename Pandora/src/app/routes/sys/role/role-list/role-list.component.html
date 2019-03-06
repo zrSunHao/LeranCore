@@ -7,10 +7,16 @@
   <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
   <st #st [data]="datas" [columns]="columns" [bordered]="true">
     <ng-template st-row="name" let-item let-index="index">
+      <label class="pb-0 text-volcano">{{item.name}}</label>
+    </ng-template>
+    <ng-template st-row="modules" let-item let-index="index">
       <div *ngFor="let module of item.modules">
         <nz-tag [nzColor]="module.tagColor"><i nz-icon [type]="module.icon" theme="outline"></i>&nbsp;{{module.name}}
         </nz-tag>
       </div>
+    </ng-template>
+    <ng-template st-row="intro" let-item let-index="index">
+      <label class="pb-0 text-geekblue">{{item.intro}}</label>
     </ng-template>
     <ng-template st-row="custom" let-item let-index="index">
       <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="active(item)">

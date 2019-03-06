@@ -10,7 +10,7 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public Guid PermissionId { get; set; }
 
-        public string PermissionName { get; set; }
+        public string IsModule { get; set; }
 
         public Role Role { get; set; }
     }

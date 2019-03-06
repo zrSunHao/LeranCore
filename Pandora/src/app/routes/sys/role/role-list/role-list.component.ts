@@ -23,9 +23,9 @@ export class SysRoleRoleListComponent implements OnInit {
 
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '角色名称', index: 'name', className: 'text-center' },
-    { title: '模块', render: 'module', className: 'text-center' },
-    { title: '简介', index: 'intro', className: 'text-center' },
+    { title: '角色名称', render: 'name', className: 'text-center' },
+    { title: '模块', render: 'modules', className: 'text-center' },
+    { title: '简介', render: 'intro', className: 'text-center' },
     {
       title: '是否启用',
       render: 'custom',
@@ -41,10 +41,12 @@ export class SysRoleRoleListComponent implements OnInit {
       buttons: [
         {
           text: '编辑',
+          icon: 'anticon anticon-edit',
           click: (item: any) => this.edit(item),
         },
         {
           text: '权限',
+          icon: 'anticon anticon-warning',
           click: (item: any) => this.perssion(item),
         },
       ],
