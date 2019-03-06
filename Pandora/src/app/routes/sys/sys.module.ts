@@ -5,7 +5,6 @@ import { SysRoutingModule } from './sys-routing.module';
 
 // 角色管理模块组件
 import { SysRoleRoleListComponent } from './role/role-list/role-list.component';
-import { SysRoleListRoleViewComponent } from './role/role-view/role-view.component';
 import { SysRoleListRoleAddComponent } from './role/role-add/role-add.component';
 import { RolePermissionComponent } from './role/role-permission/role-permission.component';
 
@@ -19,7 +18,6 @@ const COMPONENTS = [
 ];
 
 const COMPONENTS_NOROUNT = [
-  SysRoleListRoleViewComponent,
   SysRoleListRoleAddComponent,
   RolePermissionComponent,
   PermissionAddComponent,

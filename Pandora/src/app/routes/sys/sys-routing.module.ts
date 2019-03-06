@@ -2,13 +2,28 @@ import { PermissionListComponent } from './permission/permission-list/permission
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SysRoleRoleListComponent } from './role/role-list/role-list.component';
+import { RolePermissionComponent } from './role/role-permission/role-permission.component';
 
 const routes: Routes = [
-  { path: 'role-list', component: SysRoleRoleListComponent , data: { title: '角色管理列表' }},
-  { path: 'permission-list', component: PermissionListComponent , data: { title: '角色管理列表' }}];
+  {
+    path: 'role-list',
+    component: SysRoleRoleListComponent,
+    data: { title: '角色管理列表' },
+  },
+  {
+    path: 'permission-list',
+    component: PermissionListComponent,
+    data: { title: '角色管理列表' },
+  },
+  {
+    path: 'role-permission-list/:id',
+    component: RolePermissionComponent,
+    data: { title: '角色权限管理列表' },
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SysRoutingModule { }
+export class SysRoutingModule {}

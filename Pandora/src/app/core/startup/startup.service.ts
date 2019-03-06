@@ -171,12 +171,12 @@ export class StartupService {
         {
           text: '主导航',
           group: true,
-          hideInBreadcrumb: true,
+          hideInBreadcrumb: false,
           children: [
             {
               text: '系统设置',
               icon: 'anticon anticon-setting',
-              shortcutRoot: true,
+              shortcutRoot: false,
               children: [
                 {
                   text: '角色管理列表',

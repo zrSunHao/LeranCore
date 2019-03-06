@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -216,49 +217,40 @@ namespace Sun.DatingApp.Services.Services.RoleServices
             {
                 var datas = new List<RolePermissionModel>();
 
-                var rolePermissions = await this.GetRolePerssionEntitys(id);
-                var rolePermissionIds = rolePermissions.Select(x => x.PermissionId).ToList();
+                var rolePmsIds = await _dataContext.RolePermissions.Where(x => x.RoleId == id && !x.Deleted).Select(x=>x.PermissionId).ToListAsync();
+                var modules = await _dataContext.Permissions.Where(x => !x.ParentId.HasValue && !x.Deleted)
+                    .Select(c => new RolePermissionModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Icon = c.Icon,
+                        Code = c.Code,
+                        Active = c.Active,
+                        Intro = c.Intro,
+                        Checked = rolePmsIds.Contains(c.Id)
+                    })
+                    .ToListAsync();
 
-                var permissionEntitys = await this.GetPerssionEntitys();
-                var parents = permissionEntitys.Where(x => !x.ParentId.HasValue).ToList();
+                var operates = await _dataContext.Permissions.Where(x => x.ParentId.HasValue && !x.Deleted)
+                    .Select(c => new RolePermissionModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Icon = c.Icon,
+                        Code = c.Code,
+                        Active = c.Active,
+                        Intro = c.Intro,
+                        ParentId = c.ParentId,
+                        Checked = rolePmsIds.Contains(c.Id)
+                    })
+                    .ToListAsync();
 
-                foreach (var parent in parents)
+                foreach (var module in modules)
                 {
-                    var parentModel = new RolePermissionModel
-                    {
-
-                        Id = parent.Id,
-                        Name = parent.Name,
-                        Icon = parent.Icon,
-                        Code = parent.Code,
-                        Intro = parent.Intro,
-                        Checked = rolePermissionIds.Contains(parent.Id)
-                    };
-
-                    var childrenDatas = new List<RolePermissionModel>();
-                    var childrens = permissionEntitys.Where(x => x.ParentId == parent.Id);
-                    foreach (var children in childrens)
-                    {
-                        var childrenModel = new RolePermissionModel
-                        {
-                            Id = parent.Id,
-                            Name = parent.Name,
-                            Icon = parent.Icon,
-                            Code = parent.Code,
-                            Intro = parent.Intro,
-                            ParentId = parent.ParentId,
-                            Checked = rolePermissionIds.Contains(children.Id)
-                        };
-                        childrenDatas.Add(childrenModel);
-                    }
-
-                    if (childrenDatas.Any())
-                    {
-                        parentModel.Children = childrenDatas;
-                    }
-
-                    datas.Add(parentModel);
+                    module.Children = operates.Where(x => x.ParentId == module.Id).ToList();
                 }
+
+                result.Data = modules;
             }
             catch (Exception ex)
             {

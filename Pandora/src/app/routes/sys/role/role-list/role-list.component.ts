@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { STColumn, STComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
-
-import { SysRoleListRoleViewComponent } from '../role-view/role-view.component';
 import { SysRoleListRoleAddComponent } from '../role-add/role-add.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sys-role-role-list',
@@ -47,13 +46,25 @@ export class SysRoleRoleListComponent implements OnInit {
         {
           text: '权限',
           icon: 'anticon anticon-warning',
-          click: (item: any) => this.perssion(item),
+          click: (item: any) =>
+            this.injector
+              .get(Router)
+              .navigateByUrl(`/sys/role-permission-list/${item.id}`),
+        },
+        {
+          text: '删除',
+          icon: 'anticon anticon-delete',
+          click: (item: any) => this.delete(item),
         },
       ],
     },
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) {}
+  constructor(
+    private http: _HttpClient,
+    private modal: ModalHelper,
+    private injector: Injector,
+  ) {}
 
   ngOnInit() {
     this.loadRoles();
@@ -83,31 +94,32 @@ export class SysRoleRoleListComponent implements OnInit {
   }
 
   add() {
+    const isEdit = false;
+    const title = '添加角色';
     const entity = {
       name: null,
       code: null,
-      icon: null,
       intro: null,
     };
 
     this.modal
-      .createStatic(SysRoleListRoleAddComponent, { entity })
-      .subscribe(() => this.st.reload());
+      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title })
+      .subscribe(() => this.loadRoles());
   }
 
   edit(item: any) {
+    const isEdit = false;
+    const title = '添加角色';
     const entity = item;
+
     this.modal
-      .createStatic(SysRoleListRoleAddComponent, { entity })
-      .subscribe(() => this.st.reload());
+      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title })
+      .subscribe(() => this.loadRoles());
   }
+
+  delete(item: any) {}
 
   active(item: any) {}
 
-  perssion(item: any) {
-    const entity = item;
-    this.modal
-      .createStatic(SysRoleListRoleViewComponent, { entity })
-      .subscribe(() => this.st.reload());
-  }
+  perssion(item: any) {}
 }

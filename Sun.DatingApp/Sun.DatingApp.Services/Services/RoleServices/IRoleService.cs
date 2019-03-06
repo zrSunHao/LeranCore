@@ -22,5 +22,7 @@ namespace Sun.DatingApp.Services.Services.RoleServices
         Task<WebApiResult> DeleteRole(Guid roleId, Guid accountId);
 
         Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto);
+
+        Task<WebApiResult<List<RolePermissionModel>>> GetRolePermissions(Guid id);
     }
 }

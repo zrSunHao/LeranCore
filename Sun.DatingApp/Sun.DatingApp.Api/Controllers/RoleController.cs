@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
@@ -56,6 +57,12 @@ namespace Sun.DatingApp.Api.Controllers
                 result.AddError("当前用户信息获取失败");
             }
             return result;
+        }
+
+        [HttpGet("getrolepermissions")]
+        public async Task<WebApiResult<List<RolePermissionModel>>> GetRolePermissions(Guid id)
+        {
+            return await _service.GetRolePermissions(id);
         }
     }
 }
