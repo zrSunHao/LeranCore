@@ -71,7 +71,7 @@ export class StartupService {
           // 设置页面标题的后缀
           this.titleService.suffix = res.app.name;
         },
-        () => { },
+        () => {},
         () => {
           resolve(null);
         },
@@ -170,28 +170,18 @@ export class StartupService {
       const menuInfo = [
         {
           text: '主导航',
-          // i18n: 'menu.main',
           group: true,
           hideInBreadcrumb: true,
           children: [
             {
-              text: '角色管理',
-              // i18n: 'menu.role.management',
-              icon: 'anticon anticon-rocket',
+              text: '系统设置',
+              icon: 'anticon anticon-setting',
               shortcutRoot: true,
               children: [
                 {
                   text: '角色管理列表',
                   link: '/sys/role-list',
-                  // i18n: 'menu.role.management.list'
                 },
-              ],
-            },
-            {
-              text: '权限管理',
-              icon: 'anticon anticon-rocket',
-              shortcutRoot: true,
-              children: [
                 {
                   text: '权限管理列表',
                   link: '/sys/permission-list',
