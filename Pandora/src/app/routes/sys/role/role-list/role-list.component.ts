@@ -11,32 +11,33 @@ import { SysRoleListRoleAddComponent } from '../role-add/role-add.component';
   templateUrl: './role-list.component.html',
 })
 export class SysRoleRoleListComponent implements OnInit {
-
   datas: Array<any> = [];
   searchSchema: SFSchema = {
     properties: {
       name: {
         type: 'string',
-        title: '角色名称'
-      }
-    }
+        title: '角色名称',
+      },
+    },
   };
 
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '角色名称', index: 'name' },
-    { title: '编码', index: 'code' },
-    { title: '简介', index: 'intro' },
-    // { title: '调用次数', type: 'number', index: 'callNo' },
-    // { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'createdAt' },
+    { title: '角色名称', index: 'name', className: 'text-center' },
+    { title: '模块', render: 'module', className: 'text-center' },
+    { title: '简介', index: 'intro', className: 'text-center' },
+    {
+      title: '是否启用',
+      render: 'custom',
+      className: 'text-center',
+      click: (item: any) => this.active(item),
+    },
     {
       title: '操作',
       // buttons: [
       //   // { text: '查看', click: (item: any) => `/form/${item.id}` },
-      //   { text: '查看', type: 'static', component: SysRoleListRoleViewComponent, click: 'reload' },
-      //   { text: '编辑', type: 'static', component: SysRoleListRoleAddComponent, click: 'reload' },
       // ]
+      className: 'text-center',
       buttons: [
         {
           text: '编辑',
@@ -47,15 +48,10 @@ export class SysRoleRoleListComponent implements OnInit {
           click: (item: any) => this.perssion(item),
         },
       ],
-
-
-    }
+    },
   ];
 
-  constructor(
-    private http: _HttpClient,
-    private modal: ModalHelper
-  ) { }
+  constructor(private http: _HttpClient, private modal: ModalHelper) {}
 
   ngOnInit() {
     this.loadRoles();
@@ -89,7 +85,7 @@ export class SysRoleRoleListComponent implements OnInit {
       name: null,
       code: null,
       icon: null,
-      intro: null
+      intro: null,
     };
 
     this.modal
@@ -104,11 +100,12 @@ export class SysRoleRoleListComponent implements OnInit {
       .subscribe(() => this.st.reload());
   }
 
+  active(item: any) {}
+
   perssion(item: any) {
     const entity = item;
     this.modal
       .createStatic(SysRoleListRoleViewComponent, { entity })
       .subscribe(() => this.st.reload());
   }
-
 }
