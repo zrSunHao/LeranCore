@@ -14,12 +14,12 @@
     <tbody>
       <tr *ngFor="let item of basicTable.data">
         <td [nzAlign]="'left'">
-          <label nz-checkbox [(ngModel)]="item.ckecked" (click)="checkModule(item)">
+          <label nz-checkbox [(ngModel)]="item.checked" (click)="checkModule(item)">
             {{item.name}}
           </label>
         </td>
         <td [nzAlign]="'left'">
-          <label nz-checkbox [(ngModel)]="operate.ckecked" (click)="checkOperate(operate)" *ngFor="let operate of item.children">
+          <label nz-checkbox [(ngModel)]="operate.checked" (click)="checkOperate(operate)" *ngFor="let operate of item.children">
             {{operate.name}}
           </label>
         </td>

@@ -9,27 +9,7 @@ import { _HttpClient } from '@delon/theme';
 })
 export class RolePermissionComponent implements OnInit {
   roleId: any;
-  listOfData = [
-    {
-      key: '1',
-      name: 'John Brown',
-      ckecked: true,
-      children: [
-        {
-          key: '2',
-          name: 'Jim Green',
-          ckecked: true,
-          address: 'London No. 1 Lake Park',
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          ckecked: true,
-          address: 'Sidney No. 1 Lake Park',
-        },
-      ],
-    },
-  ];
+  listOfData = [];
 
   constructor(private route: ActivatedRoute, private http: _HttpClient) {}
 
@@ -51,12 +31,48 @@ export class RolePermissionComponent implements OnInit {
   }
 
   checkModule(data) {
-    console.log(data);
-    const ddd = this.listOfData[0];
-    ddd.ckecked = true;
+    const checked = data.checked;
+    // console.log(data.checked);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.listOfData.length; i++) {
+      // console.log(`${data.id}:${this.listOfData[i].id}`);
+      if (this.listOfData[i].id === data.id) {
+        // console.log(data.checked);
+        this.listOfData[i].checked = !checked;
+        // console.log(this.listOfData[i].children.length);
+        if (this.listOfData[i].children.length > 0) {
+          // tslint:disable-next-line:prefer-for-of
+          for (let j = 0; j < this.listOfData[i].children.length; j++) {
+            this.listOfData[i].children[j].checked = !checked;
+          }
+        }
+      }
+    }
+    console.log(this.listOfData);
   }
 
   checkOperate(data) {
-    console.log(data);
+    const checked = data.checked;
+    console.log(checked);
+    const parentId = data.parentId;
+
+    for (let i = 0; i < this.listOfData.length; i++) {
+      // console.log(`${data.id}:${this.listOfData[i].id}`);
+      if (this.listOfData[i].id === parentId) {
+        let flag = true;
+        for (let j = 0; j < this.listOfData[i].children.length; j++) {
+          if (this.listOfData[i].children[j].id === data.id) {
+            this.listOfData[i].children[j].checked = checked;
+          }
+          if (this.listOfData[i].children[j].checked === !checked) {
+            flag = false;
+          }
+        }
+        if (flag) {
+          this.listOfData[i].checked = checked;
+        }
+      }
+    }
+    console.log(this.listOfData);
   }
 }
