@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Sun.DatingApp.Services.Services.MenuServices;
 using Sun.DatingApp.Services.Services.Permissions;
 
 namespace Sun.DatingApp.Api
@@ -166,6 +167,7 @@ namespace Sun.DatingApp.Api
             services.AddScoped<IPromptService, PromptService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IMenuService, MenuService>();
 
             //
             #endregion
