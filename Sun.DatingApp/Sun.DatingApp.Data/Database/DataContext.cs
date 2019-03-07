@@ -22,6 +22,8 @@ namespace Sun.DatingApp.Data.Database
         public DbSet<Prompt> Prompts { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<ProfilePicture> ProfilePictures { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Page> Pages { get; set; }
 
         #endregion
 
@@ -53,6 +55,8 @@ namespace Sun.DatingApp.Data.Database
             modelBuilder.ApplyConfiguration(new PromptCfg());
             modelBuilder.ApplyConfiguration(new OrganizationCfg());
             modelBuilder.ApplyConfiguration(new ProfilePictureCfg());
+            modelBuilder.ApplyConfiguration(new MenuCfg());
+            modelBuilder.ApplyConfiguration(new PageCfg());
 
             #endregion
 
