@@ -17,6 +17,7 @@ import { PermissionOperationComponent } from './permission/permission-operation/
 import { MenuListComponent } from './menu/menu-list/menu-list.component';
 import { MenuAddComponent } from './menu/menu-add/menu-add.component';
 import { MenuRootComponent } from './menu/menu-root/menu-root.component';
+import { MenuPageAddComponent } from './menu/menu-page-add/menu-page-add.component';
 
 const COMPONENTS = [SysRoleRoleListComponent];
 
@@ -29,6 +30,7 @@ const COMPONENTS_NOROUNT = [
   MenuListComponent,
   MenuAddComponent,
   MenuRootComponent,
+  MenuPageAddComponent,
 ];
 
 @NgModule({
