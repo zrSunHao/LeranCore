@@ -15,29 +15,30 @@ export class SysRoleListRoleAddComponent implements OnInit {
   record: any = {};
   schema: SFSchema = {
     properties: {
-      name: { type: 'string', title: '角色名称', maxLength: 50 },
+      name: { type: 'string', title: '名称', maxLength: 50 },
       code: { type: 'string', title: '编码', maxLength: 50 },
       intro: {
         type: 'string',
         title: '描述',
         ui: {
           widget: 'textarea',
+          grid: { span: 24 },
           autosize: { minRows: 2, maxRows: 6 },
         },
       },
     },
     required: ['name', 'code', 'intro'],
     ui: {
-      spanLabelFixed: 150,
-      grid: { span: 24 },
+      spanLabelFixed: 70,
+      grid: { span: 12 },
     },
   };
 
   constructor(
     private modal: NzModalRef,
     public msgSrv: NzMessageService,
-    public http: _HttpClient
-  ) { }
+    public http: _HttpClient,
+  ) {}
 
   ngOnInit(): void {
     // this.http.get(`/user/${this.record.id}`).subscribe(res => this.i = res);

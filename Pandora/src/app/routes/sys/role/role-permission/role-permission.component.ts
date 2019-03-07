@@ -32,14 +32,14 @@ export class RolePermissionComponent implements OnInit {
 
   checkModule(data) {
     const checked = data.checked;
-    console.log(data.checked);
+    // console.log(data.checked);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listOfData.length; i++) {
-      console.log(`${data.id}:${this.listOfData[i].id}`);
+      // console.log(`${data.id}:${this.listOfData[i].id}`);
       if (this.listOfData[i].id === data.id) {
-        console.log(data.checked);
+        // console.log(data.checked);
         this.listOfData[i].checked = checked;
-        console.log(this.listOfData[i].children.length);
+        // console.log(this.listOfData[i].children.length);
         if (this.listOfData[i].children.length > 0) {
           // tslint:disable-next-line:prefer-for-of
           for (let j = 0; j < this.listOfData[i].children.length; j++) {
@@ -84,5 +84,24 @@ export class RolePermissionComponent implements OnInit {
       }
     }
     // console.log(this.listOfData);
+  }
+
+  save() {
+    const modules = [];
+    const operates = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.listOfData.length; i++) {
+      if (this.listOfData[i].checked) {
+        modules.push(this.listOfData[i].id);
+      }
+      // tslint:disable-next-line:prefer-for-of
+      for (let j = 0; j < this.listOfData[i].children.length; j++) {
+        if (this.listOfData[i].children[j].checked) {
+          operates.push(this.listOfData[i].children[j].id);
+        }
+      }
+    }
+    console.log(modules);
+    console.log(operates);
   }
 }

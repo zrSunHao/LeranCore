@@ -1,0 +1,14 @@
+<nz-card>
+  <nz-alert nzType="info" nzMessage="菜单页面管理列表" [nzBanner]="true" nzShowIcon>
+  </nz-alert>
+  <st #st [data]="datas" [columns]="columns" [bordered]="true" [rowClickTime]="0" >
+    <ng-template st-row="name" let-item let-index="index">
+      <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
+      </nz-tag>
+    </ng-template>
+    <ng-template st-row="custom" let-item let-index="index">
+      <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="active(item)">
+      </nz-switch>
+    </ng-template>
+  </st>
+</nz-card>

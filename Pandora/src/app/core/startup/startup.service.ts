@@ -186,6 +186,10 @@ export class StartupService {
                   text: '权限管理列表',
                   link: '/sys/permission-list',
                 },
+                {
+                  text: '菜单管理列表',
+                  link: '/sys/menu-list',
+                },
               ],
             },
           ],

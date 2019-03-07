@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SysRoleRoleListComponent } from './role/role-list/role-list.component';
 import { RolePermissionComponent } from './role/role-permission/role-permission.component';
+import { MenuRootComponent } from './menu/menu-root/menu-root.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,11 @@ const routes: Routes = [
     path: 'role-permission-list/:id',
     component: RolePermissionComponent,
     data: { title: '角色权限管理列表' },
+  },
+  {
+    path: 'menu-list',
+    component: MenuRootComponent,
+    data: { title: '菜单管理列表' },
   },
 ];
 
