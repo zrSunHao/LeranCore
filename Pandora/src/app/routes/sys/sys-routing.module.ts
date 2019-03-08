@@ -1,3 +1,4 @@
+import { AccountListComponent } from './account/account-list/account-list.component';
 import { PermissionListComponent } from './permission/permission-list/permission-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -25,6 +26,11 @@ const routes: Routes = [
     path: 'menu-list',
     component: MenuRootComponent,
     data: { title: '菜单管理列表' },
+  },
+  {
+    path: 'account-list',
+    component: AccountListComponent,
+    data: { title: '账号管理列表' },
   },
 ];
 

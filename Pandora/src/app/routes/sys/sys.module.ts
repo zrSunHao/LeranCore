@@ -1,3 +1,5 @@
+import { AccountAddComponent } from './account/account-add/account-add.component';
+import { AccountListComponent } from './account/account-list/account-list.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
 
@@ -19,6 +21,8 @@ import { MenuAddComponent } from './menu/menu-add/menu-add.component';
 import { MenuRootComponent } from './menu/menu-root/menu-root.component';
 import { MenuPageAddComponent } from './menu/menu-page-add/menu-page-add.component';
 
+// 账号管理模块
+
 const COMPONENTS = [SysRoleRoleListComponent];
 
 const COMPONENTS_NOROUNT = [
@@ -31,6 +35,8 @@ const COMPONENTS_NOROUNT = [
   MenuAddComponent,
   MenuRootComponent,
   MenuPageAddComponent,
+  AccountListComponent,
+  AccountAddComponent,
 ];
 
 @NgModule({
