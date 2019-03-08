@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Api.Config
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ICacheService, MemoryCacheService>();
+            services.AddSingleton<ICacheHandler, MemoryCacheHandler>();
 
             services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         }

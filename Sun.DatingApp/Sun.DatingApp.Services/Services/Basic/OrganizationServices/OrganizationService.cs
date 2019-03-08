@@ -7,7 +7,7 @@ namespace Sun.DatingApp.Services.Services.Basic.OrganizationServices
 {
     public class OrganizationService: BaseService, IOrganizationService
     {
-        public OrganizationService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public OrganizationService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
         }
     }

@@ -17,7 +17,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
     public class MenuService : BaseService, IMenuService
     {
-        public MenuService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public MenuService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
         }
 

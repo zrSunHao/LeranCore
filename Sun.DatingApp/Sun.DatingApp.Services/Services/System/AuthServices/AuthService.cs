@@ -20,7 +20,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
     public class AuthService : BaseService ,IAuthService
     {
-        public AuthService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public AuthService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
         }
 
@@ -112,7 +112,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     data.Role = role.Code;
                 }
                 data.Permissions = permissions;
-                _catchService.Add(data.Id.ToString(), data);
+                _catchHandler.Add(data.Id.ToString(), data);
                 result.Data = data;
                 return result;
             }

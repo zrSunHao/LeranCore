@@ -12,11 +12,11 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
 {
     public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionAuthorizationRequirement>
     {
-        private readonly ICacheService _catchService;
+        private readonly ICacheHandler _catchHandler;
 
-        public PermissionAuthorizationHandler(ICacheService catchService)
+        public PermissionAuthorizationHandler(ICacheHandler catchHandler)
         {
-            _catchService = catchService;
+            _catchHandler = catchHandler;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionAuthorizationRequirement requirement)
@@ -32,7 +32,7 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
                     var userIdClaim = context.User.FindFirst(_ => _.Type == ClaimTypes.NameIdentifier);
                     if (userIdClaim != null)
                     {
-                        var account = _catchService.Get<AccessDataModel>(userIdClaim.Value.ToString());
+                        var account = _catchHandler.Get<AccessDataModel>(userIdClaim.Value.ToString());
                         if (account != null && account.Permissions.Any())
                         {
                             var permissionName = requirement.Name;

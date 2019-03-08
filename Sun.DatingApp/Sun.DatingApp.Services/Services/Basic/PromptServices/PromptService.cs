@@ -7,7 +7,7 @@ namespace Sun.DatingApp.Services.Services.Basic.PromptServices
 {
     public class PromptService: BaseService, IPromptService
     {
-        public PromptService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public PromptService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
         }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sun.DatingApp.Utility.CacheUtility
 {
-    public interface ICacheService
+    public interface ICacheHandler
     {
         /// <summary>
         /// 验证缓存项是否存在

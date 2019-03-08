@@ -17,7 +17,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
     public class RoleService: BaseService,IRoleService
     {
-        public RoleService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public RoleService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
         }
 
@@ -313,9 +313,9 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                 await _dataContext.SaveChangesAsync();
 
-                var account = _catchService.Get<AccessDataModel>(accountId.ToString());
+                var account = _catchHandler.Get<AccessDataModel>(accountId.ToString());
                 account.Permissions = dto.Permissions.Select(x=>x.Name).ToList();
-                _catchService.Replace(accountId.ToString(), account);
+                _catchHandler.Replace(accountId.ToString(), account);
             }
             catch (Exception ex)
             {

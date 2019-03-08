@@ -14,7 +14,7 @@ namespace Sun.DatingApp.Services.Services.UserServices
 {
     public class UserService : BaseService, IUserService
     {
-        public UserService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public UserService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
 
         }

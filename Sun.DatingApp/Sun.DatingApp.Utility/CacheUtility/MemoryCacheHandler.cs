@@ -6,11 +6,11 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Sun.DatingApp.Utility.CacheUtility
 {
-    public class MemoryCacheService : ICacheService
+    public class MemoryCacheHandler : ICacheHandler
     {
         protected IMemoryCache _cache;
 
-        public MemoryCacheService(IMemoryCache cache)
+        public MemoryCacheHandler(IMemoryCache cache)
         {
             _cache = cache;
         }

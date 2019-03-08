@@ -18,7 +18,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
 {
     public class PermissionService: BaseService, IPermissionService
     {
-        public PermissionService(DataContext dataContext, IMapper mapper, ICacheService catchService) : base(dataContext, mapper, catchService)
+        public PermissionService(DataContext dataContext, IMapper mapper, ICacheHandler catchHandler) : base(dataContext, mapper, catchHandler)
         {
 
         }
