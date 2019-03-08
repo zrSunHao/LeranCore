@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Model.Menus.Dto;
 using Sun.DatingApp.Model.Menus.Model;
+using Sun.DatingApp.Model.System.Menus.Dto;
 
 namespace Sun.DatingApp.Services.Services.MenuServices
 {

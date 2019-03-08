@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Sun.DatingApp.Data.Entities.System;
-using Sun.DatingApp.Model.Auth.Login.Model;
+using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Utility.CacheUtility;
 
 namespace Sun.DatingApp.Api.Extensions.Authorization

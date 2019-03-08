@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sun.DatingApp.Model.Auth.Accounts.Dto;
-using Sun.DatingApp.Model.Auth.Accounts.Model;
 using Sun.DatingApp.Utility.CacheUtility;
 
 namespace Sun.DatingApp.Services.Services.UserServices

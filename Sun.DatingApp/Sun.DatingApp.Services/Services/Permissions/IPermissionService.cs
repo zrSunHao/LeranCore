@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Model.Permissions.Dto;
-using Sun.DatingApp.Model.Permissions.Model;
+using Sun.DatingApp.Model.System.Permissions.Dto;
+using Sun.DatingApp.Model.System.Permissions.Model;
 
 namespace Sun.DatingApp.Services.Services.Permissions
 {

@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Users\" />
+    <Folder Include="System\Users\" />
+    <Folder Include="Basic\" />
+    <Folder Include="Business\" />
   </ItemGroup>
 
 </Project>

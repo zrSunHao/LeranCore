@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Sun.DatingApp.Model.Auth.Login.Dto;
-using Sun.DatingApp.Model.Auth.Login.Model;
-using Sun.DatingApp.Model.Auth.Register.Dto;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Services.Services.AuthServices;
 using System;
@@ -13,8 +10,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Sun.DatingApp.Model.Auth.Accounts.Dto;
-using Sun.DatingApp.Model.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
+using Sun.DatingApp.Model.System.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Login.Dto;
+using Sun.DatingApp.Model.System.Auth.Login.Model;
+using Sun.DatingApp.Model.System.Auth.Register.Dto;
 
 namespace Sun.DatingApp.Api.Controllers
 {

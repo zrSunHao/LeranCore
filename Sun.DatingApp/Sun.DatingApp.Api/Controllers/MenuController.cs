@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Model.Menus.Dto;
 using Sun.DatingApp.Model.Menus.Model;
+using Sun.DatingApp.Model.System.Menus.Dto;
 using Sun.DatingApp.Services.Services.MenuServices;
 
 namespace Sun.DatingApp.Api.Controllers

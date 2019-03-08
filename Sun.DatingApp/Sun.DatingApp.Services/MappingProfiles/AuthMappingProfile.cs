@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Sun.DatingApp.Data.Entities.System;
-using Sun.DatingApp.Model.Auth.Accounts.Model;
-using Sun.DatingApp.Model.Auth.Login.Model;
-using Sun.DatingApp.Model.Auth.Register.Dto;
 using System;
+using Sun.DatingApp.Model.System.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Login.Model;
+using Sun.DatingApp.Model.System.Auth.Register.Dto;
 
 namespace Sun.DatingApp.Services.MappingProfiles
 {

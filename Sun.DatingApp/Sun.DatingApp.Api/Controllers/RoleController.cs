@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Model.Roles.Dto;
-using Sun.DatingApp.Model.Roles.Model;
+using Sun.DatingApp.Model.System.Roles.Dto;
+using Sun.DatingApp.Model.System.Roles.Model;
 using Sun.DatingApp.Services.Services.RoleServices;
 
 namespace Sun.DatingApp.Api.Controllers
