@@ -190,6 +190,10 @@ export class StartupService {
                   text: '菜单管理列表',
                   link: '/sys/menu-list',
                 },
+                {
+                  text: '账号管理列表',
+                  link: '/sys/account-list',
+                },
               ],
             },
           ],

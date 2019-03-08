@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Menus\Dto\" />
-    <Folder Include="Menus\Model\" />
     <Folder Include="Users\" />
   </ItemGroup>
 
