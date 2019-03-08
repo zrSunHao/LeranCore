@@ -1,6 +1,6 @@
 ﻿using Sun.DatingApp.Services.Services.UserServices;
 
-namespace Sun.DatingApp.Api.Controllers
+namespace Sun.DatingApp.Api.Controllers.System
 {
     public class UserController : BaseController
     {

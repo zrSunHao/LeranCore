@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Model.Business.Cars;
 
-namespace Sun.DatingApp.Api.Controllers
+namespace Sun.DatingApp.Api.Controllers.Business
 {
     public class CarController : BaseController
     {

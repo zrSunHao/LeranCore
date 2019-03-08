@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Sun.DatingApp.Api.Controllers
+namespace Sun.DatingApp.Api.Controllers.Basic
 {
-    public class PromptController : Controller
+    public class OrganizationController : Controller
     {
         // GET
         public IActionResult Index()
