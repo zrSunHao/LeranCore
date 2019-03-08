@@ -1,20 +1,20 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Model.System.Permissions.Dto;
-using Sun.DatingApp.Model.System.Permissions.Model;
-using Sun.DatingApp.Services.Services.BaseServices;
-using Sun.DatingApp.Utility.CacheUtility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Common.Model;
+using Sun.DatingApp.Model.System.Permissions.Dto;
+using Sun.DatingApp.Model.System.Permissions.Model;
+using Sun.DatingApp.Services.Services.Common.BaseServices;
+using Sun.DatingApp.Utility.CacheUtility;
 
-namespace Sun.DatingApp.Services.Services.Permissions
+namespace Sun.DatingApp.Services.Services.System.Permissions
 {
     public class PermissionService: BaseService, IPermissionService
     {

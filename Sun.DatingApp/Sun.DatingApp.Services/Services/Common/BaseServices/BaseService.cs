@@ -1,15 +1,14 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Sun.DatingApp.Data.Database;
+using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Utility.CacheUtility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Sun.DatingApp.Data.Database;
-using Sun.DatingApp.Data.Entities;
-using Sun.DatingApp.Data.Entities.System;
-using Sun.DatingApp.Utility.CacheUtility;
 
-namespace Sun.DatingApp.Services.Services.BaseServices
+namespace Sun.DatingApp.Services.Services.Common.BaseServices
 {
     public abstract class BaseService: IBaseService
     {

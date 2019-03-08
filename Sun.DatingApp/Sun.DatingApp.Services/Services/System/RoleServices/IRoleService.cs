@@ -1,11 +1,11 @@
-﻿using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Model.System.Roles.Dto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
 
-namespace Sun.DatingApp.Services.Services.RoleServices
+namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
     public interface IRoleService
     {

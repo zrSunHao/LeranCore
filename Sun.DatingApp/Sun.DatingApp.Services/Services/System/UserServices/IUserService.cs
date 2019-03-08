@@ -1,4 +1,4 @@
-﻿using Sun.DatingApp.Services.Services.BaseServices;
+﻿using Sun.DatingApp.Services.Services.Common.BaseServices;
 
 namespace Sun.DatingApp.Services.Services.UserServices
 {

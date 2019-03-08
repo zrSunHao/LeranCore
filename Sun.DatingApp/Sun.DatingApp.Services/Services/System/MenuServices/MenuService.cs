@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +10,10 @@ using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Menus.Model;
 using Sun.DatingApp.Model.System.Menus.Dto;
-using Sun.DatingApp.Services.Services.BaseServices;
+using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
 
-namespace Sun.DatingApp.Services.Services.MenuServices
+namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
     public class MenuService : BaseService, IMenuService
     {

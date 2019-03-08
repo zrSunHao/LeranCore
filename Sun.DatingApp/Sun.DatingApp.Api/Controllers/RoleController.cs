@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
-using Sun.DatingApp.Services.Services.RoleServices;
+using Sun.DatingApp.Services.Services.System.RoleServices;
 
 namespace Sun.DatingApp.Api.Controllers
 {

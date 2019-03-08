@@ -1,14 +1,13 @@
-﻿using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Services.Services.BaseServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
 
-namespace Sun.DatingApp.Services.Services.AuthServices
+namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
     public interface IAuthService
     {

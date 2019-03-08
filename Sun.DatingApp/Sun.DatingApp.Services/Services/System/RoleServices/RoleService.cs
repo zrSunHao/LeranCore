@@ -1,19 +1,19 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Roles.Dto;
-using Sun.DatingApp.Services.Services.BaseServices;
-using Sun.DatingApp.Utility.CacheUtility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Sun.DatingApp.Model.System.Roles.Model;
+using Sun.DatingApp.Services.Services.Common.BaseServices;
+using Sun.DatingApp.Utility.CacheUtility;
 
-namespace Sun.DatingApp.Services.Services.RoleServices
+namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
     public class RoleService: BaseService,IRoleService
     {

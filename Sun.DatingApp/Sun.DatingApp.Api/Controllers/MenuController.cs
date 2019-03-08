@@ -6,7 +6,7 @@ using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Menus.Model;
 using Sun.DatingApp.Model.System.Menus.Dto;
-using Sun.DatingApp.Services.Services.MenuServices;
+using Sun.DatingApp.Services.Services.System.MenuServices;
 
 namespace Sun.DatingApp.Api.Controllers
 {

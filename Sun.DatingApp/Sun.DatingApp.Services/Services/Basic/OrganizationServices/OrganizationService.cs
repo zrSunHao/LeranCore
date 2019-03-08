@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Sun.DatingApp.Data.Database;
-using Sun.DatingApp.Services.Services.BaseServices;
+using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
 
-namespace Sun.DatingApp.Services.Services.OrganizationServices
+namespace Sun.DatingApp.Services.Services.Basic.OrganizationServices
 {
     public class OrganizationService: BaseService, IOrganizationService
     {

@@ -1,22 +1,22 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Sun.DatingApp.Data.Database;
-using Sun.DatingApp.Data.Entities.System;
-using Sun.DatingApp.Model.Common;
-using Sun.DatingApp.Services.Services.BaseServices;
-using Sun.DatingApp.Utility.CacheUtility;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Sun.DatingApp.Data.Database;
+using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
+using Sun.DatingApp.Services.Services.Common.BaseServices;
+using Sun.DatingApp.Utility.CacheUtility;
 
-namespace Sun.DatingApp.Services.Services.AuthServices
+namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
     public class AuthService : BaseService ,IAuthService
     {

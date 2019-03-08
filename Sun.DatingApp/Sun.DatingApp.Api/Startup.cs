@@ -12,10 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Data.Database;
-using Sun.DatingApp.Services.Services.AuthServices;
-using Sun.DatingApp.Services.Services.OrganizationServices;
-using Sun.DatingApp.Services.Services.PromptServices;
-using Sun.DatingApp.Services.Services.RoleServices;
 using Sun.DatingApp.Services.Services.UserServices;
 using Sun.DatingApp.Services.SignalRHubs;
 using Sun.DatingApp.Utility.CacheUtility;
@@ -24,8 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Sun.DatingApp.Services.Services.MenuServices;
-using Sun.DatingApp.Services.Services.Permissions;
+using Sun.DatingApp.Services.Services.Basic.OrganizationServices;
+using Sun.DatingApp.Services.Services.Basic.PromptServices;
+using Sun.DatingApp.Services.Services.System.AuthServices;
+using Sun.DatingApp.Services.Services.System.MenuServices;
+using Sun.DatingApp.Services.Services.System.Permissions;
+using Sun.DatingApp.Services.Services.System.RoleServices;
 
 namespace Sun.DatingApp.Api
 {

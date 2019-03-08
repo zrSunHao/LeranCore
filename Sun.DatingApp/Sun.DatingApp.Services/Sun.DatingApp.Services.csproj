@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Sun.DatingApp.Utility\Sun.DatingApp.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Business\" />
+  </ItemGroup>
+
 </Project>
