@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Sun.DatingApp.Model.Messages;
+using Sun.DatingApp.Model.Basic.Messages;
 
 namespace Sun.DatingApp.Api.Controllers
 {

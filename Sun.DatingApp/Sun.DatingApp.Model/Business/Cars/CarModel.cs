@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sun.DatingApp.Model.Cars
+namespace Sun.DatingApp.Model.Business.Cars
 {
     public class CarModel
     {

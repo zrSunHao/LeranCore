@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common.Dto;
+using Sun.DatingApp.Model.Common.Model;
 
 namespace Sun.DatingApp.Services.Services.Permissions
 {

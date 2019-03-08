@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sun.DatingApp.Model.Common
+namespace Sun.DatingApp.Model.Common.Model
 {
     public class ItemModel
     {

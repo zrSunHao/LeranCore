@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <Folder Include="System\Users\" />
-    <Folder Include="Basic\" />
-    <Folder Include="Business\" />
   </ItemGroup>
 
 </Project>

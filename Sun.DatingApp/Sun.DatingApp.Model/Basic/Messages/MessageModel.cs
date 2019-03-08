@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sun.DatingApp.Model.Messages
+namespace Sun.DatingApp.Model.Basic.Messages
 {
     public class MessageModel
     {

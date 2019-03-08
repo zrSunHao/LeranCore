@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sun.DatingApp.Model.Cars;
 using System;
 using System.Collections.Generic;
 using Sun.DatingApp.Api.Extensions.Authorization;
+using Sun.DatingApp.Model.Business.Cars;
 
 namespace Sun.DatingApp.Api.Controllers
 {

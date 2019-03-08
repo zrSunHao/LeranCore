@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Sun.DatingApp.Model.Logs
+namespace Sun.DatingApp.Model.Basic.Logs
 {
     public class LogModel
     {
