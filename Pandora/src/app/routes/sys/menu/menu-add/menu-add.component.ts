@@ -13,11 +13,9 @@ export class MenuAddComponent implements OnInit {
   isEdit = false;
   title = '';
 
-  record: any = {};
   schema: SFSchema = {
     properties: {
       name: { type: 'string', title: '菜单名称', maxLength: 100 },
-      url: { type: 'string', title: 'URL', maxLength: 100 },
       tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
@@ -31,7 +29,7 @@ export class MenuAddComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'url', 'icon', 'intro', 'tagColor'],
+    required: ['name', 'icon', 'intro', 'tagColor'],
     ui: {
       spanLabelFixed: 100,
       grid: { span: 12 },
@@ -54,20 +52,20 @@ export class MenuAddComponent implements OnInit {
   }
 
   add(entity: any) {
-    const url = 'permission/create';
+    const url = 'menu/addmenu';
     console.log(entity);
-    // this.http.post(url, entity).subscribe((res: any) => {
-    //   if (!res.success) {
-    //     this.notification.create('error', '添加失败', res.allMessages);
-    //     return;
-    //   }
-    //   this.notification.create('success', '添加成功', res.allMessages);
-    //   this.modal.close(res);
-    // });
+    this.http.post(url, entity).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '添加失败', res.allMessages);
+        return;
+      }
+      this.notification.create('success', '添加成功', res.allMessages);
+      this.modal.close(res);
+    });
   }
 
   edit(entity: any) {
-    const url = 'permission/edit';
+    const url = 'menu/editmenu';
 
     this.http.post(url, entity).subscribe((res: any) => {
       if (!res.success) {

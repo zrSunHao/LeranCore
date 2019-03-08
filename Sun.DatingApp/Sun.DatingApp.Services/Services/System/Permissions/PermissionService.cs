@@ -236,8 +236,8 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
                 var data = await _dataContext.Permissions.Where(x => !x.Deleted && !x.ParentId.HasValue).Select(x =>
                     new ItemModel
                     {
-                        Id = x.Id,
-                        Name = x.Name
+                        Value = x.Id,
+                        Label = x.Name
                     }).ToListAsync();
 
                 result.Data = data;

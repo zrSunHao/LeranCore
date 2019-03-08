@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { STComponent, STColumn } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
-import { NzNotificationService } from 'ng-zorro-antd';
+import { NzNotificationService, isTemplateRef } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-menu-list',
@@ -11,6 +11,9 @@ import { NzNotificationService } from 'ng-zorro-antd';
 })
 export class MenuListComponent implements OnInit {
   @ViewChild('st') st: STComponent;
+
+  menu: any;
+
   // 列表数据
   datas: Array<any> = [];
   // 列表搜索条件
@@ -55,6 +58,23 @@ export class MenuListComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  loadData(menu: any) {
+    console.log(menu);
+    this.menu = menu;
+    const url = 'menu/getpages';
+    this.http.get(url, { id: menu.id }).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create(
+          'error',
+          menu.name + '下的页面列表数据加载失败',
+          res.allMessages,
+        );
+        return;
+      }
+      this.datas = res.data;
+    });
+  }
 
   active(item) {}
 

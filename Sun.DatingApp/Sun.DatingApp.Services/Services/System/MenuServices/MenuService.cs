@@ -59,7 +59,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     Name = dto.Name,
                     TagColor = dto.TagColor,
                     Icon = dto.Icon,
-                    Active = dto.Active,
+                    Active = true,
                     Intro = dto.Intro,
                     Deleted = false,
                     CreatedAt = DateTime.Now,
@@ -98,7 +98,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.Name = dto.Name;
                 entity.TagColor = dto.TagColor;
                 entity.Icon = dto.Icon;
-                entity.Active = dto.Active;
                 entity.Intro = dto.Intro;
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdatedById = accountId;
@@ -226,7 +225,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     Url = dto.Url,
                     TagColor = dto.TagColor,
                     Icon = dto.Icon,
-                    Active = dto.Active,
+                    Active = true,
                     Intro = dto.Intro,
                     MenuId = dto.MenuId,
                     ModuleId = dto.ModuleId,
@@ -268,7 +267,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.TagColor = dto.TagColor;
                 entity.Url = dto.Url;
                 entity.Icon = dto.Icon;
-                entity.Active = dto.Active;
                 entity.Intro = dto.Intro;
                 entity.ModuleId = dto.ModuleId;
                 entity.MenuId = dto.MenuId;
