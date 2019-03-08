@@ -104,7 +104,7 @@ namespace Sun.DatingApp.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("active")]
-        public async Task<WebApiResult> Active(PermissionActiveDto dto)
+        public async Task<WebApiResult> Active(ActiveDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
@@ -116,6 +116,16 @@ namespace Sun.DatingApp.Api.Controllers
                 result.AddError("当前用户信息获取失败");
             }
             return result;
+        }
+
+        /// <summary>
+        /// 获取模块选择框数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getmoduleitems")]
+        public async Task<WebApiResult<List<ItemModel>>> GetModuleItems()
+        {
+            return await _service.GetModuleItems();
         }
     }
 }

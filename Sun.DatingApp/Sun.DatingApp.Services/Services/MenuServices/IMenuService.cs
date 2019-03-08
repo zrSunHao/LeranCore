@@ -18,6 +18,9 @@ namespace Sun.DatingApp.Services.Services.MenuServices
 
         Task<WebApiResult> ActiveMenu(ActiveDto dto, Guid accountId);
 
+        Task<WebApiResult> DeleteMenu(Guid id, Guid accountId);
+
+
         Task<WebApiResult<List<PageListModel>>> GetPages(Guid id);
 
         Task<WebApiResult> AddPage(PageEditDto dto, Guid accountId);
@@ -25,6 +28,8 @@ namespace Sun.DatingApp.Services.Services.MenuServices
         Task<WebApiResult> EditPage(PageEditDto dto, Guid accountId);
 
         Task<WebApiResult> ActivePage(ActiveDto dto, Guid accountId);
+
+        Task<WebApiResult> DeletePage(Guid id, Guid accountId);
 
     }
 }

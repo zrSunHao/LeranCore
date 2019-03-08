@@ -194,7 +194,7 @@ namespace Sun.DatingApp.Services.Services.Permissions
             return result;
         }
 
-        public async Task<WebApiResult> Active(PermissionActiveDto dto, Guid accountId)
+        public async Task<WebApiResult> Active(ActiveDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -219,6 +219,28 @@ namespace Sun.DatingApp.Services.Services.Permissions
                 entity.UpdatedById = accountId;
 
                 await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<List<ItemModel>>> GetModuleItems()
+        {
+            var result = new WebApiResult<List<ItemModel>>();
+            try
+            {
+                var data = await _dataContext.Permissions.Where(x => !x.Deleted && !x.ParentId.HasValue).Select(x =>
+                    new ItemModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }).ToListAsync();
+
+                result.Data = data;
             }
             catch (Exception ex)
             {

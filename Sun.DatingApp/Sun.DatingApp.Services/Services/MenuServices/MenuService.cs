@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
+using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Menus.Dto;
 using Sun.DatingApp.Model.Menus.Model;
@@ -52,7 +53,21 @@ namespace Sun.DatingApp.Services.Services.MenuServices
             var result = new WebApiResult();
             try
             {
+                var entity = new Menu
+                {
+                    Id = Guid.NewGuid(),
+                    Name = dto.Name,
+                    TagColor = dto.TagColor,
+                    Icon = dto.Icon,
+                    Active = dto.Active,
+                    Intro = dto.Intro,
+                    Deleted = false,
+                    CreatedAt = DateTime.Now,
+                    CreatedById = CurrentUserId
+                };
 
+                _dataContext.Menus.Add(entity);
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -67,7 +82,28 @@ namespace Sun.DatingApp.Services.Services.MenuServices
             var result = new WebApiResult();
             try
             {
+                if (!dto.Id.HasValue)
+                {
+                    result.AddError("数据不规范");
+                    return result;
+                }
 
+                var entity = await _dataContext.Menus.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                entity.Name = dto.Name;
+                entity.TagColor = dto.TagColor;
+                entity.Icon = dto.Icon;
+                entity.Active = dto.Active;
+                entity.Intro = dto.Intro;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -82,7 +118,59 @@ namespace Sun.DatingApp.Services.Services.MenuServices
             var result = new WebApiResult();
             try
             {
+                var entity = await _dataContext.Menus.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
 
+                if (dto.Active == entity.Active)
+                {
+                    var errMsg = "";
+                    if (entity.Active) errMsg = "菜单早已开启"; else errMsg = "权限早已关闭";
+                    result.AddError(errMsg);
+                    return result;
+                }
+
+                entity.Active = dto.Active;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult> DeleteMenu(Guid id, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Menus.FirstOrDefaultAsync(x => x.Id == id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                entity.Deleted = true;
+                entity.DeletedAt = DateTime.Now;
+                entity.DeletedById = accountId;
+
+                await _dataContext.Pages.Where(x => x.MenuId == entity.Id).ForEachAsync(c =>
+                {
+                    c.Deleted = true;
+                    c.DeletedAt = DateTime.Now;
+                    c.DeletedById = accountId;
+                });
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -131,7 +219,24 @@ namespace Sun.DatingApp.Services.Services.MenuServices
             var result = new WebApiResult();
             try
             {
+                var entity = new Page
+                {
+                    Id = Guid.NewGuid(),
+                    Name = dto.Name,
+                    Url = dto.Url,
+                    TagColor = dto.TagColor,
+                    Icon = dto.Icon,
+                    Active = dto.Active,
+                    Intro = dto.Intro,
+                    MenuId = dto.MenuId,
+                    ModuleId = dto.ModuleId,
+                    Deleted = false,
+                    CreatedAt = DateTime.Now,
+                    CreatedById = CurrentUserId
+                };
 
+                _dataContext.Pages.Add(entity);
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -146,7 +251,31 @@ namespace Sun.DatingApp.Services.Services.MenuServices
             var result = new WebApiResult();
             try
             {
+                if (!dto.Id.HasValue)
+                {
+                    result.AddError("数据不规范");
+                    return result;
+                }
 
+                var entity = await _dataContext.Pages.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                entity.Name = dto.Name;
+                entity.TagColor = dto.TagColor;
+                entity.Url = dto.Url;
+                entity.Icon = dto.Icon;
+                entity.Active = dto.Active;
+                entity.Intro = dto.Intro;
+                entity.ModuleId = dto.ModuleId;
+                entity.MenuId = dto.MenuId;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -161,7 +290,52 @@ namespace Sun.DatingApp.Services.Services.MenuServices
             var result = new WebApiResult();
             try
             {
+                var entity = await _dataContext.Pages.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
 
+                if (dto.Active == entity.Active)
+                {
+                    var errMsg = "";
+                    if (entity.Active) errMsg = "页面早已开启"; else errMsg = "权限早已关闭";
+                    result.AddError(errMsg);
+                    return result;
+                }
+
+                entity.Active = dto.Active;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult> DeletePage(Guid id, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Pages.FirstOrDefaultAsync(x => x.Id == id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                entity.Deleted = true;
+                entity.DeletedAt = DateTime.Now;
+                entity.DeletedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

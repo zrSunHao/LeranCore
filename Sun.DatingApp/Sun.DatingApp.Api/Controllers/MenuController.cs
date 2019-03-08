@@ -91,6 +91,27 @@ namespace Sun.DatingApp.Api.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        [HttpGet("deletemenu")]
+        public async Task<WebApiResult> DeleteMenu(Guid id, Guid accountId)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.DeleteMenu(id, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// 获取页面列表数据
@@ -166,5 +187,25 @@ namespace Sun.DatingApp.Api.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 删除页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        [HttpGet("deletepage")]
+        public async Task<WebApiResult> DeletePage(Guid id, Guid accountId)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.DeletePage(id, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
     }
 }

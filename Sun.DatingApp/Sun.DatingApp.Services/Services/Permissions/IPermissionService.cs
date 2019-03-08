@@ -53,6 +53,12 @@ namespace Sun.DatingApp.Services.Services.Permissions
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult> Active(PermissionActiveDto dto,Guid accountId);
+        Task<WebApiResult> Active(ActiveDto dto,Guid accountId);
+
+        /// <summary>
+        /// 获取模块选择框数据
+        /// </summary>
+        /// <returns></returns>
+        Task<WebApiResult<List<ItemModel>>> GetModuleItems();
     }
 }
