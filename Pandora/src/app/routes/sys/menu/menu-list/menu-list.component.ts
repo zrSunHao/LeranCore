@@ -3,6 +3,7 @@ import { STComponent, STColumn } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService, isTemplateRef } from 'ng-zorro-antd';
+import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
 
 @Component({
   selector: 'app-menu-list',
@@ -55,9 +56,9 @@ export class MenuListComponent implements OnInit {
     private modal: ModalHelper,
     private http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   loadData(menu: any) {
     console.log(menu);
@@ -76,9 +77,63 @@ export class MenuListComponent implements OnInit {
     });
   }
 
-  active(item) {}
+  active(item) {
+    const url = 'menu/activepage';
+    const active = item.active;
+    let msg = '';
+    if (active) {
+      msg = '关闭';
+    } else {
+      msg = '开启';
+    }
 
-  edit(item) {}
+    this.http
+      .post(url, { id: item.id, active: !active })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create('error', msg + '失败', res.allMessages);
+          item.active = active;
+          return;
+        }
+        this.notification.create('success', msg + '成功', res.allMessages);
+        item.active = !active;
+      });
+  }
 
-  delete(item) {}
+
+  edit(item) {
+    const isEdit = true;
+    const title = '修改页面';
+    const entity = {
+      id: item.id,
+      name: item.name,
+      url: item.url,
+      icon: item.icon,
+      tagColor: item.tagColor,
+      intro: item.intro,
+      moduleId: item.moduleId,
+      menuId: this.menu.id,
+      menuName: this.menu.name,
+    };
+
+    this.modal
+      .createStatic(MenuPageAddComponent, { entity, isEdit, title })
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        this.loadData(this.menu);
+      });
+  }
+
+  delete(item) {
+    const url = 'menu/deletepage';
+
+    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '删除失败', res.allMessages);
+        return;
+      }
+      this.notification.create('success', '删除成功', res.allMessages);
+      this.loadData(this.menu);
+    });
+  }
 }

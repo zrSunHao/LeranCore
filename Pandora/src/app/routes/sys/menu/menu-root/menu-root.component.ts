@@ -145,7 +145,7 @@ export class MenuRootComponent implements OnInit {
       name: null,
       url: null,
       icon: null,
-      tagColor: null,
+      tagColor: item.tagColor,
       intro: null,
       moduleId: null,
       menuId: item.id,
@@ -157,7 +157,7 @@ export class MenuRootComponent implements OnInit {
       .createStatic(MenuPageAddComponent, { entity, isEdit, title })
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
-        this.loadData();
+        this.menulist.loadData(item);
       });
 
   }
