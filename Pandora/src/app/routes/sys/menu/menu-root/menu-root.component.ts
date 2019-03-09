@@ -15,15 +15,17 @@ export class MenuRootComponent implements OnInit {
 
   list = [];
   initLoading = false;
+  items = [];
 
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadData();
+    this.loadItems();
   }
 
   loadData() {
@@ -38,6 +40,24 @@ export class MenuRootComponent implements OnInit {
         return;
       }
       this.list = res.data;
+    });
+  }
+
+  loadItems() {
+    const url = 'permission/getmoduleitems';
+    this.http.get(url).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create(
+          'error',
+          '模块下拉框数据加载失败',
+          res.allMessages,
+        );
+      }
+      if (res.data != null) {
+        this.items = res.data;
+      }
+
+      console.log(this.items);
     });
   }
 
@@ -132,22 +152,13 @@ export class MenuRootComponent implements OnInit {
       menuName: item.name,
     };
 
-    const url = 'permission/getmoduleitems';
-    this.http.get(url).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create(
-          'error',
-          '模块下拉框数据加载失败',
-          res.allMessages,
-        );
-      }
-      const items = res.data;
-      console.log(res.data);
-      this.modal
-        .createStatic(MenuPageAddComponent, { entity, isEdit, title, items })
-        .subscribe(res => {
-          this.loadData();
-        });
-    });
+    localStorage.setItem('moudleItems', JSON.stringify(this.items));
+    this.modal
+      .createStatic(MenuPageAddComponent, { entity, isEdit, title })
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        this.loadData();
+      });
+
   }
 }

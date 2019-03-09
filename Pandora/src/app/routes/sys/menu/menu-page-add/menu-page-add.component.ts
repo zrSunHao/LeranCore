@@ -15,7 +15,6 @@ export class MenuPageAddComponent implements OnInit {
   entity: any = {};
   isEdit = false;
   title = '';
-  items = [];
 
   schema: SFSchema = {
     properties: {
@@ -23,10 +22,10 @@ export class MenuPageAddComponent implements OnInit {
       menuName: { type: 'string', title: '菜单', readOnly: true },
       tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       url: { type: 'string', title: 'URL', maxLength: 100 },
-      moudleId: {
+      moduleId: {
         type: 'string',
         title: '所属模块',
-        enum: this.items,
+        enum: JSON.parse(localStorage.getItem('moudleItems')),
       },
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
@@ -40,7 +39,7 @@ export class MenuPageAddComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'url', 'icon', 'intro', 'moudleId', 'tagColor'],
+    required: ['name', 'url', 'icon', 'intro', 'moduleId', 'tagColor'],
     ui: {
       spanLabelFixed: 100,
       grid: { span: 12 },
@@ -51,54 +50,9 @@ export class MenuPageAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    // this.loadItems1();
-    console.log(this.items);
-  }
-
-  loadItems() {
-    const url = 'permission/getmoduleitems';
-    this.http.get(url).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create(
-          'error',
-          '模块下拉框数据加载失败',
-          res.allMessages,
-        );
-      }
-      this.items = res.data;
-      console.log(this.items);
-    });
-  }
-
-  loadItems1(): Observable<any> {
-    const url = 'permission/getmoduleitems';
-
-    return this.http.get(url).pipe(
-      map((res: any) => {
-        console.log(res);
-        if (!res.success) {
-          this.notification.create(
-            'error',
-            '模块下拉框数据加载失败',
-            res.allMessages,
-          );
-          return [];
-        }
-
-        const items = [
-          {
-            label: '系统模块',
-            group: true,
-            children: res.data,
-          },
-        ];
-        return items;
-      }),
-      null,
-    );
   }
 
   save(value: any) {
@@ -112,14 +66,14 @@ export class MenuPageAddComponent implements OnInit {
   add(entity: any) {
     const url = 'menu/addpage';
     console.log(entity);
-    // this.http.post(url, entity).subscribe((res: any) => {
-    //   if (!res.success) {
-    //     this.notification.create('error', '添加失败', res.allMessages);
-    //     return;
-    //   }
-    //   this.notification.create('success', '添加成功', res.allMessages);
-    //   this.modal.close(res);
-    // });
+    this.http.post(url, entity).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '添加失败', res.allMessages);
+        return;
+      }
+      this.notification.create('success', '添加成功', res.allMessages);
+      this.modal.close(res);
+    });
   }
 
   edit(entity: any) {
