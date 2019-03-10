@@ -16,6 +16,8 @@ export class AccountListComponent implements OnInit {
   @ViewChild('st') st: STComponent;
   // 列表数据
   datas: Array<any> = [];
+  // 选中的列表行
+  selectRows: Array<any> = [];
   // 列表搜索条件
   searchSchema: SFSchema = {
     properties: {
@@ -125,7 +127,26 @@ export class AccountListComponent implements OnInit {
   }
 
   activeAccount(item) {
+    const url = 'auth/activeAccount';
+    const active = item.active;
+    let msg = '';
+    if (active) {
+      msg = '关闭';
+    } else {
+      msg = '开启';
+    }
 
+    this.http
+      .post(url, { id: item.id, active: !active })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create('error', msg + '失败', res.allMessages);
+          item.active = active;
+          return;
+        }
+        this.notification.create('success', msg + '成功', res.allMessages);
+        item.active = !active;
+      });
   }
 
   editAccount(item) {
@@ -137,7 +158,16 @@ export class AccountListComponent implements OnInit {
   }
 
   deleteAccount(item) {
+    const url = 'menu/deletepage';
 
+    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '删除失败', res.allMessages);
+        return;
+      }
+      this.notification.create('success', '删除成功', res.allMessages);
+      // TODO 加载列表数据
+    });
   }
 
   rowClick(event) {
@@ -146,6 +176,7 @@ export class AccountListComponent implements OnInit {
 
   change(e: STChange) {
     console.log('change', e);
+    this.selectRows = e.checkbox;
   }
 
 }
