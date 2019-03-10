@@ -5,6 +5,7 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { PagingOptions } from '@shared/model/query-params.model';
 import { BasicOperateService } from '../../_core/basic-services/basic-operate.service';
+import { AccountAddComponent } from '../account-add/account-add.component';
 
 @Component({
   selector: 'app-account-list',
@@ -123,7 +124,17 @@ export class AccountListComponent implements OnInit {
   }
 
   addAccount() {
+    const isEdit = false;
+    const title = '添加页面';
+    const entity = {
+    };
 
+    this.modal
+      .createStatic(AccountAddComponent, { entity, isEdit, title })
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        // TODO 加载列表数据
+      });
   }
 
   activeAccount(item) {
@@ -150,15 +161,39 @@ export class AccountListComponent implements OnInit {
   }
 
   editAccount(item) {
+    const isEdit = true;
+    const title = '修改页面';
+    const entity = {
+    };
 
+    this.modal
+      .createStatic(AccountAddComponent, { entity, isEdit, title })
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        // TODO 加载列表数据
+      });
   }
 
+  // TODO 单条锁定
   lockoutAccount(item) {
 
   }
 
+  // TODO 批量锁定
+  lockoutAccounts() {
+    const rowIds = this.getRowIds();
+    this.lockout(rowIds);
+  }
+
+  // TODO 批量禁用
+  activeAccounts() {
+    const rowIds = this.getRowIds();
+    this.active(rowIds);
+  }
+
+  // TODO 加载列表数据
   deleteAccount(item) {
-    const url = 'menu/deletepage';
+    const url = 'auth/deleteAccount';
 
     this.http.get(url, { id: item.id }).subscribe((res: any) => {
       if (!res.success) {
@@ -174,9 +209,35 @@ export class AccountListComponent implements OnInit {
 
   }
 
-  change(e: STChange) {
-    console.log('change', e);
-    this.selectRows = e.checkbox;
+  active(ids: any[]) {
+    if (ids.length < 1) {
+      // TODO 报错
+    } else {
+
+    }
+  }
+
+  lockout(ids: any[]) {
+    if (ids.length < 1) {
+      // TODO 报错
+    } else {
+
+    }
+  }
+
+  change(event: STChange) {
+    console.log('change', event);
+    this.selectRows = event.checkbox;
+  }
+
+  getRowIds(): any[] {
+    const rows = this.selectRows;
+    const rowIds = [];
+    rows.forEach(row => {
+      rowIds.push(row.id);
+    });
+    console.log(rowIds);
+    return rowIds;
   }
 
 }
