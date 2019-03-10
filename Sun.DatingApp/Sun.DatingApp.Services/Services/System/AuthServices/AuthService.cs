@@ -198,7 +198,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 query = from u in query
                     where (!string.IsNullOrEmpty(filters.Email) && u.Email.Contains(filters.Email)) ||
                           string.IsNullOrEmpty(filters.Email)
-                    where (!string.IsNullOrEmpty(filters.UserName) && u.Email.Contains(filters.UserName)) ||
+                    where (!string.IsNullOrEmpty(filters.UserName) && u.UserName.Contains(filters.UserName)) ||
                           string.IsNullOrEmpty(filters.UserName)
                     where (!string.IsNullOrEmpty(filters.Role) && u.Email.Contains(filters.Role)) ||
                           string.IsNullOrEmpty(filters.Role)
