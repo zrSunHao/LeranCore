@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { STComponent, STColumn } from '@delon/abc';
+import { STComponent, STColumn, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd';
@@ -31,6 +31,7 @@ export class AccountListComponent implements OnInit {
 
   // 列表行列格式
   columns: STColumn[] = [
+    { title: 'ID', index: 'id', type: 'checkbox', selections: [] },
     { title: '用户名', index: 'userName', className: 'text-center' },
     { title: '邮箱', index: 'email', className: 'text-center' },
     { title: '角色', index: 'role', className: 'text-center' },
@@ -129,6 +130,10 @@ export class AccountListComponent implements OnInit {
 
   rowClick(event) {
 
+  }
+
+  change(e: STChange) {
+    console.log('change', e);
   }
 
 }
