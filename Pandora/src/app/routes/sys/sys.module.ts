@@ -21,6 +21,10 @@ import { MenuAddComponent } from './menu/menu-add/menu-add.component';
 import { MenuRootComponent } from './menu/menu-root/menu-root.component';
 import { MenuPageAddComponent } from './menu/menu-page-add/menu-page-add.component';
 
+// 服务
+import { BasicOperateService } from './_core/basic-services/basic-operate.service';
+import { NZ_NOTIFICATION_CONFIG } from 'ng-zorro-antd';
+
 // 账号管理模块
 
 const COMPONENTS = [SysRoleRoleListComponent];
@@ -43,6 +47,9 @@ const COMPONENTS_NOROUNT = [
   imports: [SharedModule, SysRoutingModule],
   declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
   entryComponents: COMPONENTS_NOROUNT,
-  providers: [],
+  providers: [
+    // { provide: NZ_NOTIFICATION_CONFIG, useValue: { nzDuration: 3000 } },
+    BasicOperateService,
+  ],
 })
-export class SysModule {}
+export class SysModule { }

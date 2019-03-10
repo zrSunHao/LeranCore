@@ -58,6 +58,8 @@ const DIRECTIVES = [];
     // your components
     ...COMPONENTS,
     ...DIRECTIVES
+  ],
+  providers: [
   ]
 })
 export class SharedModule { }

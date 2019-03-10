@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // #region default language
 // 参考：https://ng-alain.com/docs/i18n
 import { default as ngLang } from '@angular/common/locales/zh';
-import { NZ_I18N, zh_CN as zorroLang } from 'ng-zorro-antd';
+import { NZ_I18N, zh_CN as zorroLang, NZ_NOTIFICATION_CONFIG } from 'ng-zorro-antd';
 import { DELON_LOCALE, zh_CN as delonLang } from '@delon/theme';
 const LANG = {
   abbr: 'zh',
@@ -115,7 +115,8 @@ import { LayoutModule } from './layout/layout.module';
     ...LANG_PROVIDES,
     ...INTERCEPTOR_PROVIDES,
     ...I18NSERVICE_PROVIDES,
-    ...APPINIT_PROVIDES
+    ...APPINIT_PROVIDES,
+    { provide: NZ_NOTIFICATION_CONFIG, useValue: { nzDuration: 3000 } }
   ],
   bootstrap: [AppComponent]
 })

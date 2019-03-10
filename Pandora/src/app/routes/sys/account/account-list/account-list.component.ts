@@ -4,6 +4,7 @@ import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { PagingOptions } from '@shared/model/query-params.model';
+import { BasicOperateService } from '../../_core/basic-services/basic-operate.service';
 
 @Component({
   selector: 'app-account-list',
@@ -67,14 +68,31 @@ export class AccountListComponent implements OnInit {
     },
   ];
 
-
-  constructor(private modal: ModalHelper, private http: _HttpClient, private notification: NzNotificationService) { }
+  constructor(
+    private modal: ModalHelper,
+    private http: _HttpClient,
+    private notification: NzNotificationService) { }
 
   ngOnInit() {
     this.loadData({});
   }
 
   loadData(dto: any) {
+    const entity = this.getQueryParams(dto);
+    const queryParams = new PagingOptions<any>(
+      entity
+    );
+
+    const url = 'auth/accounts';
+    this.http.post(url, queryParams).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '列表数据加载失败', res.errMsg);
+      }
+      this.datas = res.data;
+    });
+  }
+
+  getQueryParams(dto: any): any {
     const entity = {
       email: dto.email,
       userName: dto.userName,
@@ -90,13 +108,7 @@ export class AccountListComponent implements OnInit {
       entity
     );
 
-    const url = 'auth/accounts';
-    this.http.post(url, queryParams).subscribe((res: any) => {
-      if (!res.success) {
-        return;
-      }
-      this.datas = res.data;
-    });
+    return queryParams;
   }
 
   search(event) {
