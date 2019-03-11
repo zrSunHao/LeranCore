@@ -1,5 +1,3 @@
-import { AccountAddComponent } from './account/account-add/account-add.component';
-import { AccountListComponent } from './account/account-list/account-list.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
 
@@ -26,6 +24,10 @@ import { BasicOperateService } from './_core/basic-services/basic-operate.servic
 import { NZ_NOTIFICATION_CONFIG } from 'ng-zorro-antd';
 
 // 账号管理模块
+import { AccountLockoutComponent } from './account/account-lockout/account-lockout.component';
+import { AccountAddComponent } from './account/account-add/account-add.component';
+import { AccountListComponent } from './account/account-list/account-list.component';
+import { AccountActiveComponent } from './account/account-active/account-active.component';
 
 const COMPONENTS = [SysRoleRoleListComponent];
 
@@ -41,6 +43,8 @@ const COMPONENTS_NOROUNT = [
   MenuPageAddComponent,
   AccountListComponent,
   AccountAddComponent,
+  AccountLockoutComponent,
+  AccountActiveComponent
 ];
 
 @NgModule({

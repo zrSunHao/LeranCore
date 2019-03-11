@@ -1,3 +1,5 @@
+import { AccountActiveComponent } from './../account-active/account-active.component';
+import { AccountLockoutComponent } from './../account-lockout/account-lockout.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { STComponent, STColumn, STChange } from '@delon/abc';
 import { SFSchema } from '@delon/form';
@@ -32,6 +34,8 @@ export class AccountListComponent implements OnInit {
       LatestLoginAtEnd: { type: 'string', title: '最近登录时间-结束', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
     }
   };
+
+  roleItems = [];
 
   // 列表行列格式
   columns: STColumn[] = [
@@ -125,9 +129,14 @@ export class AccountListComponent implements OnInit {
 
   addAccount() {
     const isEdit = false;
-    const title = '添加页面';
+    const title = '添加账号';
     const entity = {
+      userName: null,
+      email: null,
+      roleId: null
     };
+
+    localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
 
     this.modal
       .createStatic(AccountAddComponent, { entity, isEdit, title })
@@ -162,8 +171,11 @@ export class AccountListComponent implements OnInit {
 
   editAccount(item) {
     const isEdit = true;
-    const title = '修改页面';
+    const title = '修改账号';
     const entity = {
+      userName: item.userName,
+      email: item.email,
+      roleId: item.roleId
     };
 
     this.modal
@@ -181,14 +193,41 @@ export class AccountListComponent implements OnInit {
 
   // TODO 批量锁定
   lockoutAccounts() {
-    const rowIds = this.getRowIds();
-    this.lockout(rowIds);
+    const rows = this.selectRows;
+    const rowIds = [];
+    rows.forEach(row => {
+      rowIds.push(row.id);
+    });
+
+    if (rowIds.length < 1) {
+      this.notification.create('error', '账号锁定错误提示', '请选择账号');
+      return;
+    } else {
+      const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
+      const title = '批量锁定账号';
+      this.lockout(rowIds, title, warningMsg);
+    }
+
+
   }
 
   // TODO 批量禁用
   activeAccounts() {
-    const rowIds = this.getRowIds();
-    this.active(rowIds);
+    const rows = this.selectRows;
+    const rowIds = [];
+    rows.forEach(row => {
+      rowIds.push(row.id);
+    });
+
+    if (rowIds.length < 1) {
+      this.notification.create('error', '账号启用、禁用错误提示', '请选择账号');
+      return;
+    } else {
+      const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
+      const title = '批量禁用账号';
+      this.active(rowIds, title, warningMsg);
+    }
+
   }
 
   // TODO 加载列表数据
@@ -209,20 +248,23 @@ export class AccountListComponent implements OnInit {
 
   }
 
-  active(ids: any[]) {
-    if (ids.length < 1) {
-      // TODO 报错
-    } else {
+  active(entity: any, title: string, warningMsg) {
+    this.modal
+      .createStatic(AccountActiveComponent, { entity, title, warningMsg }, { size: 'md' })
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        // TODO 加载列表数据
+      });
 
-    }
   }
 
-  lockout(ids: any[]) {
-    if (ids.length < 1) {
-      // TODO 报错
-    } else {
-
-    }
+  lockout(entity: any, title: string, warningMsg) {
+    this.modal
+      .createStatic(AccountLockoutComponent, { entity, title, warningMsg }, { size: 'md' })
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        // TODO 加载列表数据
+      });
   }
 
   change(event: STChange) {
@@ -240,4 +282,19 @@ export class AccountListComponent implements OnInit {
     return rowIds;
   }
 
+  loadRoleItem() {
+    const url = 'permission/getRoleItems';
+    this.http.get(url).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create(
+          'error',
+          '模块下拉框数据加载失败',
+          res.allMessages,
+        );
+      }
+      if (res.data != null) {
+        this.roleItems = res.data;
+      }
+    });
+  }
 }

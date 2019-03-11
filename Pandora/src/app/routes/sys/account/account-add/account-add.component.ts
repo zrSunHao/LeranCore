@@ -16,21 +16,15 @@ export class AccountAddComponent implements OnInit {
 
   schema: SFSchema = {
     properties: {
-      name: { type: 'string', title: '菜单名称', maxLength: 100 },
-      tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
-      icon: { type: 'string', title: '图标', maxLength: 100 },
-      intro: {
+      userName: { type: 'string', title: '用户名', maxLength: 50 },
+      email: { type: 'string', title: '邮箱', maxLength: 100 },
+      roleId: {
         type: 'string',
-        title: '备注',
-        maxLength: 200,
-        ui: {
-          widget: 'textarea',
-          grid: { span: 24 },
-          autosize: { minRows: 2, maxRows: 6 },
-        },
+        title: '角色',
+        enum: JSON.parse(localStorage.getItem('roleItems')),
       },
     },
-    required: ['name', 'icon', 'intro', 'tagColor'],
+    required: ['name', 'email', 'roleId'],
     ui: {
       spanLabelFixed: 100,
       grid: { span: 12 },
