@@ -1,10 +1,7 @@
-import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import { SFSchema, SFSchemaEnumType, SFDataSchema } from '@delon/form';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
-import { Observable, of } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu-page-add',
@@ -50,10 +47,9 @@ export class MenuPageAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   save(value: any) {
     if (this.isEdit) {
