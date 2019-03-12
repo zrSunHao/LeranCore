@@ -166,7 +166,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     {
                         foreach (var data in datas)
                         {
-                            data.Modules = modules.Where(x => x.RoleId == data.Id).ToList();
+                            //data.Modules = modules.Where(x => x.RoleId == data.Id).ToList();
                         }
                     }
                 }

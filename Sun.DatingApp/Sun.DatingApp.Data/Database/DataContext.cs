@@ -16,6 +16,7 @@ namespace Sun.DatingApp.Data.Database
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<RolePage> RolePages { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -57,6 +58,7 @@ namespace Sun.DatingApp.Data.Database
             modelBuilder.ApplyConfiguration(new ProfilePictureCfg());
             modelBuilder.ApplyConfiguration(new MenuCfg());
             modelBuilder.ApplyConfiguration(new PageCfg());
+            modelBuilder.ApplyConfiguration(new RolePageCfg());
 
             #endregion
 

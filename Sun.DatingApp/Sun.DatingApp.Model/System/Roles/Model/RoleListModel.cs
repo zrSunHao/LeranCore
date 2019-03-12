@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sun.DatingApp.Model.System.Menus.Model;
 
 namespace Sun.DatingApp.Model.System.Roles.Model
 {
@@ -15,6 +16,6 @@ namespace Sun.DatingApp.Model.System.Roles.Model
 
         public string Intro { get; set; }
 
-        public List<RoleListPermissionModel> Modules { get; set; }
+        public List<PageItem> Pages { get; set; }
     }
 }
