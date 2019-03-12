@@ -182,73 +182,15 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         }
 
         /// <summary>
-        /// 修改账号所属角色
-        /// </summary>
-        /// <param name="newRoleId">新角色Id</param>
-        /// <param name="accountId">当前账号Id</param>
-        /// <returns></returns>
-        public async Task<WebApiResult> UpdateAccountRole(Guid newRoleId, Guid accountId)
-        {
-            var result = new WebApiResult();
-            try
-            {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == accountId);
-                account.RoleId = newRoleId;
-                await _dataContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                result.AddError(ex.Message);
-            }
-            return result;
-        }
-
-        /// <summary>
         /// 获取角色权限数据
         /// </summary>
         /// <returns></returns>
-        public async Task<WebApiResult<List<RolePermissionModel>>> GetRolePermissions(Guid id)
+        public async Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id)
         {
-            var result = new WebApiResult<List<RolePermissionModel>>();
+            var result = new WebApiResult<List<RolePageModel>>();
             try
             {
-                var datas = new List<RolePermissionModel>();
-
-                var rolePmsIds = await _dataContext.RolePermissions.Where(x => x.RoleId == id && !x.Deleted).Select(x=>x.PermissionId).ToListAsync();
-                var modules = await _dataContext.Permissions.Where(x => !x.ParentId.HasValue && !x.Deleted)
-                    .Select(c => new RolePermissionModel
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                        Icon = c.Icon,
-                        Code = c.Code,
-                        Active = c.Active,
-                        Intro = c.Intro,
-                        Checked = rolePmsIds.Contains(c.Id)
-                    })
-                    .ToListAsync();
-
-                var operates = await _dataContext.Permissions.Where(x => x.ParentId.HasValue && !x.Deleted)
-                    .Select(c => new RolePermissionModel
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                        Icon = c.Icon,
-                        Code = c.Code,
-                        Active = c.Active,
-                        Intro = c.Intro,
-                        ParentId = c.ParentId,
-                        Checked = rolePmsIds.Contains(c.Id)
-                    })
-                    .ToListAsync();
-
-                foreach (var module in modules)
-                {
-                    module.Children = operates.Where(x => x.ParentId == module.Id).ToList();
-                }
-
-                result.Data = modules;
+                
             }
             catch (Exception ex)
             {
@@ -264,59 +206,12 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        public async Task<WebApiResult> UpdateRolePermission(UpdateRolePermissionDto dto, Guid accountId)
+        public async Task<WebApiResult> EditRolePermission(EditRolePermissionDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
             {
-                var allPermissions = await _dataContext.RolePermissions.Where(x => x.RoleId == dto.RoleId && !x.Deleted).ToListAsync();
-                var dataPermissions = allPermissions;
-                var dtoPermissionIds = dto.Permissions.Select(x => x.Id).ToList();
-
-                if (allPermissions.Any())
-                {
-                    var deleteIds = allPermissions.Where(x => !dtoPermissionIds.Contains(x.Id)).Select(x => x.Id)
-                        .ToList();
-                    if (deleteIds.Any())
-                    {
-                        await _dataContext.RolePermissions.Where(x => deleteIds.Contains(x.Id)).ForEachAsync(x =>
-                        {
-                            x.Deleted = false;
-                            x.DeletedAt = DateTime.Now;
-                            x.DeletedById = accountId;
-                        });
-                    }
-
-                    dataPermissions = allPermissions.Where(x => dtoPermissionIds.Contains(x.Id)).ToList();
-                }
-
-                var dataPermissionIds = dataPermissions.Select(x => x.Id).ToList();
-                var newRolePermissions = dto.Permissions.Where(x => !dataPermissionIds.Contains(x.Id)).ToList();
-                if (newRolePermissions.Any())
-                {
-                    var entitys = new List<RolePermission>();
-                    foreach (var newRolePermission in newRolePermissions)
-                    {
-                        var entity = new RolePermission
-                        {
-                            Id = Guid.NewGuid(),
-                            RoleId = dto.RoleId,
-                            PermissionId = newRolePermission.Id,
-                            Deleted = false,
-                            CreatedAt = DateTime.Now,
-                            CreatedById = accountId,
-                        };
-                        entitys.Add(entity);
-                    }
-
-                    await _dataContext.RolePermissions.AddRangeAsync(entitys);
-                }
-
-                await _dataContext.SaveChangesAsync();
-
-                var account = _catchHandler.Get<AccessDataModel>(accountId.ToString());
-                account.Permissions = dto.Permissions.Select(x=>x.Name).ToList();
-                _catchHandler.Replace(accountId.ToString(), account);
+                
             }
             catch (Exception ex)
             {

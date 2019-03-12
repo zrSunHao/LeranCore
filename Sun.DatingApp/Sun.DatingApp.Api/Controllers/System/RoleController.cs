@@ -24,13 +24,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("updateRolePermission")]
-        public async Task<WebApiResult> UpdateRolePermission(UpdateRolePermissionDto dto)
+        [HttpPost("EditRolePermission")]
+        public async Task<WebApiResult> EditRolePermission(EditRolePermissionDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result =  await _service.UpdateRolePermission(dto, CurrentUserId.Value);
+                result =  await _service.EditRolePermission(dto, CurrentUserId.Value);
             }
             else
             {
@@ -39,13 +39,13 @@ namespace Sun.DatingApp.Api.Controllers.System
             return result;
         }
 
-        [HttpPost("getroles")]
+        [HttpPost("GetRoles")]
         public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
         {
             return await _service.GetRoles(dto);
         }
 
-        [HttpPost("createrole")]
+        [HttpPost("CreateRole")]
         public async Task<WebApiResult> CreateRole(CreateOrUpdateRoleDto dto)
         {
             var result = new WebApiResult();
@@ -60,8 +60,8 @@ namespace Sun.DatingApp.Api.Controllers.System
             return result;
         }
 
-        [HttpGet("getrolepermissions")]
-        public async Task<WebApiResult<List<RolePermissionModel>>> GetRolePermissions(Guid id)
+        [HttpGet("GetRolePermissions")]
+        public async Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id)
         {
             return await _service.GetRolePermissions(id);
         }
@@ -70,7 +70,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// 获取角色选择列表数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getRoleItems")]
+        [HttpGet("GetRoleItems")]
         public async Task<WebApiResult<List<ItemModel>>> GetRoleItems()
         {
             return await _service.GetRoleItems();

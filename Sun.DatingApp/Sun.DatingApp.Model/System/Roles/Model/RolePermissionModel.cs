@@ -20,7 +20,5 @@ namespace Sun.DatingApp.Model.System.Roles.Model
         public string Intro { get; set; }
 
         public Guid PageId { get; set; }
-
-        public List<RolePermissionModel> Children { get; set; }
     }
 }
