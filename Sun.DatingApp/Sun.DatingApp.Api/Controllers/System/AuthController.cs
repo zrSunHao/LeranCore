@@ -301,12 +301,12 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="ids"></param>
         /// <returns></returns>
         [HttpPost("batchDeleteAccount")]
-        public async Task<WebApiResult> BatchDeleteAccount(List<Guid> ids)
+        public async Task<WebApiResult> BatchDeleteAccount(BatchDeleteAccountDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.BatchDeleteAccount(ids, CurrentUserId.Value);
+                result = await _service.BatchDeleteAccount(dto, CurrentUserId.Value);
             }
             else
             {

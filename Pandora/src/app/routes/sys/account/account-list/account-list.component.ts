@@ -293,17 +293,25 @@ export class AccountListComponent implements OnInit {
     });
 
     if (rowIds.length < 1) {
-      this.notification.create('error', '账号状态错误提示', '请选择要操作的账号');
+      this.notification.create(
+        'error',
+        '账号状态错误提示',
+        '请选择要操作的账号',
+      );
     } else {
       const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
       const title = '批量锁定账号';
       const entity = { ids: rowIds, lockoutEndAt: null, active: null };
 
       this.modal
-        .createStatic(AccountStatusComponent, { entity, title, warningMsg }, { size: 'md' })
+        .createStatic(
+          AccountStatusComponent,
+          { entity, title, warningMsg },
+          { size: 'md' },
+        )
         // tslint:disable-next-line:no-shadowed-variable
         .subscribe(res => {
-          if ( res != null) {
+          if (res != null) {
             this.loadData({});
           }
         });
@@ -334,18 +342,18 @@ export class AccountListComponent implements OnInit {
   deleteAccounts() {
     const url = 'auth/batchDeleteAccount';
     const rows = this.selectRows;
+    console.log(rows);
     const rowIds = [];
     rows.forEach(row => {
       rowIds.push(row.id);
     });
-
+    console.log(rowIds);
     if (rowIds.length < 1) {
       this.notification.create(
         'error',
-        '账号状态错误提示',
-        '请选择要操作的账号',
+        '批量删除错误提示',
+        '请选择要删除的账号',
       );
-      return;
     } else {
       this.http.post(url, { ids: rowIds }).subscribe((res: any) => {
         if (!res.success) {

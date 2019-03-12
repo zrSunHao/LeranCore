@@ -102,6 +102,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// <param name="ids"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult> BatchDeleteAccount(List<Guid> ids, Guid accountId);
+        Task<WebApiResult> BatchDeleteAccount(BatchDeleteAccountDto dto, Guid accountId);
     }
 }

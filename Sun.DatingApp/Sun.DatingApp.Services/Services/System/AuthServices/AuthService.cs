@@ -483,17 +483,17 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult> BatchDeleteAccount(List<Guid> ids, Guid accountId)
+        public async Task<WebApiResult> BatchDeleteAccount(BatchDeleteAccountDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
             {
-                if (!ids.Any())
+                if (dto == null || !dto.Ids.Any())
                 {
                     result.AddError("请选择要删除的账号！");
                     return result;
                 }
-                await _dataContext.Accounts.Where(x => ids.Contains(x.Id)).ForEachAsync(y =>
+                await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id)).ForEachAsync(y =>
                 {
                     y.Deleted = true;
                     y.DeletedAt = DateTime.Now;
