@@ -1,4 +1,3 @@
-import { AccountActiveComponent } from './../account-active/account-active.component';
 import { AccountLockoutComponent } from './../account-lockout/account-lockout.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { STComponent, STColumn, STChange } from '@delon/abc';
@@ -239,13 +238,18 @@ export class AccountListComponent implements OnInit {
     const title = '修改账号';
     const warningMsg = '添加账号的正常途径是用户自行修改，请慎重考虑';
     const entity = {
+      id: item.id,
       userName: item.userName,
       email: item.email,
       roleId: item.roleId,
     };
 
     this.modal
-      .createStatic(AccountAddComponent, { entity, isEdit, title, warningMsg })
+      .createStatic(
+        AccountAddComponent,
+        { entity, isEdit, title, warningMsg },
+        { size: 'md' },
+      )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         // TODO 加载列表数据
@@ -273,24 +277,6 @@ export class AccountListComponent implements OnInit {
     }
   }
 
-  // TODO 批量禁用
-  activeAccounts() {
-    const rows = this.selectRows;
-    const rowIds = [];
-    rows.forEach(row => {
-      rowIds.push(row.id);
-    });
-
-    if (rowIds.length < 1) {
-      this.notification.create('error', '账号启用、禁用错误提示', '请选择账号');
-      return;
-    } else {
-      const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
-      const title = '批量禁用账号';
-      this.active(rowIds, title, warningMsg);
-    }
-  }
-
   // TODO 加载列表数据
   deleteAccount(item) {
     const url = 'auth/deleteAccount';
@@ -306,19 +292,6 @@ export class AccountListComponent implements OnInit {
   }
 
   rowClick(event) {}
-
-  active(entity: any, title: string, warningMsg) {
-    this.modal
-      .createStatic(
-        AccountActiveComponent,
-        { entity, title, warningMsg },
-        { size: 'md' },
-      )
-      // tslint:disable-next-line:no-shadowed-variable
-      .subscribe(res => {
-        // TODO 加载列表数据
-      });
-  }
 
   lockout(entity: any, title: string, warningMsg) {
     this.modal

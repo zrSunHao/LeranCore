@@ -61,7 +61,7 @@ export class AccountAddComponent implements OnInit {
 
   edit(entity: any) {
     const url = 'auth/editAccount';
-
+    console.log(entity);
     this.http.post(url, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '更新失败', res.allMessages);

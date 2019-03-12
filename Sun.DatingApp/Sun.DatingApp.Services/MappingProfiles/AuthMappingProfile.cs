@@ -40,6 +40,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.UserName, x => x.MapFrom(y => y.UserName))
                 .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
+                .ForMember(x => x.RoleId, x => x.MapFrom(y => y.RoleId))
                 .ForMember(x => x.LatestLoginAt, x => x.MapFrom(y => y.LatestLoginAt))
                 .ForMember(x => x.LockoutEndAt, x => x.MapFrom(y => y.LockoutEndAt))
                 .ForMember(x => x.AccessFailedCount, x => x.MapFrom(y => y.AccessFailedCount))

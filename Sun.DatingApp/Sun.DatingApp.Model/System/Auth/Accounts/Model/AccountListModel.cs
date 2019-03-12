@@ -10,7 +10,7 @@ namespace Sun.DatingApp.Model.System.Auth.Accounts.Model
 
         public string UserName { get; set; }
 
-        public string Role { get; set; }
+        public Guid RoleId { get; set; }
 
         public bool Active { get; set; }
 
