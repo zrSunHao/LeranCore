@@ -7,8 +7,8 @@ namespace Sun.DatingApp.Model.System.Roles.Dto
     {
         public Guid RoleId { get; set; }
 
-        public List<Guid> PermissionIds { get; set; }
+        public List<RolePermissionAndPageIdDto> PermissionAndPageIds { get; set; }
 
-        public List<Guid> MenuIds { get; set; }
+        public List<Guid> PageIds { get; set; }
     }
 }

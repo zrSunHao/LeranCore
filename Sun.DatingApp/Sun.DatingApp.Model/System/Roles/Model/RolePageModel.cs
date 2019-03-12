@@ -12,6 +12,10 @@ namespace Sun.DatingApp.Model.System.Roles.Model
 
         public string MenuName { get; set; }
 
+        public string MenuTagColor { get; set; }
+
+        public string MenuIcon { get; set; }
+
         public string TagColor { get; set; }
 
         public string Icon { get; set; }

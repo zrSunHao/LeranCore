@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Model;
-using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
@@ -190,7 +190,46 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<RolePageModel>>();
             try
             {
-                
+                var pages = await (from p in _dataContext.Pages
+                    join m in _dataContext.Menus on p.MenuId equals m.Id into tm
+                    from mp in tm.DefaultIfEmpty()
+                    where !p.Deleted
+                    select new RolePageModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        MenuName = mp.Name,
+                        MenuTagColor = mp.TagColor,
+                        MenuIcon = mp.Icon,
+                        TagColor = p.TagColor,
+                        Icon = p.Icon,
+                        Active = p.Active
+                    }).ToListAsync();
+
+                if (pages.Any())
+                {
+                    var allPermissions = await _dataContext.Permissions.Where(x => x.Deleted).ToListAsync();
+                    var rolePermissionIds = await _dataContext.RolePermissions.Where(x => x.RoleId == id && !x.Deleted)
+                        .Select(x => x.PermissionId).ToListAsync();
+
+                    foreach (var page in pages)
+                    {
+                        page.Permissions = allPermissions.Where(x => x.PageId == page.Id).Select(x =>
+                            new RolePermissionModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Active = x.Active,
+                                Icon = x.Icon,
+                                Code = x.Code,
+                                Intro = x.Intro,
+                                PageId = x.PageId,
+                                Checked = rolePermissionIds.Contains(x.Id)
+                            }).ToList();
+                    }
+                }
+
+                result.Data = pages;
             }
             catch (Exception ex)
             {
@@ -211,7 +250,55 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
+                var deletePages = await _dataContext.RolePages.Where(x => x.RoleId == dto.RoleId).ToListAsync();
+                _dataContext.RolePages.RemoveRange(deletePages);
+
+                var deletePermissions = await _dataContext.RolePermissions.Where(x => x.RoleId == dto.RoleId).ToListAsync();
+                _dataContext.RolePermissions.RemoveRange(deletePermissions);
+
+                await _dataContext.SaveChangesAsync();
+
                 
+                if (dto.PageIds!=null && dto.PageIds.Any())
+                {
+                    var pages = new List<RolePage>();
+                    foreach (var pageId in dto.PageIds)
+                    {
+                        var page = new RolePage
+                        {
+                            Id = Guid.NewGuid(),
+                            RoleId = dto.RoleId,
+                            PageId = pageId,
+                            CreatedAt = DateTime.Now,
+                            CreatedById = accountId,
+                            Deleted = false
+                        };
+                        pages.Add(page);
+                    }
+                    _dataContext.RolePages.AddRange(pages);
+                }
+
+                if (dto.PermissionAndPageIds != null && dto.PermissionAndPageIds.Any())
+                {
+                    var permissions = new List<RolePermission>();
+                    foreach (var PermissionAndPageId in dto.PermissionAndPageIds)
+                    {
+                        var permission = new RolePermission
+                        {
+                            Id = Guid.NewGuid(),
+                            RoleId = dto.RoleId,
+                            PermissionId = PermissionAndPageId.PermissionId,
+                            PageId = PermissionAndPageId.PageId,
+                            CreatedAt = DateTime.Now,
+                            CreatedById = accountId,
+                            Deleted = false
+                        };
+                        permissions.Add(permission);
+                    }
+                    _dataContext.RolePermissions.AddRange(permissions);
+                }
+
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
