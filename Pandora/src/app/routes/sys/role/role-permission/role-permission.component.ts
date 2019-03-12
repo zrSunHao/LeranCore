@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _HttpClient } from '@delon/theme';
 
@@ -11,7 +11,11 @@ export class RolePermissionComponent implements OnInit {
   roleId: any;
   listOfData = [];
 
-  constructor(private route: ActivatedRoute, private http: _HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: _HttpClient,
+    private injector: Injector,
+  ) {}
 
   ngOnInit() {
     this.roleId = this.route.snapshot.params[`id`];
@@ -103,5 +107,9 @@ export class RolePermissionComponent implements OnInit {
     }
     console.log(modules);
     console.log(operates);
+  }
+
+  back() {
+    this.injector.get(Router).navigateByUrl(`/sys/role-list`);
   }
 }

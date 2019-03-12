@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: 'permission-list',
     component: PermissionListComponent,
-    data: { title: '角色管理列表' },
+    data: { title: '权限管理列表' },
   },
   {
     path: 'role-permission-list/:id',
