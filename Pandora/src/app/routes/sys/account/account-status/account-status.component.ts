@@ -3,15 +3,20 @@ import { SFSchema } from '@delon/form';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 
+const activeItem = [
+  { label: '请选择', value: 2 },
+  { label: '开启', value: 1 },
+  { label: '禁用', value: 0 },
+];
+
 @Component({
-  selector: 'app-account-lockout',
-  templateUrl: './account-lockout.component.html',
+  selector: 'app-account-status',
+  templateUrl: './account-status.component.html',
   styles: [],
 })
-export class AccountLockoutComponent implements OnInit {
+export class AccountStatusComponent implements OnInit {
   entity: any = {};
   title = '';
-  warningMsgTitle = '';
   warningMsg = '';
 
   schema: SFSchema = {
@@ -22,8 +27,15 @@ export class AccountLockoutComponent implements OnInit {
         format: 'date',
         ui: { grid: { span: 12 } },
       },
+      active: {
+        type: 'string',
+        title: '启用或禁用',
+        enum: activeItem,
+        default: 2,
+        ui: { widget: 'select', grid: { span: 12 } },
+      },
     },
-    required: ['lockoutEndAt'],
+    required: [],
     ui: {
       span: 24,
       spanLabelFixed: 130,
@@ -38,19 +50,7 @@ export class AccountLockoutComponent implements OnInit {
 
   ngOnInit() {}
 
-  save(value: any) {
-    const url = 'auth/lockoutAccount';
-    const entity = value;
-    console.log(entity);
-    this.http.post(url, entity).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create('error', '更新失败', res.allMessages);
-        return;
-      }
-      this.notification.create('success', '更新成功', res.allMessages);
-      this.modal.close(res);
-    });
-  }
+  save(value: any) {}
 
   close() {
     this.modal.destroy();

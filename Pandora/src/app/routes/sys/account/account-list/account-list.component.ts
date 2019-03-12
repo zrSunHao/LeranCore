@@ -6,6 +6,7 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { PagingOptions } from '@shared/model/query-params.model';
 import { AccountAddComponent } from '../account-add/account-add.component';
+import { AccountStatusComponent } from '../account-status/account-status.component';
 
 const activeItem = [
   { label: '请选择', value: 2 },
@@ -257,10 +258,34 @@ export class AccountListComponent implements OnInit {
   }
 
   // TODO 单条锁定
-  lockoutAccount(item) {}
+  lockoutAccount(item) {
+    const isEdit = false;
+    const title = '锁订账号';
+    const warningMsg = '在锁订到期之前该账号不能登录，请慎重考虑';
+    const warningMsgTitle = `锁订[${item.userName}]账号警告`;
+    const entity = {
+      id: item.id,
+      lockoutEndAt: item.lockoutEndAt,
+    };
+
+    localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
+
+    this.modal
+      .createStatic(
+        AccountLockoutComponent,
+        { entity, isEdit, title, warningMsg, warningMsgTitle },
+        { size: 'md' },
+      )
+      // tslint:disable-next-line:no-shadowed-variable
+      .subscribe(res => {
+        if (res != null) {
+          this.loadData({});
+        }
+      });
+  }
 
   // TODO 批量锁定
-  lockoutAccounts() {
+  statusAccounts() {
     const rows = this.selectRows;
     const rowIds = [];
     rows.forEach(row => {
@@ -268,12 +293,27 @@ export class AccountListComponent implements OnInit {
     });
 
     if (rowIds.length < 1) {
-      this.notification.create('error', '账号锁定错误提示', '请选择账号');
+      this.notification.create(
+        'error',
+        '账号状态错误提示',
+        '请选择要操作的账号',
+      );
       return;
     } else {
       const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
       const title = '批量锁定账号';
-      this.lockout(rowIds, title, warningMsg);
+      const entity = { ids: rowIds, lockoutEndAt: null, active: null };
+
+      this.modal
+        .createStatic(
+          AccountStatusComponent,
+          { entity, title, warningMsg },
+          { size: 'md' },
+        )
+        // tslint:disable-next-line:no-shadowed-variable
+        .subscribe(res => {
+          this.loadData({});
+        });
     }
   }
 
@@ -292,19 +332,6 @@ export class AccountListComponent implements OnInit {
   }
 
   rowClick(event) {}
-
-  lockout(entity: any, title: string, warningMsg) {
-    this.modal
-      .createStatic(
-        AccountLockoutComponent,
-        { entity, title, warningMsg },
-        { size: 'md' },
-      )
-      // tslint:disable-next-line:no-shadowed-variable
-      .subscribe(res => {
-        // TODO 加载列表数据
-      });
-  }
 
   change(event: STChange) {
     console.log('change', event);

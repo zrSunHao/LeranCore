@@ -27,6 +27,7 @@ import { NZ_NOTIFICATION_CONFIG } from 'ng-zorro-antd';
 import { AccountLockoutComponent } from './account/account-lockout/account-lockout.component';
 import { AccountAddComponent } from './account/account-add/account-add.component';
 import { AccountListComponent } from './account/account-list/account-list.component';
+import { AccountStatusComponent } from './account/account-status/account-status.component';
 
 const COMPONENTS = [SysRoleRoleListComponent];
 
@@ -42,7 +43,8 @@ const COMPONENTS_NOROUNT = [
   MenuPageAddComponent,
   AccountListComponent,
   AccountAddComponent,
-  AccountLockoutComponent
+  AccountLockoutComponent,
+  AccountStatusComponent
 ];
 
 @NgModule({
