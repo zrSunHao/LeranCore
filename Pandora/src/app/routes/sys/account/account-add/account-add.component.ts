@@ -6,13 +6,13 @@ import { SFSchema } from '@delon/form';
 @Component({
   selector: 'app-account-add',
   templateUrl: './account-add.component.html',
-  styles: []
+  styles: [],
 })
 export class AccountAddComponent implements OnInit {
-
   entity: any = {};
   isEdit = false;
   title = '';
+  warningMsg = '';
 
   schema: SFSchema = {
     properties: {
@@ -26,17 +26,17 @@ export class AccountAddComponent implements OnInit {
     },
     required: ['name', 'email', 'roleId'],
     ui: {
-      spanLabelFixed: 100,
-      grid: { span: 12 },
+      spanLabelFixed: 80,
+      // grid: { span: 12 },
     },
   };
   constructor(
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   save(value: any) {
     if (this.isEdit) {
@@ -75,5 +75,4 @@ export class AccountAddComponent implements OnInit {
   close() {
     this.modal.destroy();
   }
-
 }

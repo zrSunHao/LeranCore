@@ -38,18 +38,6 @@ export class AccountListComponent implements OnInit {
         title: '邮箱',
         ui: { autosize: true, grid: { span: 6 } },
       },
-      role: {
-        type: 'string',
-        title: '角色',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      active: {
-        type: 'string',
-        title: '启用或禁用',
-        enum: activeItem,
-        default: 2,
-        ui: { widget: 'select', grid: { span: 6 } },
-      },
       CreatedAtStart: {
         type: 'string',
         title: '创建时间-开始',
@@ -61,6 +49,18 @@ export class AccountListComponent implements OnInit {
         title: '创建时间-结束',
         format: 'date',
         ui: { autosize: true, grid: { span: 6 } },
+      },
+      role: {
+        type: 'string',
+        title: '角色',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      active: {
+        type: 'string',
+        title: '状态',
+        enum: activeItem,
+        default: 2,
+        ui: { widget: 'select', grid: { span: 6 } },
       },
       LatestLoginAtStart: {
         type: 'string',
@@ -74,6 +74,10 @@ export class AccountListComponent implements OnInit {
         format: 'date',
         ui: { autosize: true, grid: { span: 6 } },
       },
+    },
+    ui: {
+      spanLabelFixed: 130,
+      grid: { span: 6 },
     },
   };
 
@@ -139,6 +143,7 @@ export class AccountListComponent implements OnInit {
 
   ngOnInit() {
     this.loadData({});
+    this.loadRoleItem();
   }
 
   loadData(dto: any) {
@@ -183,6 +188,7 @@ export class AccountListComponent implements OnInit {
   addAccount() {
     const isEdit = false;
     const title = '添加账号';
+    const warningMsg = '添加账号的正常途径是用户自行注册，请慎重考虑';
     const entity = {
       userName: null,
       email: null,
@@ -192,7 +198,11 @@ export class AccountListComponent implements OnInit {
     localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
 
     this.modal
-      .createStatic(AccountAddComponent, { entity, isEdit, title })
+      .createStatic(
+        AccountAddComponent,
+        { entity, isEdit, title, warningMsg },
+        { size: 'md' },
+      )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         // TODO 加载列表数据
@@ -225,6 +235,7 @@ export class AccountListComponent implements OnInit {
   editAccount(item) {
     const isEdit = true;
     const title = '修改账号';
+    const warningMsg = '添加账号的正常途径是用户自行修改，请慎重考虑';
     const entity = {
       userName: item.userName,
       email: item.email,
@@ -232,7 +243,7 @@ export class AccountListComponent implements OnInit {
     };
 
     this.modal
-      .createStatic(AccountAddComponent, { entity, isEdit, title })
+      .createStatic(AccountAddComponent, { entity, isEdit, title, warningMsg })
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         // TODO 加载列表数据
@@ -335,13 +346,15 @@ export class AccountListComponent implements OnInit {
     return rowIds;
   }
 
+  deleteAccounts() {}
+
   loadRoleItem() {
-    const url = 'permission/getRoleItems';
+    const url = 'role/getRoleItems';
     this.http.get(url).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create(
           'error',
-          '模块下拉框数据加载失败',
+          '角色下拉框数据加载失败',
           res.allMessages,
         );
       }
