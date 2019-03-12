@@ -12,17 +12,11 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
     public interface IPermissionService
     {
         /// <summary>
-        /// 获取操作模块权限数据
-        /// </summary>
-        /// <returns></returns>
-        Task<WebApiPagingResult<List<PermissionListModel>>> GetModulePermission(string name);
-
-        /// <summary>
         /// 获取对应模块下的操作权限
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<WebApiResult<List<PermissionListModel>>> GetOperatePermission(Guid id);
+        Task<WebApiResult<List<PermissionListModel>>> GetPermission(Guid id);
 
         /// <summary>
         /// 新建权限树节点
@@ -30,7 +24,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult<PermissionListModel>> Create(PermissionEditDto dto, Guid accountId);
+        Task<WebApiResult<PermissionListModel>> CreatePermission(PermissionEditDto dto, Guid accountId);
 
         /// <summary>
         /// 修改权限节点
@@ -38,7 +32,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult> Edit(PermissionEditDto dto, Guid accountId);
+        Task<WebApiResult> EditPermission(PermissionEditDto dto, Guid accountId);
 
         /// <summary>
         /// 删除权限节点
@@ -46,7 +40,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         /// <param name="id"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult> Delete(Guid id, Guid accountId);
+        Task<WebApiResult> DeletePermission(Guid id, Guid accountId);
 
         /// <summary>
         /// 权限启用或关闭
@@ -54,12 +48,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        Task<WebApiResult> Active(ActiveDto dto,Guid accountId);
+        Task<WebApiResult> ActivePermission(ActiveDto dto,Guid accountId);
 
-        /// <summary>
-        /// 获取模块选择框数据
-        /// </summary>
-        /// <returns></returns>
-        Task<WebApiResult<List<ItemModel>>> GetModuleItems();
     }
 }

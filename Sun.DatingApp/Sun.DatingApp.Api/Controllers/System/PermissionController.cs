@@ -21,23 +21,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         }
 
         /// <summary>
-        /// 获取操作模块权限数据
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("getmodulepermission")]
-        public async Task<WebApiResult<List<PermissionListModel>>> GetModulePermission(string name)
-        {
-            return await _service.GetModulePermission(name);
-        }
-
-        /// <summary>
         /// 获取对应模块下的操作权限
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getoperatepermission")]
-        public async Task<WebApiResult<List<PermissionListModel>>> GetOperatePermission(Guid id)
+        [HttpGet("GetPermission")]
+        public async Task<WebApiResult<List<PermissionListModel>>> GetPermission(Guid id)
         {
-            return await _service.GetOperatePermission(id);
+            return await _service.GetPermission(id);
         }
 
         /// <summary>
@@ -45,13 +35,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("create")]
-        public async Task<WebApiResult<PermissionListModel>> Create(PermissionEditDto dto)
+        [HttpPost("CreatePermission")]
+        public async Task<WebApiResult<PermissionListModel>> CreatePermission(PermissionEditDto dto)
         {
             var result = new WebApiResult<PermissionListModel>();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.Create(dto, CurrentUserId.Value);
+                result = await _service.CreatePermission(dto, CurrentUserId.Value);
             }
             else
             {
@@ -65,13 +55,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("edit")]
-        public async Task<WebApiResult> Edit(PermissionEditDto dto)
+        [HttpPost("EditPermission")]
+        public async Task<WebApiResult> EditPermission(PermissionEditDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.Edit(dto, CurrentUserId.Value);
+                result = await _service.EditPermission(dto, CurrentUserId.Value);
             }
             else
             {
@@ -85,13 +75,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("delete")]
-        public async Task<WebApiResult> Delete(Guid id)
+        [HttpGet("DeletePermission")]
+        public async Task<WebApiResult> DeletePermission(Guid id)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.Delete(id, CurrentUserId.Value);
+                result = await _service.DeletePermission(id, CurrentUserId.Value);
             }
             else
             {
@@ -105,29 +95,19 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("active")]
-        public async Task<WebApiResult> Active(ActiveDto dto)
+        [HttpPost("ActivePermission")]
+        public async Task<WebApiResult> ActivePermission(ActiveDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.Active(dto, CurrentUserId.Value);
+                result = await _service.ActivePermission(dto, CurrentUserId.Value);
             }
             else
             {
                 result.AddError("当前用户信息获取失败");
             }
             return result;
-        }
-
-        /// <summary>
-        /// 获取模块选择框数据
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("getmoduleitems")]
-        public async Task<WebApiResult<List<ItemModel>>> GetModuleItems()
-        {
-            return await _service.GetModuleItems();
         }
     }
 }

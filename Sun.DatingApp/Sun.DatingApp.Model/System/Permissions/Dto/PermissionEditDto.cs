@@ -16,8 +16,6 @@ namespace Sun.DatingApp.Model.System.Permissions.Dto
 
         public string TagColor { get; set; }
 
-        public Guid? ParentId { get; set; }
-
-        public bool IsModule { get; set; }
+        public Guid PageId { get; set; }
     }
 }
