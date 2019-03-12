@@ -50,7 +50,51 @@ export class AccountStatusComponent implements OnInit {
 
   ngOnInit() {}
 
-  save(value: any) {}
+  save(value: any) {
+    const url = 'auth/batchEditAccount';
+    console.log(value);
+
+    if (
+      value.lockoutEndAt == null &&
+      (value.active == null || value.active === 2)
+    ) {
+      this.notification.create(
+        'error',
+        '账号状态批量更新失败',
+        '请输入要更改的状态',
+      );
+    } else {
+      let realActive = null;
+      if (value.active === 1) {
+        realActive = true;
+      }
+      if (value.active === 0) {
+        realActive = false;
+      }
+      const entity = {
+        ids: value.ids,
+        active: realActive,
+        lockoutEndAt: value.lockoutEndAt
+      };
+
+      this.http.post(url, entity).subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create(
+            'error',
+            '账号状态批量更新失败',
+            res.allMessages,
+          );
+        } else {
+          this.notification.create(
+            'success',
+            '账号状态批量更新成功',
+            res.allMessages,
+          );
+          this.modal.close(res);
+        }
+      });
+    }
+  }
 
   close() {
     this.modal.destroy();

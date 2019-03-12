@@ -149,6 +149,7 @@ export class AccountListComponent implements OnInit {
   loadData(dto: any) {
     const entity = this.getQueryParams(dto);
     const queryParams = new PagingOptions<any>(entity);
+    this.selectRows = [];
 
     const url = 'auth/accounts';
     this.http.post(url, queryParams).subscribe((res: any) => {
@@ -257,7 +258,7 @@ export class AccountListComponent implements OnInit {
       });
   }
 
-  // TODO 单条锁定
+  // 单条锁定
   lockoutAccount(item) {
     const isEdit = false;
     const title = '锁订账号';
@@ -284,8 +285,54 @@ export class AccountListComponent implements OnInit {
       });
   }
 
-  // TODO 批量锁定
   statusAccounts() {
+    const rows = this.selectRows;
+    const rowIds = [];
+    rows.forEach(row => {
+      rowIds.push(row.id);
+    });
+
+    if (rowIds.length < 1) {
+      this.notification.create('error', '账号状态错误提示', '请选择要操作的账号');
+    } else {
+      const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
+      const title = '批量锁定账号';
+      const entity = { ids: rowIds, lockoutEndAt: null, active: null };
+
+      this.modal
+        .createStatic(AccountStatusComponent, { entity, title, warningMsg }, { size: 'md' })
+        // tslint:disable-next-line:no-shadowed-variable
+        .subscribe(res => {
+          if ( res != null) {
+            this.loadData({});
+          }
+        });
+    }
+  }
+
+  deleteAccount(item) {
+    const url = 'auth/deleteAccount';
+
+    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '删除失败', res.allMessages);
+        return;
+      } else {
+        this.notification.create('success', '删除成功', res.allMessages);
+        this.loadData({});
+      }
+    });
+  }
+
+  rowClick(event) {}
+
+  change(event: STChange) {
+    // console.log('change', event);
+    this.selectRows = event.checkbox;
+  }
+
+  deleteAccounts() {
+    const url = 'auth/batchDeleteAccount';
     const rows = this.selectRows;
     const rowIds = [];
     rows.forEach(row => {
@@ -300,55 +347,16 @@ export class AccountListComponent implements OnInit {
       );
       return;
     } else {
-      const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
-      const title = '批量锁定账号';
-      const entity = { ids: rowIds, lockoutEndAt: null, active: null };
-
-      this.modal
-        .createStatic(
-          AccountStatusComponent,
-          { entity, title, warningMsg },
-          { size: 'md' },
-        )
-        // tslint:disable-next-line:no-shadowed-variable
-        .subscribe(res => {
+      this.http.post(url, { ids: rowIds }).subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create('error', '批量删除失败', res.allMessages);
+        } else {
+          this.notification.create('success', '批量删除成功', res.allMessages);
           this.loadData({});
-        });
+        }
+      });
     }
   }
-
-  // TODO 加载列表数据
-  deleteAccount(item) {
-    const url = 'auth/deleteAccount';
-
-    this.http.get(url, { id: item.id }).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create('error', '删除失败', res.allMessages);
-        return;
-      }
-      this.notification.create('success', '删除成功', res.allMessages);
-      // TODO 加载列表数据
-    });
-  }
-
-  rowClick(event) {}
-
-  change(event: STChange) {
-    console.log('change', event);
-    this.selectRows = event.checkbox;
-  }
-
-  getRowIds(): any[] {
-    const rows = this.selectRows;
-    const rowIds = [];
-    rows.forEach(row => {
-      rowIds.push(row.id);
-    });
-    console.log(rowIds);
-    return rowIds;
-  }
-
-  deleteAccounts() {}
 
   loadRoleItem() {
     const url = 'role/getRoleItems';
