@@ -3,6 +3,7 @@ import { SFSchema } from '@delon/form';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 
+const BatchEditAccountUrl = 'Auth/BatchEditAccount';
 const activeItem = [
   { label: '请选择', value: 2 },
   { label: '开启', value: 1 },
@@ -21,17 +22,9 @@ export class AccountStatusComponent implements OnInit {
 
   schema: SFSchema = {
     properties: {
-      lockoutEndAt: {
-        type: 'string',
-        title: '锁定到期时间',
-        format: 'date',
-        ui: { grid: { span: 12 } },
-      },
+      lockoutEndAt: { type: 'string', title: '锁定到期时间', format: 'date', ui: { grid: { span: 12 } } },
       active: {
-        type: 'string',
-        title: '启用或禁用',
-        enum: activeItem,
-        default: 2,
+        type: 'string', title: '启用或禁用', enum: activeItem, default: 2,
         ui: { widget: 'select', grid: { span: 12 } },
       },
     },
@@ -46,23 +39,16 @@ export class AccountStatusComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   save(value: any) {
-    const url = 'auth/batchEditAccount';
-    console.log(value);
-
     if (
       value.lockoutEndAt == null &&
       (value.active == null || value.active === 2)
     ) {
-      this.notification.create(
-        'error',
-        '账号状态批量更新失败',
-        '请输入要更改的状态',
-      );
+      this.notification.create('error', '账号状态批量更新失败', '请输入要更改的状态');
     } else {
       let realActive = null;
       if (value.active === 1) {
@@ -77,19 +63,11 @@ export class AccountStatusComponent implements OnInit {
         lockoutEndAt: value.lockoutEndAt
       };
 
-      this.http.post(url, entity).subscribe((res: any) => {
+      this.http.post(BatchEditAccountUrl, entity).subscribe((res: any) => {
         if (!res.success) {
-          this.notification.create(
-            'error',
-            '账号状态批量更新失败',
-            res.allMessages,
-          );
+          this.notification.create('error', '账号状态批量更新失败', res.allMessages);
         } else {
-          this.notification.create(
-            'success',
-            '账号状态批量更新成功',
-            res.allMessages,
-          );
+          this.notification.create('success', '账号状态批量更新成功', res.allMessages);
           this.modal.close(res);
         }
       });

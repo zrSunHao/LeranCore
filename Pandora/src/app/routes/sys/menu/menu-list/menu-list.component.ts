@@ -5,6 +5,10 @@ import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService, isTemplateRef } from 'ng-zorro-antd';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
 
+const GetPagesUrl = 'Menu/GetPages';
+const ActivePageUrl = 'Menu/ActivePage';
+const DeletePageUrl = 'Menu/DeletePage';
+
 @Component({
   selector: 'app-menu-list',
   templateUrl: './menu-list.component.html',
@@ -29,23 +33,18 @@ export class MenuListComponent implements OnInit {
     { title: '页面名称', render: 'name', className: 'text-center' },
     { title: '备注', index: 'intro', className: 'text-center' },
     {
-      title: '是否启用',
-      render: 'custom',
-      className: 'text-center',
+      title: '是否启用', render: 'custom', className: 'text-center',
       click: (item: any) => this.active(item),
     },
     {
-      title: '操作',
-      className: 'text-center',
+      title: '操作', className: 'text-center',
       buttons: [
         {
-          text: '编辑',
-          icon: 'anticon anticon-edit',
+          text: '编辑', icon: 'anticon anticon-edit',
           click: (item: any) => this.edit(item),
         },
         {
-          text: '删除',
-          icon: 'anticon anticon-delete',
+          text: '删除', icon: 'anticon anticon-delete',
           click: (item: any) => this.delete(item),
         },
       ],
@@ -63,22 +62,16 @@ export class MenuListComponent implements OnInit {
   loadData(menu: any) {
     console.log(menu);
     this.menu = menu;
-    const url = 'menu/getpages';
-    this.http.get(url, { id: menu.id }).subscribe((res: any) => {
+    this.http.get(GetPagesUrl, { id: menu.id }).subscribe((res: any) => {
       if (!res.success) {
-        this.notification.create(
-          'error',
-          menu.name + '下的页面列表数据加载失败',
-          res.allMessages,
-        );
-        return;
+        this.notification.create('error', menu.name + '下的页面列表数据加载失败', res.allMessages);
+      } else {
+        this.datas = res.data;
       }
-      this.datas = res.data;
     });
   }
 
   active(item) {
-    const url = 'menu/activepage';
     const active = item.active;
     let msg = '';
     if (active) {
@@ -88,15 +81,15 @@ export class MenuListComponent implements OnInit {
     }
 
     this.http
-      .post(url, { id: item.id, active: !active })
+      .post(ActivePageUrl, { id: item.id, active: !active })
       .subscribe((res: any) => {
         if (!res.success) {
           this.notification.create('error', msg + '失败', res.allMessages);
           item.active = active;
-          return;
+        } else {
+          this.notification.create('success', msg + '成功', res.allMessages);
+          item.active = !active;
         }
-        this.notification.create('success', msg + '成功', res.allMessages);
-        item.active = !active;
       });
   }
 
@@ -125,15 +118,13 @@ export class MenuListComponent implements OnInit {
   }
 
   delete(item) {
-    const url = 'menu/deletepage';
-
-    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+    this.http.get(DeletePageUrl, { id: item.id }).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '删除失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '删除成功', res.allMessages);
+        this.loadData(this.menu);
       }
-      this.notification.create('success', '删除成功', res.allMessages);
-      this.loadData(this.menu);
     });
   }
 }

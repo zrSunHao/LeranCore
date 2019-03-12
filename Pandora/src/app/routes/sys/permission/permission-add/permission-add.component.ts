@@ -3,6 +3,9 @@ import { SFSchema } from '@delon/form';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 
+const CreatePermissionUrl = 'Permission/CreatePermission';
+const EditPermissionUrl = 'Permission/EditPermission';
+
 @Component({
   selector: 'app-permission-add',
   templateUrl: './permission-add.component.html',
@@ -52,28 +55,24 @@ export class PermissionAddComponent implements OnInit {
   }
 
   add(entity: any) {
-    const url = 'permission/create';
-
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(CreatePermissionUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '添加失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '添加成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '添加成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 
   edit(entity: any) {
-    const url = 'permission/edit';
-
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(EditPermissionUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '更新失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '更新成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '更新成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 

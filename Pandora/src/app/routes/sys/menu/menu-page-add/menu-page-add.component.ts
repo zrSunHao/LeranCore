@@ -3,6 +3,9 @@ import { SFSchema, SFSchemaEnumType, SFDataSchema } from '@delon/form';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 
+const CreatePageUrl = 'Menu/CreatePage';
+const EditPageUrl = 'Menu/EditPage';
+
 @Component({
   selector: 'app-menu-page-add',
   templateUrl: './menu-page-add.component.html',
@@ -20,15 +23,12 @@ export class MenuPageAddComponent implements OnInit {
       tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       url: { type: 'string', title: 'URL', maxLength: 100 },
       moduleId: {
-        type: 'string',
-        title: '所属模块',
+        type: 'string', title: '所属模块',
         enum: JSON.parse(localStorage.getItem('moudleItems')),
       },
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
-        type: 'string',
-        title: '备注',
-        maxLength: 200,
+        type: 'string', title: '备注', maxLength: 200,
         ui: {
           widget: 'textarea',
           grid: { span: 24 },
@@ -47,9 +47,9 @@ export class MenuPageAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   save(value: any) {
     if (this.isEdit) {
@@ -60,28 +60,24 @@ export class MenuPageAddComponent implements OnInit {
   }
 
   add(entity: any) {
-    const url = 'menu/addpage';
-    console.log(entity);
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(CreatePageUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '添加失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '添加成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '添加成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 
   edit(entity: any) {
-    const url = 'menu/editpage';
-
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(EditPageUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '更新失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '更新成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '更新成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 

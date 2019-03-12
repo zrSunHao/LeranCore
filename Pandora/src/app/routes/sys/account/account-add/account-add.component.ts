@@ -3,6 +3,9 @@ import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { SFSchema } from '@delon/form';
 
+const CreateAccountUrl = 'Auth/CreateAccount';
+const EditAccountUrl = 'Auth/EditAccount';
+
 @Component({
   selector: 'app-account-add',
   templateUrl: './account-add.component.html',
@@ -19,8 +22,7 @@ export class AccountAddComponent implements OnInit {
       userName: { type: 'string', title: '用户名', maxLength: 50 },
       email: { type: 'string', title: '邮箱', maxLength: 100 },
       roleId: {
-        type: 'string',
-        title: '角色',
+        type: 'string', title: '角色',
         enum: JSON.parse(localStorage.getItem('roleItems')),
       },
     },
@@ -34,9 +36,9 @@ export class AccountAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   save(value: any) {
     if (this.isEdit) {
@@ -47,28 +49,24 @@ export class AccountAddComponent implements OnInit {
   }
 
   add(entity: any) {
-    const url = 'auth/createAccount';
-    console.log(entity);
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(CreateAccountUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '添加失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '添加成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '添加成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 
   edit(entity: any) {
-    const url = 'auth/editAccount';
-    console.log(entity);
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(EditAccountUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '更新失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '更新成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '更新成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 

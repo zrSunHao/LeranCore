@@ -8,6 +8,12 @@ import { PagingOptions } from '@shared/model/query-params.model';
 import { AccountAddComponent } from '../account-add/account-add.component';
 import { AccountStatusComponent } from '../account-status/account-status.component';
 
+const GetAccountsUrl = 'Auth/Accounts';
+const ActiveAccountUrl = 'Auth/ActiveAccount';
+const DeleteAccountUrl = 'Auth/DeleteAccount';
+const BatchDeleteAccountUrl = 'Auth/BatchDeleteAccount';
+const GetRoleItemsUrl = 'Role/GetRoleItems';
+
 const activeItem = [
   { label: '请选择', value: 2 },
   { label: '开启', value: 1 },
@@ -28,52 +34,14 @@ export class AccountListComponent implements OnInit {
   // 列表搜索条件
   searchSchema: SFSchema = {
     properties: {
-      userName: {
-        type: 'string',
-        title: '用户名',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      email: {
-        type: 'string',
-        title: '邮箱',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      CreatedAtStart: {
-        type: 'string',
-        title: '创建时间-开始',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      CreatedAtEnd: {
-        type: 'string',
-        title: '创建时间-结束',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      role: {
-        type: 'string',
-        title: '角色',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      active: {
-        type: 'string',
-        title: '状态',
-        enum: activeItem,
-        default: 2,
-        ui: { widget: 'select', grid: { span: 6 } },
-      },
-      LatestLoginAtStart: {
-        type: 'string',
-        title: '最近登录时间-开始',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      LatestLoginAtEnd: {
-        type: 'string',
-        title: '最近登录时间-结束',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
+      userName: { type: 'string', title: '用户名', ui: { autosize: true, grid: { span: 6 } } },
+      email: { type: 'string', title: '邮箱', ui: { autosize: true, grid: { span: 6 } }, },
+      CreatedAtStart: { type: 'string', title: '创建时间-开始', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
+      CreatedAtEnd: { type: 'string', title: '创建时间-结束', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
+      role: { type: 'string', title: '角色', ui: { autosize: true, grid: { span: 6 } }, },
+      active: { type: 'string', title: '状态', enum: activeItem, default: 2, ui: { widget: 'select', grid: { span: 6 } }, },
+      LatestLoginAtStart: { type: 'string', title: '最近登录时间-开始', format: 'date', ui: { autosize: true, grid: { span: 6 } }, },
+      LatestLoginAtEnd: { type: 'string', title: '最近登录时间-结束', format: 'date', ui: { autosize: true, grid: { span: 6 } }, },
     },
     ui: {
       spanLabelFixed: 130,
@@ -89,46 +57,28 @@ export class AccountListComponent implements OnInit {
     { title: '用户名', index: 'userName', className: 'text-center' },
     { title: '邮箱', index: 'email', className: 'text-center' },
     { title: '角色', index: 'role', className: 'text-center' },
+    { title: '创建时间', index: 'createdAt', type: 'date', className: 'text-center', },
     {
-      title: '创建时间',
-      index: 'createdAt',
-      type: 'date',
-      className: 'text-center',
+      title: '最近登录时间', index: 'latestLoginAt', type: 'date', className: 'text-center',
     },
+    { title: '登陆失败次数', index: 'accessFailedCount', className: 'text-center', },
     {
-      title: '最近登录时间',
-      index: 'latestLoginAt',
-      type: 'date',
-      className: 'text-center',
-    },
-    {
-      title: '登陆失败次数',
-      index: 'accessFailedCount',
-      className: 'text-center',
-    },
-    {
-      title: '是否启用',
-      render: 'custom',
-      className: 'text-center',
+      title: '是否启用', render: 'custom', className: 'text-center',
       click: (item: any) => this.activeAccount(item),
     },
     {
-      title: '操作',
-      className: 'text-center',
+      title: '操作', className: 'text-center',
       buttons: [
         {
-          text: '编辑',
-          icon: 'anticon anticon-edit',
+          text: '编辑', icon: 'anticon anticon-edit',
           click: (item: any) => this.editAccount(item),
         },
         {
-          text: '锁定',
-          icon: 'anticon anticon-plus',
+          text: '锁定', icon: 'anticon anticon-plus',
           click: (item: any) => this.lockoutAccount(item),
         },
         {
-          text: '删除',
-          icon: 'anticon anticon-delete',
+          text: '删除', icon: 'anticon anticon-delete',
           click: (item: any) => this.deleteAccount(item),
         },
       ],
@@ -139,7 +89,7 @@ export class AccountListComponent implements OnInit {
     private modal: ModalHelper,
     private http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadData({});
@@ -151,8 +101,7 @@ export class AccountListComponent implements OnInit {
     const queryParams = new PagingOptions<any>(entity);
     this.selectRows = [];
 
-    const url = 'auth/accounts';
-    this.http.post(url, queryParams).subscribe((res: any) => {
+    this.http.post(GetAccountsUrl, queryParams).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '列表数据加载失败', res.errMsg);
       }
@@ -173,7 +122,6 @@ export class AccountListComponent implements OnInit {
     };
 
     const queryParams = new PagingOptions<any>(entity);
-
     return queryParams;
   }
 
@@ -190,20 +138,12 @@ export class AccountListComponent implements OnInit {
     const isEdit = false;
     const title = '添加账号';
     const warningMsg = '添加账号的正常途径是用户自行注册，请慎重考虑';
-    const entity = {
-      userName: null,
-      email: null,
-      roleId: null,
-    };
+    const entity = { userName: null, email: null, roleId: null, };
 
     localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
 
     this.modal
-      .createStatic(
-        AccountAddComponent,
-        { entity, isEdit, title, warningMsg },
-        { size: 'md' },
-      )
+      .createStatic(AccountAddComponent, { entity, isEdit, title, warningMsg }, { size: 'md' })
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         if (res != null) {
@@ -213,7 +153,6 @@ export class AccountListComponent implements OnInit {
   }
 
   activeAccount(item) {
-    const url = 'auth/activeAccount';
     const active = item.active;
     let msg = '';
     if (active) {
@@ -222,8 +161,7 @@ export class AccountListComponent implements OnInit {
       msg = '开启';
     }
 
-    this.http
-      .post(url, { id: item.id, active: !active })
+    this.http.post(ActiveAccountUrl, { id: item.id, active: !active })
       .subscribe((res: any) => {
         if (!res.success) {
           this.notification.create('error', msg + '失败', res.allMessages);
@@ -239,19 +177,9 @@ export class AccountListComponent implements OnInit {
     const isEdit = true;
     const title = '修改账号';
     const warningMsg = '添加账号的正常途径是用户自行修改，请慎重考虑';
-    const entity = {
-      id: item.id,
-      userName: item.userName,
-      email: item.email,
-      roleId: item.roleId,
-    };
+    const entity = { id: item.id, userName: item.userName, email: item.email, roleId: item.roleId, };
 
-    this.modal
-      .createStatic(
-        AccountAddComponent,
-        { entity, isEdit, title, warningMsg },
-        { size: 'md' },
-      )
+    this.modal.createStatic(AccountAddComponent, { entity, isEdit, title, warningMsg }, { size: 'md' })
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         // TODO 加载列表数据
@@ -264,19 +192,15 @@ export class AccountListComponent implements OnInit {
     const title = '锁订账号';
     const warningMsg = '在锁订到期之前该账号不能登录，请慎重考虑';
     const warningMsgTitle = `锁订[${item.userName}]账号警告`;
-    const entity = {
-      id: item.id,
-      lockoutEndAt: item.lockoutEndAt,
-    };
+    const entity = { id: item.id, lockoutEndAt: item.lockoutEndAt, };
 
     localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
 
-    this.modal
-      .createStatic(
-        AccountLockoutComponent,
-        { entity, isEdit, title, warningMsg, warningMsgTitle },
-        { size: 'md' },
-      )
+    this.modal.createStatic(
+      AccountLockoutComponent,
+      { entity, isEdit, title, warningMsg, warningMsgTitle },
+      { size: 'md' },
+    )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         if (res != null) {
@@ -293,22 +217,17 @@ export class AccountListComponent implements OnInit {
     });
 
     if (rowIds.length < 1) {
-      this.notification.create(
-        'error',
-        '账号状态错误提示',
-        '请选择要操作的账号',
-      );
+      this.notification.create('error', '账号状态错误提示', '请选择要操作的账号');
     } else {
       const warningMsg = '共选择了' + rows.length + '个账号，请谨慎操作';
       const title = '批量锁定账号';
       const entity = { ids: rowIds, lockoutEndAt: null, active: null };
 
-      this.modal
-        .createStatic(
-          AccountStatusComponent,
-          { entity, title, warningMsg },
-          { size: 'md' },
-        )
+      this.modal.createStatic(
+        AccountStatusComponent,
+        { entity, title, warningMsg },
+        { size: 'md' },
+      )
         // tslint:disable-next-line:no-shadowed-variable
         .subscribe(res => {
           if (res != null) {
@@ -319,9 +238,7 @@ export class AccountListComponent implements OnInit {
   }
 
   deleteAccount(item) {
-    const url = 'auth/deleteAccount';
-
-    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+    this.http.get(DeleteAccountUrl, { id: item.id }).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '删除失败', res.allMessages);
         return;
@@ -332,7 +249,7 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-  rowClick(event) {}
+  rowClick(event) { }
 
   change(event: STChange) {
     // console.log('change', event);
@@ -340,7 +257,6 @@ export class AccountListComponent implements OnInit {
   }
 
   deleteAccounts() {
-    const url = 'auth/batchDeleteAccount';
     const rows = this.selectRows;
     console.log(rows);
     const rowIds = [];
@@ -349,13 +265,9 @@ export class AccountListComponent implements OnInit {
     });
     console.log(rowIds);
     if (rowIds.length < 1) {
-      this.notification.create(
-        'error',
-        '批量删除错误提示',
-        '请选择要删除的账号',
-      );
+      this.notification.create('error', '批量删除错误提示', '请选择要删除的账号');
     } else {
-      this.http.post(url, { ids: rowIds }).subscribe((res: any) => {
+      this.http.post(BatchDeleteAccountUrl, { ids: rowIds }).subscribe((res: any) => {
         if (!res.success) {
           this.notification.create('error', '批量删除失败', res.allMessages);
         } else {
@@ -367,14 +279,9 @@ export class AccountListComponent implements OnInit {
   }
 
   loadRoleItem() {
-    const url = 'role/getRoleItems';
-    this.http.get(url).subscribe((res: any) => {
+    this.http.get(GetRoleItemsUrl).subscribe((res: any) => {
       if (!res.success) {
-        this.notification.create(
-          'error',
-          '角色下拉框数据加载失败',
-          res.allMessages,
-        );
+        this.notification.create('error', '角色下拉框数据加载失败', res.allMessages);
       }
       if (res.data != null) {
         this.roleItems = res.data;

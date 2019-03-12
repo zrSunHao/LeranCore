@@ -3,6 +3,9 @@ import { SFSchema } from '@delon/form';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 
+const CreateMenuUrl = 'Menu/CreateMenu';
+const EditMenuUrl = 'Menu/EditMenu';
+
 @Component({
   selector: 'app-menu-add',
   templateUrl: './menu-add.component.html',
@@ -19,9 +22,7 @@ export class MenuAddComponent implements OnInit {
       tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
-        type: 'string',
-        title: '备注',
-        maxLength: 200,
+        type: 'string', title: '备注', maxLength: 200,
         ui: {
           widget: 'textarea',
           grid: { span: 24 },
@@ -39,9 +40,9 @@ export class MenuAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   save(value: any) {
     if (this.isEdit) {
@@ -52,28 +53,24 @@ export class MenuAddComponent implements OnInit {
   }
 
   add(entity: any) {
-    const url = 'menu/addmenu';
-    console.log(entity);
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(CreateMenuUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '添加失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '添加成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '添加成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 
   edit(entity: any) {
-    const url = 'menu/editmenu';
-
-    this.http.post(url, entity).subscribe((res: any) => {
+    this.http.post(EditMenuUrl, entity).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '更新失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '更新成功', res.allMessages);
+        this.modal.close(res);
       }
-      this.notification.create('success', '更新成功', res.allMessages);
-      this.modal.close(res);
     });
   }
 

@@ -5,6 +5,10 @@ import { MenuAddComponent } from '../menu-add/menu-add.component';
 import { MenuListComponent } from '../menu-list/menu-list.component';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
 
+const GetMenusUrl = 'Menu/GetMenus';
+const ActiveMenuUrl = 'Menu/ActiveMenu';
+const DeleteMenuUrl = 'Menu/DeleteMenu';
+
 @Component({
   selector: 'app-menu-root',
   templateUrl: './menu-root.component.html',
@@ -15,7 +19,6 @@ export class MenuRootComponent implements OnInit {
 
   list = [];
   initLoading = false;
-  items = [];
 
   constructor(
     private modal: ModalHelper,
@@ -25,39 +28,15 @@ export class MenuRootComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
-    this.loadItems();
   }
 
   loadData() {
-    const url = 'menu/getmenus';
-    this.http.get(url).subscribe((res: any) => {
+    this.http.get(GetMenusUrl).subscribe((res: any) => {
       if (!res.success) {
-        this.notification.create(
-          'error',
-          '菜单列表数据加载失败',
-          res.allMessages,
-        );
-        return;
+        this.notification.create('error', '菜单列表数据加载失败', res.allMessages);
+      } else {
+        this.list = res.data;
       }
-      this.list = res.data;
-    });
-  }
-
-  loadItems() {
-    const url = 'permission/getmoduleitems';
-    this.http.get(url).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create(
-          'error',
-          '模块下拉框数据加载失败',
-          res.allMessages,
-        );
-      }
-      if (res.data != null) {
-        this.items = res.data;
-      }
-
-      console.log(this.items);
     });
   }
 
@@ -98,7 +77,6 @@ export class MenuRootComponent implements OnInit {
   }
 
   active(item) {
-    const url = 'menu/activemenu';
     const active = item.active;
     let msg = '';
     if (active) {
@@ -108,22 +86,20 @@ export class MenuRootComponent implements OnInit {
     }
 
     this.http
-      .post(url, { id: item.id, active: !active })
+      .post(ActiveMenuUrl, { id: item.id, active: !active })
       .subscribe((res: any) => {
         if (!res.success) {
           this.notification.create('error', msg + '失败', res.allMessages);
           item.active = active;
-          return;
+        } else {
+          this.notification.create('success', msg + '成功', res.allMessages);
+          item.active = !active;
         }
-        this.notification.create('success', msg + '成功', res.allMessages);
-        item.active = !active;
       });
   }
 
   delete(item) {
-    const url = 'menu/deletemenu';
-
-    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+    this.http.get(DeleteMenuUrl, { id: item.id }).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '删除失败', res.allMessages);
         return;
@@ -152,7 +128,6 @@ export class MenuRootComponent implements OnInit {
       menuName: item.name,
     };
 
-    localStorage.setItem('moudleItems', JSON.stringify(this.items));
     this.modal
       .createStatic(MenuPageAddComponent, { entity, isEdit, title })
       // tslint:disable-next-line:no-shadowed-variable

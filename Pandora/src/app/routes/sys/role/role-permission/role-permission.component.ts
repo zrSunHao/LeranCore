@@ -2,6 +2,9 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _HttpClient } from '@delon/theme';
 
+const GetRolePermissionsUrl = 'Role/GetRolePermissions';
+const EditRolePermissionUrl = 'Role/EditRolePermission';
+
 @Component({
   selector: 'app-role-permission',
   templateUrl: './role-permission.component.html',
@@ -24,9 +27,7 @@ export class RolePermissionComponent implements OnInit {
   }
 
   loadDatas() {
-    const url = 'role/getrolepermissions';
-
-    this.http.get(url, { id: this.roleId }).subscribe((res: any) => {
+    this.http.get(GetRolePermissionsUrl, { id: this.roleId }).subscribe((res: any) => {
       if (!res.success) {
         return;
       }

@@ -412,7 +412,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 if (dto.Active == entity.Active)
                 {
                     var errMsg = "";
-                    if (entity.Active) errMsg = "权限早已开启"; else errMsg = "权限早已关闭";
+                    if (entity.Active) errMsg = "账号早已开启"; else errMsg = "账号早已关闭";
                     result.AddError(errMsg);
                     return result;
                 }

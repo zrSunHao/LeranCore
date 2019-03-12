@@ -3,6 +3,9 @@ import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
 import { SFSchema } from '@delon/form';
 import { _HttpClient } from '@delon/theme';
 
+const CreateRoleUrl = 'Role/CreateRole';
+const EditRoleUrl = 'Role/EditRole';
+
 @Component({
   selector: 'app-sys-role-list-role-add',
   templateUrl: './role-add.component.html',

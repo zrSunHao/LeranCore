@@ -6,6 +6,10 @@ import { PermissionAddComponent } from '../permission-add/permission-add.compone
 import { PermissionOperationComponent } from '../permission-operation/permission-operation.component';
 import { NzNotificationService } from 'ng-zorro-antd';
 
+const GetPermissionUrl = 'Permission/GetPermission';
+const DeletePermissionUrl = 'Permission/DeletePermission';
+const ActivePermissionUrl = 'Permission/ActivePermission';
+
 @Component({
   selector: 'app-permission-list',
   templateUrl: './permission-list.component.html',

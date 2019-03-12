@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common.Dto;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
@@ -23,12 +24,67 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         }
 
         /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
+        {
+            var result = new WebApiResult<List<RoleListModel>>();
+            try
+            {
+                var datas = await _dataContext.Roles.Select(x => new RoleListModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Code = x.Code,
+                    Active = x.Active,
+                    Intro = x.Intro,
+                }).ToListAsync();
+
+                if (datas.Any())
+                {
+                    var roleIds = datas.Select(x => x.Id).ToList();
+
+                    var modules = await (from rp in _dataContext.RolePermissions
+                                         join p in _dataContext.Permissions on rp.RoleId equals p.Id into tp
+                                         from prp in tp.DefaultIfEmpty()
+                                         where roleIds.Contains(rp.RoleId) && !rp.Deleted
+                                         select new RoleListPermissionModel
+                                         {
+                                             Id = prp.Id,
+                                             Name = prp.Name,
+                                             Icon = prp.Icon,
+                                             TagColor = prp.Active ? prp.TagColor : "",
+                                             RoleId = rp.RoleId
+                                         }).ToListAsync();
+
+                    if (modules.Any())
+                    {
+                        foreach (var data in datas)
+                        {
+                            //data.Modules = modules.Where(x => x.RoleId == data.Id).ToList();
+                        }
+                    }
+                }
+
+                result.Data = datas;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 新建角色
         /// </summary>
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        public async Task<WebApiResult> CreateRole(CreateOrUpdateRoleDto dto,Guid accountId)
+        public async Task<WebApiResult> CreateRole(CreateOrEditRoleDto dto,Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -60,7 +116,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        public async Task<WebApiResult> UpdateRole(CreateOrUpdateRoleDto dto, Guid accountId)
+        public async Task<WebApiResult> EditRole(CreateOrEditRoleDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -90,6 +146,46 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             {
                 Console.WriteLine(ex);
                 result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 启用或禁用角色
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public async Task<WebApiResult> ActiveAccount(ActiveDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                if (dto.Active == entity.Active)
+                {
+                    var errMsg = "";
+                    if (entity.Active) errMsg = "角色早已开启"; else errMsg = "角色早已关闭";
+                    result.AddError(errMsg);
+                    return result;
+                }
+
+                entity.Active = dto.Active;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
             }
             return result;
         }
@@ -126,60 +222,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
-        /// <summary>
-        /// 获取角色列表
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
-        {
-            var result = new WebApiResult<List<RoleListModel>>();
-            try
-            {
-                var datas = await _dataContext.Roles.Select(x => new RoleListModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Code = x.Code,
-                    Active = x.Active,
-                    Intro = x.Intro,
-                }).ToListAsync();
-                
-                if (datas.Any())
-                {
-                    var roleIds = datas.Select(x => x.Id).ToList();
-
-                    var modules = await (from rp in _dataContext.RolePermissions
-                        join p in _dataContext.Permissions on rp.RoleId equals p.Id into tp
-                        from prp in tp.DefaultIfEmpty()
-                        where roleIds.Contains(rp.RoleId) && !rp.Deleted
-                        select new RoleListPermissionModel
-                        {
-                            Id = prp.Id,
-                            Name = prp.Name,
-                            Icon = prp.Icon,
-                            TagColor = prp.Active ? prp.TagColor : "",
-                            RoleId = rp.RoleId
-                        }).ToListAsync();
-
-                    if (modules.Any())
-                    {
-                        foreach (var data in datas)
-                        {
-                            //data.Modules = modules.Where(x => x.RoleId == data.Id).ToList();
-                        }
-                    }
-                }
-
-                result.Data = datas;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                result.AddError(ex.Message);
-            }
-            return result;
-        }
+        
 
         /// <summary>
         /// 获取角色权限数据
@@ -307,6 +350,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             }
             return result;
         }
+
+
 
         /// <summary>
         /// 获取角色列表

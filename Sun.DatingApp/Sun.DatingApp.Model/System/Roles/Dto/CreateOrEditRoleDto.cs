@@ -2,7 +2,7 @@
 
 namespace Sun.DatingApp.Model.System.Roles.Dto
 {
-    public class CreateOrUpdateRoleDto
+    public class CreateOrEditRoleDto
     {
         public Guid? Id { get; set; }
 
