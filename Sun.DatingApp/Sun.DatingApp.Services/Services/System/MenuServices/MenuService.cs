@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common.Model;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -49,7 +50,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        public async Task<WebApiResult> AddMenu(MenuEditDto dto, Guid accountId)
+        public async Task<WebApiResult> CreateMenu(MenuEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -210,7 +211,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        public async Task<WebApiResult> AddPage(PageEditDto dto, Guid accountId)
+        public async Task<WebApiResult> CreatePage(PageEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -329,6 +330,28 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.DeletedById = accountId;
 
                 await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<List<ItemModel>>> GetPageItems()
+        {
+            var result = new WebApiResult<List<ItemModel>>();
+            try
+            {
+                var data = await _dataContext.Pages.Where(x => !x.Deleted).Select(x =>
+                    new ItemModel
+                    {
+                        Value = x.Id,
+                        Label = x.Name
+                    }).ToListAsync();
+
+                result.Data = data;
             }
             catch (Exception ex)
             {

@@ -6,6 +6,7 @@ using Sun.DatingApp.Model.System.Menus.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common.Model;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -13,7 +14,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
     {
         Task<WebApiResult<List<MenuListModel>>> GetMenus();
 
-        Task<WebApiResult> AddMenu(MenuEditDto dto, Guid accountId);
+        Task<WebApiResult> CreateMenu(MenuEditDto dto, Guid accountId);
 
         Task<WebApiResult> EditMenu(MenuEditDto dto, Guid accountId);
 
@@ -24,13 +25,15 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 
         Task<WebApiResult<List<PageListModel>>> GetPages(Guid id);
 
-        Task<WebApiResult> AddPage(PageEditDto dto, Guid accountId);
+        Task<WebApiResult> CreatePage(PageEditDto dto, Guid accountId);
 
         Task<WebApiResult> EditPage(PageEditDto dto, Guid accountId);
 
         Task<WebApiResult> ActivePage(ActiveDto dto, Guid accountId);
 
         Task<WebApiResult> DeletePage(Guid id, Guid accountId);
+
+        Task<WebApiResult<List<ItemModel>>> GetPageItems();
 
     }
 }

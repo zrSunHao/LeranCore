@@ -8,6 +8,7 @@ using Sun.DatingApp.Services.Services.System.MenuServices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common.Model;
 
 namespace Sun.DatingApp.Api.Controllers.System
 {
@@ -24,7 +25,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// 获取菜单列表数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getmenus")]
+        [HttpGet("GetMenus")]
         public async Task<WebApiResult<List<MenuListModel>>> GetMenus()
         {
             return await _service.GetMenus();
@@ -36,13 +37,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpPost("addmenu")]
-        public async Task<WebApiResult> AddMenu(MenuEditDto dto, Guid accountId)
+        [HttpPost("CreateMenu")]
+        public async Task<WebApiResult> CreateMenu(MenuEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.AddMenu(dto, CurrentUserId.Value);
+                result = await _service.CreateMenu(dto, CurrentUserId.Value);
             }
             else
             {
@@ -57,7 +58,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpPost("editmenu")]
+        [HttpPost("EditMenu")]
         public async Task<WebApiResult> EditMenu(MenuEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
@@ -78,7 +79,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpPost("activemenu")]
+        [HttpPost("ActiveMenu")]
         public async Task<WebApiResult> ActiveMenu(ActiveDto dto, Guid accountId)
         {
             var result = new WebApiResult();
@@ -99,7 +100,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpGet("deletemenu")]
+        [HttpGet("DeleteMenu")]
         public async Task<WebApiResult> DeleteMenu(Guid id, Guid accountId)
         {
             var result = new WebApiResult();
@@ -120,7 +121,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("getpages")]
+        [HttpGet("GetPages")]
         public async Task<WebApiResult<List<PageListModel>>> GetPages(Guid id)
         {
             return await _service.GetPages(id);
@@ -132,13 +133,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpPost("addpage")]
-        public async Task<WebApiResult> AddPage(PageEditDto dto, Guid accountId)
+        [HttpPost("CreatePage")]
+        public async Task<WebApiResult> CreatePage(PageEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.AddPage(dto, CurrentUserId.Value);
+                result = await _service.CreatePage(dto, CurrentUserId.Value);
             }
             else
             {
@@ -153,7 +154,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpPost("editpage")]
+        [HttpPost("EditPage")]
         public async Task<WebApiResult> EditPage(PageEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
@@ -174,7 +175,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpPost("activepage")]
+        [HttpPost("ActivePage")]
         public async Task<WebApiResult> ActivePage(ActiveDto dto, Guid accountId)
         {
             var result = new WebApiResult();
@@ -195,7 +196,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
-        [HttpGet("deletepage")]
+        [HttpGet("DeletePage")]
         public async Task<WebApiResult> DeletePage(Guid id, Guid accountId)
         {
             var result = new WebApiResult();
@@ -208,6 +209,16 @@ namespace Sun.DatingApp.Api.Controllers.System
                 result.AddError("当前用户信息获取失败");
             }
             return result;
+        }
+
+        /// <summary>
+        /// 获取页面选择列表信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetPageItems")]
+        public async Task<WebApiResult<List<ItemModel>>> GetPageItems()
+        {
+            return await _service.GetPageItems();
         }
     }
 }
