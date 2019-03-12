@@ -16,9 +16,6 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("角色Id")]
         public Guid RoleId { get; set; }
 
-        [Description("角色编号")]
-        public string RoleCode { get; set; }
-
         [Description("密码")]
         public byte[] PasswordHash { get; set; }
 

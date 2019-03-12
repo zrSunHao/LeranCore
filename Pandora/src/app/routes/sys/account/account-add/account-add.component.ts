@@ -47,7 +47,7 @@ export class AccountAddComponent implements OnInit {
   }
 
   add(entity: any) {
-    const url = 'auth/addAccount';
+    const url = 'auth/createAccount';
     console.log(entity);
     this.http.post(url, entity).subscribe((res: any) => {
       if (!res.success) {

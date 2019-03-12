@@ -6,7 +6,7 @@ namespace Sun.DatingApp.Model.System.Auth.Accounts.Dto
 {
     public class EditAccountDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string UserName { get; set; }
 

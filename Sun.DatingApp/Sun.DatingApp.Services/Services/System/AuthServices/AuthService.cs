@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
@@ -15,7 +16,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Sun.DatingApp.Model.Common.Dto;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -52,7 +52,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
                 account.PasswordSalt = passwordSalt;
                 account.PasswordHash = passwordHash;
-                account.RoleCode = role.Code;
                 account.RoleId = role.Id;
 
                 await _dataContext.Accounts.AddAsync(account);
@@ -181,36 +180,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        #region 私有方法
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != passwordHash[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        #endregion
+        
 
         public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
@@ -298,6 +268,47 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
+        public async Task<WebApiResult> CreateAccount(EditAccountDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var emailExist = await _dataContext.Accounts.AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                if (emailExist)
+                {
+                    result.AddError("邮箱已存在");
+                    return result;
+                }
+
+                byte[] passwordHash, passwordSalt;
+                CreatePasswordHash(dto.UserName, out passwordHash, out passwordSalt);
+
+                var entity = new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Email = dto.Email,
+                    UserName = dto.UserName,
+                    RoleId = dto.RoleId,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    Active = true,
+                    AccessFailedCount = 0,
+                    CreatedAt = DateTime.Now,
+                    CreatedById = accountId,
+                    Deleted = false
+                };
+
+                _dataContext.Accounts.Add(entity);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
         public async Task<WebApiResult> EditAccount(EditAccountDto dto, Guid accountId)
         {
             var result = new WebApiResult();
@@ -307,13 +318,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 if (entity == null)
                 {
                     result.AddError("数据为空");
-                    return result;
-                }
-
-                var nameExist = await _dataContext.Accounts.AnyAsync(x => x.Id != dto.Id && x.UserName == dto.UserName && !x.Deleted);
-                if (nameExist)
-                {
-                    result.AddError("用户名已存在");
                     return result;
                 }
 
@@ -503,5 +507,38 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             }
             return result;
         }
+
+
+        #region 私有方法
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        #endregion
+
     }
 }

@@ -176,6 +176,26 @@ namespace Sun.DatingApp.Api.Controllers.System
         }
 
         /// <summary>
+        /// 新建账号
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("createAccount")]
+        public async Task<WebApiResult> CreateAccount(EditAccountDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.CreateAccount(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 编辑账号
         /// </summary>
         /// <param name="dto"></param>

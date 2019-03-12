@@ -205,7 +205,9 @@ export class AccountListComponent implements OnInit {
       )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
-        // TODO 加载列表数据
+        if (res != null) {
+          this.loadData({});
+        }
       });
   }
 

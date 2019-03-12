@@ -41,7 +41,13 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// <returns></returns>
         Task<WebApiResult> Logout(Guid id);
 
-
+        /// <summary>
+        /// 新建账号
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        Task<WebApiResult> CreateAccount(EditAccountDto dto, Guid accountId);
 
         /// <summary>
         /// 账号管理列表
