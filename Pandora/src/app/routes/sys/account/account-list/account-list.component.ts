@@ -6,16 +6,20 @@ import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { PagingOptions } from '@shared/model/query-params.model';
-import { BasicOperateService } from '../../_core/basic-services/basic-operate.service';
 import { AccountAddComponent } from '../account-add/account-add.component';
+
+const activeItem = [
+  { label: '请选择', value: 2 },
+  { label: '开启', value: 1 },
+  { label: '禁用', value: 0 },
+];
 
 @Component({
   selector: 'app-account-list',
   templateUrl: './account-list.component.html',
-  styles: []
+  styles: [],
 })
 export class AccountListComponent implements OnInit {
-
   @ViewChild('st') st: STComponent;
   // 列表数据
   datas: Array<any> = [];
@@ -24,15 +28,53 @@ export class AccountListComponent implements OnInit {
   // 列表搜索条件
   searchSchema: SFSchema = {
     properties: {
-      userName: { type: 'string', title: '用户名', ui: { autosize: true, grid: { span: 6 } } },
-      email: { type: 'string', title: '邮箱', ui: { autosize: true, grid: { span: 6 } } },
-      role: { type: 'string', title: '角色', ui: { autosize: true, grid: { span: 6 } } },
-      accessFailedCount: { type: 'boolean', title: '是否启用', ui: { autosize: true, grid: { span: 6 } } },
-      CreatedAtStart: { type: 'string', title: '创建时间-开始', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
-      CreatedAtEnd: { type: 'string', title: '创建时间-结束', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
-      LatestLoginAtStart: { type: 'string', title: '最近登录时间-开始', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
-      LatestLoginAtEnd: { type: 'string', title: '最近登录时间-结束', format: 'date', ui: { autosize: true, grid: { span: 6 } } },
-    }
+      userName: {
+        type: 'string',
+        title: '用户名',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      email: {
+        type: 'string',
+        title: '邮箱',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      role: {
+        type: 'string',
+        title: '角色',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      active: {
+        type: 'string',
+        title: '启用或禁用',
+        enum: activeItem,
+        default: 2,
+        ui: { widget: 'select', grid: { span: 6 } },
+      },
+      CreatedAtStart: {
+        type: 'string',
+        title: '创建时间-开始',
+        format: 'date',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      CreatedAtEnd: {
+        type: 'string',
+        title: '创建时间-结束',
+        format: 'date',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      LatestLoginAtStart: {
+        type: 'string',
+        title: '最近登录时间-开始',
+        format: 'date',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+      LatestLoginAtEnd: {
+        type: 'string',
+        title: '最近登录时间-结束',
+        format: 'date',
+        ui: { autosize: true, grid: { span: 6 } },
+      },
+    },
   };
 
   roleItems = [];
@@ -43,9 +85,23 @@ export class AccountListComponent implements OnInit {
     { title: '用户名', index: 'userName', className: 'text-center' },
     { title: '邮箱', index: 'email', className: 'text-center' },
     { title: '角色', index: 'role', className: 'text-center' },
-    { title: '创建时间', index: 'createdAt', type: 'date', className: 'text-center' },
-    { title: '最近登录时间', index: 'latestLoginAt', type: 'date', className: 'text-center' },
-    { title: '登陆失败次数', index: 'accessFailedCount', className: 'text-center' },
+    {
+      title: '创建时间',
+      index: 'createdAt',
+      type: 'date',
+      className: 'text-center',
+    },
+    {
+      title: '最近登录时间',
+      index: 'latestLoginAt',
+      type: 'date',
+      className: 'text-center',
+    },
+    {
+      title: '登陆失败次数',
+      index: 'accessFailedCount',
+      className: 'text-center',
+    },
     {
       title: '是否启用',
       render: 'custom',
@@ -78,7 +134,8 @@ export class AccountListComponent implements OnInit {
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
-    private notification: NzNotificationService) { }
+    private notification: NzNotificationService,
+  ) {}
 
   ngOnInit() {
     this.loadData({});
@@ -86,9 +143,7 @@ export class AccountListComponent implements OnInit {
 
   loadData(dto: any) {
     const entity = this.getQueryParams(dto);
-    const queryParams = new PagingOptions<any>(
-      entity
-    );
+    const queryParams = new PagingOptions<any>(entity);
 
     const url = 'auth/accounts';
     this.http.post(url, queryParams).subscribe((res: any) => {
@@ -111,9 +166,7 @@ export class AccountListComponent implements OnInit {
       createdAtEnd: dto.createdAtEnd,
     };
 
-    const queryParams = new PagingOptions<any>(
-      entity
-    );
+    const queryParams = new PagingOptions<any>(entity);
 
     return queryParams;
   }
@@ -133,7 +186,7 @@ export class AccountListComponent implements OnInit {
     const entity = {
       userName: null,
       email: null,
-      roleId: null
+      roleId: null,
     };
 
     localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
@@ -175,7 +228,7 @@ export class AccountListComponent implements OnInit {
     const entity = {
       userName: item.userName,
       email: item.email,
-      roleId: item.roleId
+      roleId: item.roleId,
     };
 
     this.modal
@@ -187,9 +240,7 @@ export class AccountListComponent implements OnInit {
   }
 
   // TODO 单条锁定
-  lockoutAccount(item) {
-
-  }
+  lockoutAccount(item) {}
 
   // TODO 批量锁定
   lockoutAccounts() {
@@ -207,8 +258,6 @@ export class AccountListComponent implements OnInit {
       const title = '批量锁定账号';
       this.lockout(rowIds, title, warningMsg);
     }
-
-
   }
 
   // TODO 批量禁用
@@ -227,7 +276,6 @@ export class AccountListComponent implements OnInit {
       const title = '批量禁用账号';
       this.active(rowIds, title, warningMsg);
     }
-
   }
 
   // TODO 加载列表数据
@@ -244,23 +292,28 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-  rowClick(event) {
-
-  }
+  rowClick(event) {}
 
   active(entity: any, title: string, warningMsg) {
     this.modal
-      .createStatic(AccountActiveComponent, { entity, title, warningMsg }, { size: 'md' })
+      .createStatic(
+        AccountActiveComponent,
+        { entity, title, warningMsg },
+        { size: 'md' },
+      )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         // TODO 加载列表数据
       });
-
   }
 
   lockout(entity: any, title: string, warningMsg) {
     this.modal
-      .createStatic(AccountLockoutComponent, { entity, title, warningMsg }, { size: 'md' })
+      .createStatic(
+        AccountLockoutComponent,
+        { entity, title, warningMsg },
+        { size: 'md' },
+      )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         // TODO 加载列表数据

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
@@ -15,6 +9,13 @@ using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Sun.DatingApp.Model.Common.Dto;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -180,6 +181,37 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
+        #region 私有方法
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        #endregion
+
         public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
             var result = new WebApiPagingResult<List<AccountListModel>>();
@@ -196,23 +228,23 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 var filters = opt.Filters;
 
                 query = from u in query
-                    where (!string.IsNullOrEmpty(filters.Email) && u.Email.Contains(filters.Email)) ||
-                          string.IsNullOrEmpty(filters.Email)
-                    where (!string.IsNullOrEmpty(filters.UserName) && u.UserName.Contains(filters.UserName)) ||
-                          string.IsNullOrEmpty(filters.UserName)
-                    where (!string.IsNullOrEmpty(filters.Role) && u.Email.Contains(filters.Role)) ||
-                          string.IsNullOrEmpty(filters.Role)
-                    where (filters.Active.HasValue && u.Active == filters.Active) || !filters.Active.HasValue
-                    where (filters.LatestLoginAtStart.HasValue && u.LatestLoginAt >= filters.LatestLoginAtStart) ||
-                          !filters.LatestLoginAtStart.HasValue
-                    where (filters.LatestLoginAtEnd.HasValue &&
-                           u.LatestLoginAt < (filters.LatestLoginAtEnd.Value.AddDays(1))) ||
-                          !filters.LatestLoginAtEnd.HasValue
-                    where (filters.CreatedAtStart.HasValue && u.CreatedAt >= filters.CreatedAtStart) ||
-                          !filters.CreatedAtStart.HasValue
-                    where (filters.CreatedAtEnd.HasValue && u.CreatedAt < (filters.CreatedAtEnd.Value.AddDays(1))) ||
-                          !filters.CreatedAtEnd.HasValue
-                    select u;
+                        where (!string.IsNullOrEmpty(filters.Email) && u.Email.Contains(filters.Email)) ||
+                              string.IsNullOrEmpty(filters.Email)
+                        where (!string.IsNullOrEmpty(filters.UserName) && u.UserName.Contains(filters.UserName)) ||
+                              string.IsNullOrEmpty(filters.UserName)
+                        where (!string.IsNullOrEmpty(filters.Role) && u.Email.Contains(filters.Role)) ||
+                              string.IsNullOrEmpty(filters.Role)
+                        where (filters.Active.HasValue && u.Active == filters.Active) || !filters.Active.HasValue
+                        where (filters.LatestLoginAtStart.HasValue && u.LatestLoginAt >= filters.LatestLoginAtStart) ||
+                              !filters.LatestLoginAtStart.HasValue
+                        where (filters.LatestLoginAtEnd.HasValue &&
+                               u.LatestLoginAt < (filters.LatestLoginAtEnd.Value.AddDays(1))) ||
+                              !filters.LatestLoginAtEnd.HasValue
+                        where (filters.CreatedAtStart.HasValue && u.CreatedAt >= filters.CreatedAtStart) ||
+                              !filters.CreatedAtStart.HasValue
+                        where (filters.CreatedAtEnd.HasValue && u.CreatedAt < (filters.CreatedAtEnd.Value.AddDays(1))) ||
+                              !filters.CreatedAtEnd.HasValue
+                        select u;
 
                 result.RowsCount = await query.CountAsync();
 
@@ -266,43 +298,195 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult> Forbidden(ForbiddenDto dto)
+        public async Task<WebApiResult> EditAccount(EditAccountDto dto)
         {
             var result = new WebApiResult();
             try
             {
-                var user = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id && !x.Deleted);
-                if (user == null)
+                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
                 {
-                    result.AddError("用户不存在");
+                    result.AddError("数据为空");
                     return result;
                 }
-                if (user.Active == dto.Forbid)
+
+                var nameExist = await _dataContext.Accounts.AnyAsync(x => x.Id != dto.Id && x.UserName == dto.UserName && !x.Deleted);
+                if (nameExist)
                 {
-                    if (user.Active)
-                        result.AddError("该用户早已激活");
-                    else
-                        result.AddError("该用户早已禁用");
+                    result.AddError("用户名已存在");
                     return result;
                 }
-                user.Active = dto.Forbid;
+
+                var emailExist = await _dataContext.Accounts.AnyAsync(x => x.Id != dto.Id && x.Email == dto.Email && !x.Deleted);
+                if (emailExist)
+                {
+                    result.AddError("邮箱已存在");
+                    return result;
+                }
+
+                entity.Email = dto.Email;
+                entity.UserName = dto.UserName;
+                entity.RoleId = dto.RoleId;
+
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                result.AddError("出现异常");
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
             }
             return result;
         }
 
-        public async Task<WebApiResult> BatchDelete(List<Guid> ids)
+        public async Task<WebApiResult> BatchEditAccount(BatchEditAccountDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                if (dto.Ids == null || !dto.Ids.Any())
+                {
+                    result.AddError("请选择要操作的账号");
+                    return result;
+                }
+
+                if (dto.Active.HasValue && !dto.LockoutEndAt.HasValue)
+                {
+                    await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id))
+                        .ForEachAsync(x =>
+                        {
+                            x.Active = dto.Active.Value;
+                            x.UpdatedAt = DateTime.Now;
+                            x.UpdatedById = accountId;
+                        });
+                }
+
+                if (!dto.Active.HasValue && dto.LockoutEndAt.HasValue)
+                {
+                    await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id))
+                        .ForEachAsync(x =>
+                        {
+                            x.LockoutEndAt = dto.LockoutEndAt.Value;
+                            x.UpdatedAt = DateTime.Now;
+                            x.UpdatedById = accountId;
+                        });
+                }
+
+                if (dto.Active.HasValue && dto.LockoutEndAt.HasValue)
+                {
+                    await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id))
+                        .ForEachAsync(x =>
+                        {
+                            x.Active = dto.Active.Value;
+                            x.LockoutEndAt = dto.LockoutEndAt.Value;
+                            x.UpdatedAt = DateTime.Now;
+                            x.UpdatedById = accountId;
+                        });
+                }
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex )
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult> Active(ActiveDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                if (dto.Active == entity.Active)
+                {
+                    var errMsg = "";
+                    if (entity.Active) errMsg = "权限早已开启"; else errMsg = "权限早已关闭";
+                    result.AddError(errMsg);
+                    return result;
+                }
+
+                entity.Active = dto.Active;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult> LockoutAccount(LockoutAccountDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                entity.LockoutEndAt = dto.LockoutEndAt;
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult> Delete(Guid id, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                if (entity == null)
+                {
+                    result.AddError("数据为空");
+                    return result;
+                }
+
+                entity.Deleted = true;
+                entity.DeletedAt = DateTime.Now;
+                entity.DeletedById = accountId;
+
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result.AddError(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult> BatchDeleteAccount(List<Guid> ids)
         {
             var result = new WebApiResult();
             try
             {
                 if (!ids.Any())
                 {
-                    result.AddError("请选择要删除的用户！");
+                    result.AddError("请选择要删除的账号！");
                     return result;
                 }
                 await _dataContext.Accounts.Where(x => ids.Contains(x.Id)).ForEachAsync(y =>
@@ -319,39 +503,5 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             }
             return result;
         }
-
-        #region 私有方法
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != passwordHash[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        #endregion
-
-
-        
     }
 }

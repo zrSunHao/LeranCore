@@ -3,12 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sun.DatingApp.Model.System.Auth.Accounts.Dto
 {
-    public class ForbiddenDto
+    public class LockoutAccountDto
     {
-        [Required]
         public Guid Id { get; set; }
 
-        [Required]
-        public bool Forbid { get; set; }
+        public DateTime LockoutEndAt { get; set; }
     }
 }

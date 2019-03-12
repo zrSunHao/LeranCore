@@ -48,17 +48,10 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt);
 
         /// <summary>
-        /// 禁用或启用
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        Task<WebApiResult> Forbidden(ForbiddenDto dto);
-
-        /// <summary>
         /// 批量删除
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<WebApiResult> BatchDelete(List<Guid> ids);
+        Task<WebApiResult> BatchDeleteAccount(List<Guid> ids);
     }
 }
