@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +10,12 @@ using Sun.DatingApp.Model.System.Auth.Login.Dto;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
 using Sun.DatingApp.Services.Services.System.AuthServices;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Sun.DatingApp.Api.Controllers.System
 {
@@ -34,12 +34,26 @@ namespace Sun.DatingApp.Api.Controllers.System
             //_service.SetCurrentUserId(CurrentUserId);
         }
 
-
-        [HttpGet("test")]
+        /// <summary>
+        /// 测试匿名链接时Api是否正常
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("TestAnonymousLink")]
         [AllowAnonymous]
-        public IActionResult Get()
+        public IActionResult TestAnonymousLink()
         {
-            return Ok("This is datingApp Api!");
+            return Ok("This is DatingApp Api,Anonymous Link Normal!");
+        }
+
+        /// <summary>
+        /// 测试认证链接时Api是否正常
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("TestAuthorizationLink")]
+        [AllowAnonymous]
+        public IActionResult TestAuthorizationLink()
+        {
+            return Ok("This is DatingApp Api,Authorization Link Normal!");
         }
 
         /// <summary>
@@ -48,7 +62,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<WebApiResult> Register([FromBody]RegisterDto dto)
         {
             return await _service.Register(dto);
@@ -60,7 +74,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<WebApiResult<AccessDataModel>> Login(LoginDto dto)
         {
             var result = new WebApiResult<AccessDataModel>();
@@ -109,7 +123,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="refreshToken"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost("refresh")]
+        [HttpPost("Refresh")]
         public async Task<WebApiResult<AccessDataModel>> Refresh(Guid refreshToken)
         {
             var result = new WebApiResult<AccessDataModel>();
@@ -156,7 +170,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("logout")]
+        [HttpGet("Logout")]
         public async Task<WebApiResult> Logout(Guid id)
         {
             return await _service.Logout(id);
@@ -169,7 +183,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="opt"></param>
         /// <returns></returns>
-        [HttpPost("accounts")]
+        [HttpPost("Accounts")]
         public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
             return await _service.Accounts(opt);
@@ -180,7 +194,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("createAccount")]
+        [HttpPost("CreateAccount")]
         public async Task<WebApiResult> CreateAccount(EditAccountDto dto)
         {
             var result = new WebApiResult();
@@ -200,7 +214,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("editAccount")]
+        [HttpPost("EditAccount")]
         public async Task<WebApiResult> EditAccount(EditAccountDto dto)
         {
             var result = new WebApiResult();
@@ -220,7 +234,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("batchEditAccount")]
+        [HttpPost("BatchEditAccount")]
         public async Task<WebApiResult> BatchEditAccount(BatchEditAccountDto dto)
         {
             var result = new WebApiResult();
@@ -240,7 +254,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("activeAccount")]
+        [HttpPost("ActiveAccount")]
         public async Task<WebApiResult> ActiveAccount(ActiveDto dto)
         {
             var result = new WebApiResult();
@@ -260,7 +274,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("lockoutAccount")]
+        [HttpPost("LockoutAccount")]
         public async Task<WebApiResult> LockoutAccount(LockoutAccountDto dto)
         {
             var result = new WebApiResult();
@@ -280,7 +294,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("deleteAccount")]
+        [HttpGet("DeleteAccount")]
         public async Task<WebApiResult> DeleteAccount(Guid id)
         {
             var result = new WebApiResult();
@@ -298,9 +312,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <summary>
         /// 批量删除
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("batchDeleteAccount")]
+        [HttpPost("BatchDeleteAccount")]
         public async Task<WebApiResult> BatchDeleteAccount(BatchDeleteAccountDto dto)
         {
             var result = new WebApiResult();
