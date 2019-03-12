@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.Common.Model;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
@@ -98,7 +99,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         /// </summary>
         /// <param name="roleId"></param>
         /// <param name="accountId"></param>
-        /// <returns></returns>
+        /// <returns></returns>+
         public async Task<WebApiResult> DeleteRole(Guid roleId, Guid accountId)
         {
             var result = new WebApiResult();
@@ -325,5 +326,30 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WebApiResult<List<ItemModel>>> GetRoleItems()
+        {
+            var result = new WebApiResult<List<ItemModel>>();
+            try
+            {
+                var data = await _dataContext.Roles.Where(x => !x.Deleted).Select(x =>
+                    new ItemModel
+                    {
+                        Value = x.Id,
+                        Label = x.Name
+                    }).ToListAsync();
+
+                result.Data = data;
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
     }
 }

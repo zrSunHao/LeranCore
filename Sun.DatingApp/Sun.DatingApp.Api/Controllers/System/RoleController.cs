@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.Common.Model;
 using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
 using Sun.DatingApp.Services.Services.System.RoleServices;
@@ -63,6 +64,16 @@ namespace Sun.DatingApp.Api.Controllers.System
         public async Task<WebApiResult<List<RolePermissionModel>>> GetRolePermissions(Guid id)
         {
             return await _service.GetRolePermissions(id);
+        }
+
+        /// <summary>
+        /// 获取角色选择列表数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getRoleItems")]
+        public async Task<WebApiResult<List<ItemModel>>> GetRoleItems()
+        {
+            return await _service.GetRoleItems();
         }
     }
 }

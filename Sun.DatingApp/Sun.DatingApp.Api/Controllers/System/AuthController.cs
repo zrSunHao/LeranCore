@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
 using Sun.DatingApp.Model.System.Auth.Login.Dto;
@@ -161,6 +162,8 @@ namespace Sun.DatingApp.Api.Controllers.System
             return await _service.Logout(id);
         }
 
+
+
         /// <summary>
         /// 账号管理列表数据
         /// </summary>
@@ -172,5 +175,124 @@ namespace Sun.DatingApp.Api.Controllers.System
             return await _service.Accounts(opt);
         }
 
+        /// <summary>
+        /// 编辑账号
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("editAccount")]
+        public async Task<WebApiResult> EditAccount(EditAccountDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.EditAccount(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 批量编辑
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("batchEditAccount")]
+        public async Task<WebApiResult> BatchEditAccount(BatchEditAccountDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.BatchEditAccount(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 启用或禁用账号
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("activeAccount")]
+        public async Task<WebApiResult> ActiveAccount(ActiveDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.ActiveAccount(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 锁定账号
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("lockoutAccount")]
+        public async Task<WebApiResult> LockoutAccount(LockoutAccountDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.LockoutAccount(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除账号
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("deleteAccount")]
+        public async Task<WebApiResult> DeleteAccount(Guid id)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.DeleteAccount(id, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost("batchDeleteAccount")]
+        public async Task<WebApiResult> BatchDeleteAccount(List<Guid> ids)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.BatchDeleteAccount(ids, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
     }
 }

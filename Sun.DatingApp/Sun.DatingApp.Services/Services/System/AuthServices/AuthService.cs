@@ -298,7 +298,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult> EditAccount(EditAccountDto dto)
+        public async Task<WebApiResult> EditAccount(EditAccountDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -393,7 +393,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult> Active(ActiveDto dto, Guid accountId)
+        public async Task<WebApiResult> ActiveAccount(ActiveDto dto, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -453,7 +453,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult> Delete(Guid id, Guid accountId)
+        public async Task<WebApiResult> DeleteAccount(Guid id, Guid accountId)
         {
             var result = new WebApiResult();
             try
@@ -479,7 +479,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult> BatchDeleteAccount(List<Guid> ids)
+        public async Task<WebApiResult> BatchDeleteAccount(List<Guid> ids, Guid accountId)
         {
             var result = new WebApiResult();
             try
