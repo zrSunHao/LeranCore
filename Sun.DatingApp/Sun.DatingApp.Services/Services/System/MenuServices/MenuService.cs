@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
@@ -10,8 +6,13 @@ using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Menus.Model;
 using Sun.DatingApp.Model.System.Menus.Dto;
+using Sun.DatingApp.Model.System.Menus.Model;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -186,8 +187,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             try
             {
                 var data = await (from p in _dataContext.Pages
-                    join m in _dataContext.Permissions on p.ModuleId equals m.Id into tm
-                    from pm in tm.DefaultIfEmpty()
                     where !p.Deleted && p.MenuId == id
                     select new PageListModel
                     {
@@ -199,8 +198,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                         Icon = p.Icon,
                         Active = p.Active,
                         MenuId = p.MenuId,
-                        ModuleId = p.ModuleId,
-                        ModuleName = pm.Name
                     }).ToListAsync();
 
                 result.Data = data;
@@ -228,7 +225,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     Active = true,
                     Intro = dto.Intro,
                     MenuId = dto.MenuId,
-                    ModuleId = dto.ModuleId,
                     Deleted = false,
                     CreatedAt = DateTime.Now,
                     CreatedById = CurrentUserId
@@ -268,7 +264,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.Url = dto.Url;
                 entity.Icon = dto.Icon;
                 entity.Intro = dto.Intro;
-                entity.ModuleId = dto.ModuleId;
                 entity.MenuId = dto.MenuId;
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdatedById = accountId;

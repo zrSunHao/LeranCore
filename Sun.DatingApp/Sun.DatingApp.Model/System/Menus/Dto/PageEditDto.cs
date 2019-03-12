@@ -16,8 +16,6 @@ namespace Sun.DatingApp.Model.System.Menus.Dto
 
         public string Intro { get; set; }
 
-        public Guid ModuleId { get; set; }
-
         public Guid MenuId { get; set; }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sun.DatingApp.Model.Menus.Model
+namespace Sun.DatingApp.Model.System.Menus.Model
 {
     public class PageListModel
     {
@@ -19,10 +17,6 @@ namespace Sun.DatingApp.Model.Menus.Model
         public bool Active { get; set; }
 
         public string Intro { get; set; }
-
-        public Guid ModuleId { get; set; }
-
-        public string ModuleName { get; set; }
 
         public Guid MenuId { get; set; }
     }
