@@ -21,7 +21,6 @@ import { MenuPageAddComponent } from './menu/menu-page-add/menu-page-add.compone
 
 // 服务
 import { BasicOperateService } from './_core/basic-services/basic-operate.service';
-import { NZ_NOTIFICATION_CONFIG } from 'ng-zorro-antd';
 
 // 账号管理模块
 import { AccountLockoutComponent } from './account/account-lockout/account-lockout.component';

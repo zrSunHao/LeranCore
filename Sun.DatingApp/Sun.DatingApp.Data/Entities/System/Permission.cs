@@ -18,8 +18,8 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public bool Active { get; set; }
 
-        public Guid? ParentId { get; set; }
+        public Guid PageId { get; set; }
 
-        public virtual Permission Parent { get; set; }
+        public virtual Page Page { get; set; }
     }
 }

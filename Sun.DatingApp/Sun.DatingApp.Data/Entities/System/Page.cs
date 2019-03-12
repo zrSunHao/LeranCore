@@ -18,8 +18,6 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public string Intro { get; set; }
 
-        public Guid ModuleId { get; set; }
-
         public Guid MenuId { get; set; }
     }
 }

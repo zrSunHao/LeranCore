@@ -10,6 +10,8 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public Guid PermissionId { get; set; }
 
+        public Guid PageId { get; set; }
+
         public Role Role { get; set; }
     }
 }
