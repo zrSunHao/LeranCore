@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Sun.DatingApp.Model.Common;
+﻿using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Info;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -99,9 +100,30 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// <summary>
         /// 批量删除
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="dto"></param>
         /// <param name="accountId"></param>
         /// <returns></returns>
         Task<WebApiResult> BatchDeleteAccount(BatchDeleteAccountDto dto, Guid accountId);
+
+        /// <summary>
+        /// 获取该账号的信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id);
+
+        /// <summary>
+        /// 获取该账号的权限信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<WebApiResult<string[]>> GetAccountPermission(Guid id);
+
+        /// <summary>
+        /// 获取该账号的菜单数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<WebApiResult<AccountMenuInfo>> GetAccountMenu(Guid id);
     }
 }

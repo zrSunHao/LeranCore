@@ -6,6 +6,7 @@ using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Info;
 using Sun.DatingApp.Model.System.Auth.Login.Dto;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
@@ -327,6 +328,41 @@ namespace Sun.DatingApp.Api.Controllers.System
                 result.AddError("当前用户信息获取失败");
             }
             return result;
+        }
+
+
+
+        /// <summary>
+        /// 获取账号信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetAccountInfo")]
+        public async Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id)
+        {
+            return await _service.GetAccountInfo(id);
+        }
+
+        /// <summary>
+        /// 获取该账号的菜单信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetAccountMenu")]
+        public async Task<WebApiResult<AccountMenuInfo>> GetAccountMenu(Guid id)
+        {
+            return await _service.GetAccountMenu(id);
+        }
+
+        /// <summary>
+        /// 获取该账号的权限信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetAccountPermission")]
+        public async Task<WebApiResult<string[]>> GetAccountPermission(Guid id)
+        {
+            return await _service.GetAccountPermission(id);
         }
     }
 }

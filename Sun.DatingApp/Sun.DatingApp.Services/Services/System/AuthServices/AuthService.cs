@@ -14,8 +14,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Sun.DatingApp.Model.System.Auth.Info;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -176,7 +178,8 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        
+
+        #region 账号管理
 
         public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
@@ -499,6 +502,111 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
+        #endregion
+
+
+        #region 私有方法
+
+        public async Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id)
+        {
+            var result = new WebApiResult<AccountInfo>();
+            try
+            {
+                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                if (account == null)
+                {
+                    result.AddError("未找到对应的用户");
+                    return result;
+                }
+
+                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
+                if (role == null)
+                {
+                    result.AddError("该账号没有角色，请联系管理员");
+                    return result;
+                }
+
+                var info = new AccountInfo()
+                {
+                    Id = account.Id,
+                    Email = account.Email,
+                    Name = account.UserName,
+                    Avatar = account.Avatar,
+                    RoleId = role.Id,
+                    RoleName = role.Name,
+                    RefreshToken = account.RefreshToken
+                };
+
+                result.Data = info;
+            }
+            catch (Exception ex)
+            {
+                result.AddError("获取账号基本信息时出现异常");
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<AccountMenuInfo>> GetAccountMenu(Guid id)
+        {
+            var result = new WebApiResult<AccountMenuInfo>();
+            try
+            {
+                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                if (account == null)
+                {
+                    result.AddError("未找到对应的用户");
+                    return result;
+                }
+
+                var permsItems = await _dataContext.RolePermissions.Where(x=>x.RoleId == account.RoleId && !x.Deleted).ToListAsync();
+                var pageIds = permsItems.Select(x => x.PageId).ToList();
+
+                if (pageIds.Any())
+                {
+                    var info = await this.GetAccountPermission(pageIds);
+                    result.Data = info;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.AddError("获取账号权限时出现异常");
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<string[]>> GetAccountPermission(Guid id)
+        {
+            var result = new WebApiResult<string[]>();
+            try
+            {
+                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                if (account == null)
+                {
+                    result.AddError("未找到对应的用户");
+                    return result;
+                }
+
+                var permsIds = await _dataContext.RolePermissions.Where(x => x.RoleId == account.RoleId && !x.Deleted).Select(x=>x.PermissionId).ToListAsync();
+                var perms = await _dataContext.Permissions.Where(x => permsIds.Contains(x.Id) && !x.Deleted)
+                    .Select(x => x.Code).ToArrayAsync();
+
+                result.Data = perms;
+            }
+            catch (Exception ex)
+            {
+                result.AddError("获取账号菜单数据时出现异常");
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        #endregion
+
 
         #region 私有方法
 
@@ -526,6 +634,54 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 return true;
+            }
+        }
+
+        private async Task<AccountMenuInfo> GetAccountPermission(List<Guid> pageIds)
+        {
+            try
+            {
+                var menuInfo = new AccountMenuInfo
+                {
+                    Text = "主导航",
+                    Group = true,
+                    HideInBreadcrumb = true,
+                };
+
+                var pages = await _dataContext.Pages.Where(x => pageIds.Contains(x.Id) && !x.Deleted).ToListAsync();
+                var menuIds = pages.Select(x => x.MenuId).ToList();
+                var menus = await _dataContext.Menus.Where(x => menuIds.Contains(x.Id)).ToListAsync();
+
+                if (menus.Any())
+                {
+                    var accountMenus = new List<AccountMenu>();
+
+                    foreach (var menu in menus)
+                    {
+                        var accountMenu = new AccountMenu
+                        {
+                            Text = menu.Name,
+                            Icon = menu.Icon,
+                            ShortcutRoot = true,
+                        };
+
+                        accountMenu.Children = pages.Where(x => x.MenuId == menu.Id).Select(x => new AccountPage
+                        {
+                            Text = x.Name,
+                            Link = x.Url
+                        }).ToList();
+
+                        accountMenus.Add(accountMenu);
+                    }
+
+                    menuInfo.Children = accountMenus;
+                }
+
+                return menuInfo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
