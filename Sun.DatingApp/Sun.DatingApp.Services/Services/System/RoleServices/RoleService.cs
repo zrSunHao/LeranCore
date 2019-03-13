@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
+using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Common.Model;
 using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
@@ -11,9 +12,8 @@ using Sun.DatingApp.Utility.CacheUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Sun.DatingApp.Model.Common.Dto;
+using Sun.DatingApp.Model.System.Menus.Model;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
@@ -33,7 +33,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<RoleListModel>>();
             try
             {
-                var datas = await _dataContext.Roles.Select(x => new RoleListModel
+                var roles = await _dataContext.Roles.Select(x => new RoleListModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -42,33 +42,35 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     Intro = x.Intro,
                 }).ToListAsync();
 
-                if (datas.Any())
+                if (roles.Any())
                 {
-                    var roleIds = datas.Select(x => x.Id).ToList();
+                    var roleIds = roles.Select(x => x.Id).ToList();
 
-                    var modules = await (from rp in _dataContext.RolePermissions
-                                         join p in _dataContext.Permissions on rp.RoleId equals p.Id into tp
-                                         from prp in tp.DefaultIfEmpty()
-                                         where roleIds.Contains(rp.RoleId) && !rp.Deleted
-                                         select new RoleListPermissionModel
-                                         {
-                                             Id = prp.Id,
-                                             Name = prp.Name,
-                                             Icon = prp.Icon,
-                                             TagColor = prp.Active ? prp.TagColor : "",
-                                             RoleId = rp.RoleId
-                                         }).ToListAsync();
-
-                    if (modules.Any())
-                    {
-                        foreach (var data in datas)
+                    var pages = await (from rp in _dataContext.RolePages
+                        join p in _dataContext.Pages on rp.PageId equals p.Id into tp
+                        from rrp in tp.DefaultIfEmpty()
+                        where roleIds.Contains(rp.RoleId)
+                        where !rp.Deleted
+                        select new PageItem
                         {
-                            //data.Modules = modules.Where(x => x.RoleId == data.Id).ToList();
+                            Id = rrp.Id,
+                            Name = rrp.Name,
+                            Icon = rrp.Icon,
+                            TagColor = rrp.TagColor,
+                            Active = rrp.Active,
+                            RoleId = rp.RoleId
+                        }).ToListAsync();
+
+                    if (pages.Any())
+                    {
+                        foreach (var role in roles)
+                        {
+                            role.Pages = pages.Where(x => x.RoleId == role.Id).ToList();
                         }
                     }
                 }
 
-                result.Data = datas;
+                result.Data = roles;
             }
             catch (Exception ex)
             {
