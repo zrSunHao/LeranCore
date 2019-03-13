@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
-namespace Sun.DatingApp.Data.Entities.System
+﻿namespace Sun.DatingApp.Data.Entities.System
 {
     public class Menu : BaseEntity
     {

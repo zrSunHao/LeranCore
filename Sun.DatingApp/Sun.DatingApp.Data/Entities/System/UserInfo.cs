@@ -1,5 +1,4 @@
-﻿using Sun.DatingApp.Data.Entities.Basic;
-using System;
+﻿using System;
 using System.ComponentModel;
 
 namespace Sun.DatingApp.Data.Entities.System

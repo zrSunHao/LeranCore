@@ -6,6 +6,7 @@ using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Info;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
@@ -14,10 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using Sun.DatingApp.Model.System.Auth.Info;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.Entities.Basic
 {
