@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Permission> builder)
         {
-            builder.ToTable("Permissions", "System");
+            builder.ToTable("Permission", "system");
 
             builder.HasKey(x => x.Id);
 

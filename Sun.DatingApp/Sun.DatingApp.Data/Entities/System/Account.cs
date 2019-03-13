@@ -40,13 +40,5 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("登陆失败次数")]
         public int AccessFailedCount { get; set; }
 
-
-
-        #region 索引
-
-        [Description("角色")]
-        public virtual Role Role { get; set; }
-        #endregion
-
     }
 }

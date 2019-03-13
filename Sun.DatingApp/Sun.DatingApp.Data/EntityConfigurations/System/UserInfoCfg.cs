@@ -9,7 +9,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<UserInfo> builder)
         {
-            builder.ToTable("UserInfos", "System");
+            builder.ToTable("UserInfo", "system");
 
             builder.HasKey(x => x.Id);
 
@@ -27,8 +27,6 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
 
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.Deleted).IsRequired();
-
-            builder.HasIndex(x => x.AccountId);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 var role = await _dataContext.Roles.AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Code == "User" && !x.Deleted);
+                    .FirstOrDefaultAsync(x => x.Name == "用户" && !x.Deleted);
                 if (role == null)
                 {
                     result.AddError("当前系统未设置默认用户角色，请联系管理员");
@@ -106,11 +106,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     select prp.Code).ToListAsync();
 
                 var data = _mapper.Map<Account, AccessDataModel>(account);
-                var role = _dataContext.Roles.FirstOrDefault(x => x.Id == account.RoleId);
-                if (role != null)
-                {
-                    data.Role = role.Code;
-                }
+                
                 data.Permissions = permissions;
                 _catchHandler.Add(data.Id.ToString(), data);
                 result.Data = data;
@@ -229,11 +225,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                         if (opt.SortOrder == "asc")
                             query = query.OrderBy(x => x.UserName);
                         query = query.OrderByDescending(x => x.UserName);
-                        break;
-                    case "Role":
-                        if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.Role);
-                        query = query.OrderByDescending(x => x.Role);
                         break;
                     case "Active":
                         if (opt.SortOrder == "asc")

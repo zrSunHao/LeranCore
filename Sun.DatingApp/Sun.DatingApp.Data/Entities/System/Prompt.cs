@@ -21,14 +21,5 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("更新次数")]
         public int UpdateNum { get; set; }
 
-
-        #region 索引
-
-        [Description("组织")]
-        public virtual Organization Organization { get; set; }
-
-        #endregion
-
-
     }
 }

@@ -12,7 +12,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Organization> builder)
         {
-            builder.ToTable("Organizations", "System");
+            builder.ToTable("Organization", "system");
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).HasMaxLength(50);
@@ -20,9 +20,6 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
 
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.Deleted).IsRequired();
-
-            builder.HasMany(x => x.Children).WithOne(x => x.Parent).HasForeignKey(x => x.ParentId);
-            builder.HasMany<Prompt>(x => x.Prompts).WithOne(x => x.Organization).HasForeignKey(x => x.OrganizationId);
         }
     }
 }

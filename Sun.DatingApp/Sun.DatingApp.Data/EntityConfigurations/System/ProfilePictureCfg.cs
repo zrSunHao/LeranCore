@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<ProfilePicture> builder)
         {
-            builder.ToTable("ProfilePictures", "System");
+            builder.ToTable("ProfilePicture", "system");
 
             builder.HasKey(x => x.Id);
 

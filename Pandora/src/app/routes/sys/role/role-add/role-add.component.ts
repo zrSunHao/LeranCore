@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalRef, NzMessageService } from 'ng-zorro-antd';
+import {
+  NzModalRef,
+  NzMessageService,
+  NzNotificationService,
+} from 'ng-zorro-antd';
 import { SFSchema } from '@delon/form';
 import { _HttpClient } from '@delon/theme';
 
@@ -19,7 +23,6 @@ export class SysRoleListRoleAddComponent implements OnInit {
   schema: SFSchema = {
     properties: {
       name: { type: 'string', title: '名称', maxLength: 50 },
-      code: { type: 'string', title: '编码', maxLength: 50 },
       intro: {
         type: 'string',
         title: '描述',
@@ -28,6 +31,7 @@ export class SysRoleListRoleAddComponent implements OnInit {
           grid: { span: 24 },
           autosize: { minRows: 2, maxRows: 6 },
         },
+        maxLength: 200,
       },
     },
     required: ['name', 'code', 'intro'],
@@ -41,6 +45,7 @@ export class SysRoleListRoleAddComponent implements OnInit {
     private modal: NzModalRef,
     public msgSrv: NzMessageService,
     public http: _HttpClient,
+    private notification: NzNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +56,28 @@ export class SysRoleListRoleAddComponent implements OnInit {
     console.log(value);
     this.msgSrv.success('保存成功');
     this.modal.close(value);
+  }
+
+  add(entity: any) {
+    this.http.post(CreateRoleUrl, entity).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '添加失败', res.allMessages);
+      } else {
+        this.notification.create('success', '添加成功', res.allMessages);
+        this.modal.close(res);
+      }
+    });
+  }
+
+  edit(entity: any) {
+    this.http.post(EditRoleUrl, entity).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '更新失败', res.allMessages);
+      } else {
+        this.notification.create('success', '更新成功', res.allMessages);
+        this.modal.close(res);
+      }
+    });
   }
 
   close() {

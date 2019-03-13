@@ -49,17 +49,5 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("Current地址Id")]
         public Guid CurrentAddressId { get; set; }
 
-
-
-        #region 索引
-
-        [Description("地址")]
-        public virtual Region Region { get; set; }
-
-        [Description("职业")]
-        public virtual Occupation Occupation { get; set; }
-
-        #endregion
-
     }
 }

@@ -9,7 +9,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.Basic
     {
         public void Configure(EntityTypeBuilder<Region> builder)
         {
-            builder.ToTable("Regions", "Basic");
+            builder.ToTable("Region", "basic");
 
             builder.HasKey(x => x.Id);
 
@@ -24,12 +24,6 @@ namespace Sun.DatingApp.Data.EntityConfigurations.Basic
             builder.Property(x => x.Lng).IsRequired().HasMaxLength(60);
             builder.Property(x => x.Lat).IsRequired().HasMaxLength(60);
             builder.Property(x => x.PinYin).HasMaxLength(100);
-
-            builder.HasIndex(x => x.RegionCode);
-            builder.HasIndex(x => x.LayerLevel);
-            builder.HasMany(x => x.Children).WithOne(x => x.Parent).HasForeignKey(x => x.ParentId);
-            builder.HasMany<UserInfo>(x => x.UserInfos).WithOne(x => x.Region).HasForeignKey(x => x.BaseAddressId);
-            builder.HasMany<UserInfo>(x => x.UserInfos).WithOne(x => x.Region).HasForeignKey(x => x.CurrentAddressId);
         }
     }
 }

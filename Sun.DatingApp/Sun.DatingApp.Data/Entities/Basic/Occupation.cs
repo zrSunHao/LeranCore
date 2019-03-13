@@ -23,18 +23,5 @@ namespace Sun.DatingApp.Data.Entities.Basic
         [Description("父编码")]
         public string ParentCode { get; set; }
 
-
-
-        #region 索引
-
-        [Description("用户")]
-        public virtual ICollection<UserInfo> UserInfos { get; set; }
-
-        public virtual ICollection<Occupation> Children { get; set; }
-
-        public virtual Occupation Parent { get; set; }
-
-        #endregion
-
     }
 }

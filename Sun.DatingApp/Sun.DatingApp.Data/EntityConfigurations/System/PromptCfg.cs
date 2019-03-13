@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Prompt> builder)
         {
-            builder.ToTable("Prompts", "System");
+            builder.ToTable("Prompt", "system");
 
             builder.HasKey(x => x.Id);
 
@@ -24,8 +24,6 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
 
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.Deleted).IsRequired();
-
-            builder.HasIndex(x => x.Code);
         }
     }
 }

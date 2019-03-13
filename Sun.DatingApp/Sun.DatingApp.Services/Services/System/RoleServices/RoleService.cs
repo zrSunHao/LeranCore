@@ -39,7 +39,6 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Code = x.Code,
                     Active = x.Active,
                     Intro = x.Intro,
                 }).ToListAsync();
@@ -98,7 +97,6 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     Id = Guid.NewGuid(),
                     Name = dto.Name,
-                    Code = dto.Code,
                     Intro = dto.Intro,
                     Deleted = false,
                     CreatedAt = DateTime.Now,
@@ -139,7 +137,6 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     return result;
                 }
 
-                role.Code = dto.Code;
                 role.Name = dto.Name;
                 role.Intro = dto.Intro;
                 role.UpdatedAt = DateTime.Now;

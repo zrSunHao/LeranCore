@@ -93,20 +93,28 @@ export class SysRoleRoleListComponent implements OnInit {
   add() {
     const isEdit = false;
     const title = '添加角色';
-    const entity = { name: null, code: null, intro: null };
+    const entity = { id: null, name: null, intro: null };
 
     this.modal
-      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title }, { size: 'md' })
+      .createStatic(
+        SysRoleListRoleAddComponent,
+        { entity, isEdit, title },
+        { size: 'md' },
+      )
       .subscribe(() => this.loadRoles());
   }
 
   edit(item: any) {
     const isEdit = false;
-    const title = '添加角色';
-    const entity = item;
+    const title = '修改角色';
+    const entity = { id: item.id, name: item.name, intro: item.intro };
 
     this.modal
-      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title }, { size: 'md' })
+      .createStatic(
+        SysRoleListRoleAddComponent,
+        { entity, isEdit, title },
+        { size: 'md' },
+      )
       .subscribe(() => this.loadRoles());
   }
 

@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Page> builder)
         {
-            builder.ToTable("Page", "System");
+            builder.ToTable("Page", "system");
 
             builder.HasKey(x => x.Id);
 

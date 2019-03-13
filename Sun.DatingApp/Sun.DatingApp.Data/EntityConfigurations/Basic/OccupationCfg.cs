@@ -9,7 +9,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.Basic
     {
         public void Configure(EntityTypeBuilder<Occupation> builder)
         {
-            builder.ToTable("Occupations", "Basic");
+            builder.ToTable("Occupation", "basic");
 
             builder.HasKey(x => x.Id);
 
@@ -17,11 +17,6 @@ namespace Sun.DatingApp.Data.EntityConfigurations.Basic
             builder.Property(x => x.Name).HasMaxLength(100);
             builder.Property(x => x.Code).IsRequired().HasMaxLength(200);
             builder.Property(x => x.ParentCode).IsRequired().HasMaxLength(200);
-
-            builder.HasIndex(x => x.Code);
-            builder.HasMany(x => x.Children).WithOne(x => x.Parent).HasForeignKey(x=>x.ParentId);
-            builder.HasMany<UserInfo>(x => x.UserInfos).WithOne(x => x.Occupation)
-                .HasForeignKey(x => x.OccupationId);
         }
     }
 }

@@ -12,9 +12,6 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("角色名称")]
         public string Name { get; set; }
 
-        [Description("角色编码")]
-        public string Code { get; set; }
-
         [Description("简介")]
         public string Intro { get; set; }
 

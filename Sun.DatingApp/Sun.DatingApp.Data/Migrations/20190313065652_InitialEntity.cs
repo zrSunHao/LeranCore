@@ -3,19 +3,19 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sun.DatingApp.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Basic");
+                name: "basic");
 
             migrationBuilder.EnsureSchema(
-                name: "System");
+                name: "system");
 
             migrationBuilder.CreateTable(
-                name: "Occupations",
-                schema: "Basic",
+                name: "Occupation",
+                schema: "basic",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -26,19 +26,12 @@ namespace Sun.DatingApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Occupations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Occupations_Occupations_ParentId",
-                        column: x => x.ParentId,
-                        principalSchema: "Basic",
-                        principalTable: "Occupations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Occupation", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Regions",
-                schema: "Basic",
+                name: "Region",
+                schema: "basic",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -57,19 +50,36 @@ namespace Sun.DatingApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Regions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Regions_Regions_ParentId",
-                        column: x => x.ParentId,
-                        principalSchema: "Basic",
-                        principalTable: "Regions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Region", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Organizations",
-                schema: "System",
+                name: "Menu",
+                schema: "system",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedById = table.Column<Guid>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedById = table.Column<Guid>(nullable: true),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: false),
+                    DeletedById = table.Column<Guid>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    TagColor = table.Column<string>(maxLength: 50, nullable: false),
+                    Icon = table.Column<string>(maxLength: 100, nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    Intro = table.Column<string>(maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menu", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Organization",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -86,19 +96,38 @@ namespace Sun.DatingApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Organizations_Organizations_ParentId",
-                        column: x => x.ParentId,
-                        principalSchema: "System",
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Organization", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfilePictures",
-                schema: "System",
+                name: "Page",
+                schema: "system",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedById = table.Column<Guid>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedById = table.Column<Guid>(nullable: true),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: false),
+                    DeletedById = table.Column<Guid>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Url = table.Column<string>(maxLength: 200, nullable: false),
+                    TagColor = table.Column<string>(maxLength: 50, nullable: false),
+                    Icon = table.Column<string>(maxLength: 100, nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    Intro = table.Column<string>(maxLength: 200, nullable: false),
+                    MenuId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Page", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfilePicture",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -117,12 +146,36 @@ namespace Sun.DatingApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfilePictures", x => x.Id);
+                    table.PrimaryKey("PK_ProfilePicture", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
-                schema: "System",
+                name: "Prompt",
+                schema: "system",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedById = table.Column<Guid>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedById = table.Column<Guid>(nullable: true),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: false),
+                    DeletedById = table.Column<Guid>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Code = table.Column<string>(maxLength: 30, nullable: false),
+                    OrganizationId = table.Column<Guid>(nullable: false),
+                    Info = table.Column<string>(maxLength: 200, nullable: false),
+                    LastInfo = table.Column<string>(maxLength: 200, nullable: false),
+                    UpdateNum = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prompt", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Role",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -134,16 +187,17 @@ namespace Sun.DatingApp.Data.Migrations
                     DeletedById = table.Column<Guid>(nullable: true),
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Intro = table.Column<string>(maxLength: 200, nullable: false)
+                    Intro = table.Column<string>(maxLength: 200, nullable: false),
+                    Active = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserInfos",
-                schema: "System",
+                name: "UserInfo",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -169,26 +223,12 @@ namespace Sun.DatingApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserInfos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserInfos_Regions_CurrentAddressId",
-                        column: x => x.CurrentAddressId,
-                        principalSchema: "Basic",
-                        principalTable: "Regions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserInfos_Occupations_OccupationId",
-                        column: x => x.OccupationId,
-                        principalSchema: "Basic",
-                        principalTable: "Occupations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_UserInfo", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prompts",
-                schema: "System",
+                name: "Permission",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -199,27 +239,29 @@ namespace Sun.DatingApp.Data.Migrations
                     Deleted = table.Column<bool>(nullable: false),
                     DeletedById = table.Column<Guid>(nullable: true),
                     DeletedAt = table.Column<DateTime>(nullable: true),
-                    Code = table.Column<string>(maxLength: 30, nullable: false),
-                    OrganizationId = table.Column<Guid>(nullable: false),
-                    Info = table.Column<string>(maxLength: 200, nullable: false),
-                    LastInfo = table.Column<string>(maxLength: 200, nullable: false),
-                    UpdateNum = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Code = table.Column<string>(maxLength: 100, nullable: false),
+                    Intro = table.Column<string>(maxLength: 200, nullable: false),
+                    Icon = table.Column<string>(maxLength: 100, nullable: false),
+                    TagColor = table.Column<string>(maxLength: 50, nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    PageId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prompts", x => x.Id);
+                    table.PrimaryKey("PK_Permission", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Prompts_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalSchema: "System",
-                        principalTable: "Organizations",
+                        name: "FK_Permission_Page_PageId",
+                        column: x => x.PageId,
+                        principalSchema: "system",
+                        principalTable: "Page",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
-                schema: "System",
+                name: "Account",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -244,19 +286,19 @@ namespace Sun.DatingApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_Account", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Roles_RoleId",
+                        name: "FK_Account_Role_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "System",
-                        principalTable: "Roles",
+                        principalSchema: "system",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleOrgItems",
-                schema: "System",
+                name: "RolePermission",
+                schema: "system",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -267,143 +309,108 @@ namespace Sun.DatingApp.Data.Migrations
                     Deleted = table.Column<bool>(nullable: false),
                     DeletedById = table.Column<Guid>(nullable: true),
                     DeletedAt = table.Column<DateTime>(nullable: true),
-                    OrganizationId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    RoleId = table.Column<Guid>(nullable: false),
+                    PermissionId = table.Column<Guid>(nullable: false),
+                    PageId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleOrgItems", x => x.Id);
+                    table.PrimaryKey("PK_RolePermission", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoleOrgItems_Roles_RoleId",
+                        name: "FK_RolePermission_Role_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "System",
-                        principalTable: "Roles",
+                        principalSchema: "system",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Occupations_Code",
-                schema: "Basic",
-                table: "Occupations",
-                column: "Code");
+            migrationBuilder.InsertData(
+                schema: "system",
+                table: "Role",
+                columns: new[] { "Id", "Active", "CreatedAt", "CreatedById", "Deleted", "DeletedAt", "DeletedById", "Intro", "Name", "UpdatedAt", "UpdatedById" },
+                values: new object[] { new Guid("917cfe90-a330-4a06-a3ba-577fe4418568"), false, new DateTime(2019, 3, 13, 14, 56, 52, 552, DateTimeKind.Local).AddTicks(6581), null, false, null, null, "超级管理员拥有所有的权限", "超级管理员", null, null });
+
+            migrationBuilder.InsertData(
+                schema: "system",
+                table: "Role",
+                columns: new[] { "Id", "Active", "CreatedAt", "CreatedById", "Deleted", "DeletedAt", "DeletedById", "Intro", "Name", "UpdatedAt", "UpdatedById" },
+                values: new object[] { new Guid("3711b967-cfb8-4e48-9db6-551ad2d48a31"), false, new DateTime(2019, 3, 13, 14, 56, 52, 553, DateTimeKind.Local).AddTicks(6072), null, false, null, null, "管理员用于管理用户权限", "管理员", null, null });
+
+            migrationBuilder.InsertData(
+                schema: "system",
+                table: "Role",
+                columns: new[] { "Id", "Active", "CreatedAt", "CreatedById", "Deleted", "DeletedAt", "DeletedById", "Intro", "Name", "UpdatedAt", "UpdatedById" },
+                values: new object[] { new Guid("6d494fed-e660-42ce-89c5-27699e2dadcd"), false, new DateTime(2019, 3, 13, 14, 56, 52, 553, DateTimeKind.Local).AddTicks(6079), null, false, null, null, "可以使用基本功能", "用户", null, null });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Occupations_ParentId",
-                schema: "Basic",
-                table: "Occupations",
-                column: "ParentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Regions_LayerLevel",
-                schema: "Basic",
-                table: "Regions",
-                column: "LayerLevel");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Regions_ParentId",
-                schema: "Basic",
-                table: "Regions",
-                column: "ParentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Regions_RegionCode",
-                schema: "Basic",
-                table: "Regions",
-                column: "RegionCode");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Accounts_Email",
-                schema: "System",
-                table: "Accounts",
-                column: "Email");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Accounts_RoleId",
-                schema: "System",
-                table: "Accounts",
+                name: "IX_Account_RoleId",
+                schema: "system",
+                table: "Account",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Organizations_ParentId",
-                schema: "System",
-                table: "Organizations",
-                column: "ParentId");
+                name: "IX_Permission_PageId",
+                schema: "system",
+                table: "Permission",
+                column: "PageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prompts_Code",
-                schema: "System",
-                table: "Prompts",
-                column: "Code");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Prompts_OrganizationId",
-                schema: "System",
-                table: "Prompts",
-                column: "OrganizationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoleOrgItems_RoleId",
-                schema: "System",
-                table: "RoleOrgItems",
+                name: "IX_RolePermission_RoleId",
+                schema: "system",
+                table: "RolePermission",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInfos_AccountId",
-                schema: "System",
-                table: "UserInfos",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInfos_CurrentAddressId",
-                schema: "System",
-                table: "UserInfos",
-                column: "CurrentAddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInfos_OccupationId",
-                schema: "System",
-                table: "UserInfos",
-                column: "OccupationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Accounts",
-                schema: "System");
+                name: "Occupation",
+                schema: "basic");
 
             migrationBuilder.DropTable(
-                name: "ProfilePictures",
-                schema: "System");
+                name: "Region",
+                schema: "basic");
 
             migrationBuilder.DropTable(
-                name: "Prompts",
-                schema: "System");
+                name: "Account",
+                schema: "system");
 
             migrationBuilder.DropTable(
-                name: "RoleOrgItems",
-                schema: "System");
+                name: "Menu",
+                schema: "system");
 
             migrationBuilder.DropTable(
-                name: "UserInfos",
-                schema: "System");
+                name: "Organization",
+                schema: "system");
 
             migrationBuilder.DropTable(
-                name: "Organizations",
-                schema: "System");
+                name: "Permission",
+                schema: "system");
 
             migrationBuilder.DropTable(
-                name: "Roles",
-                schema: "System");
+                name: "ProfilePicture",
+                schema: "system");
 
             migrationBuilder.DropTable(
-                name: "Regions",
-                schema: "Basic");
+                name: "Prompt",
+                schema: "system");
 
             migrationBuilder.DropTable(
-                name: "Occupations",
-                schema: "Basic");
+                name: "RolePermission",
+                schema: "system");
+
+            migrationBuilder.DropTable(
+                name: "UserInfo",
+                schema: "system");
+
+            migrationBuilder.DropTable(
+                name: "Page",
+                schema: "system");
+
+            migrationBuilder.DropTable(
+                name: "Role",
+                schema: "system");
         }
     }
 }

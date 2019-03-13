@@ -47,19 +47,5 @@ namespace Sun.DatingApp.Data.Entities.Basic
         [Description("拼音")]
         public string PinYin { get; set; }
 
-
-
-        #region 索引
-
-        [Description("父")]
-        public virtual Region Parent { get; set; }
-
-        [Description("子")]
-        public virtual ICollection<Region> Children { get; set; }
-
-        public virtual ICollection<UserInfo> UserInfos { get; set; }
-
-        #endregion
-
     }
 }

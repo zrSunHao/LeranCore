@@ -10,8 +10,8 @@ using Sun.DatingApp.Data.Database;
 namespace Sun.DatingApp.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190303053025_Add_PermissionEntity")]
-    partial class Add_PermissionEntity
+    [Migration("20190313065652_InitialEntity")]
+    partial class InitialEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,11 +41,7 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Occupations","Basic");
+                    b.ToTable("Occupation","basic");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.Basic.Region", b =>
@@ -88,13 +84,7 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LayerLevel");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("RegionCode");
-
-                    b.ToTable("Regions","Basic");
+                    b.ToTable("Region","basic");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Account", b =>
@@ -134,10 +124,6 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.Property<Guid?>("RefreshToken");
 
-                    b.Property<string>("RoleCode")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
                     b.Property<Guid>("RoleId");
 
                     b.Property<DateTime?>("UpdatedAt");
@@ -150,11 +136,51 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email");
-
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Accounts","System");
+                    b.ToTable("Account","system");
+                });
+
+            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<Guid?>("CreatedById");
+
+                    b.Property<bool>("Deleted");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<Guid?>("DeletedById");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Intro")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("TagColor")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.Property<Guid?>("UpdatedById");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Menu","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Organization", b =>
@@ -186,15 +212,63 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
+                    b.ToTable("Organization","system");
+                });
 
-                    b.ToTable("Organizations","System");
+            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Page", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<Guid?>("CreatedById");
+
+                    b.Property<bool>("Deleted");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<Guid?>("DeletedById");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Intro")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<Guid>("MenuId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("TagColor")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime?>("UpdatedAt");
+
+                    b.Property<Guid?>("UpdatedById");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Page","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Permission", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -222,13 +296,21 @@ namespace Sun.DatingApp.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<Guid>("PageId");
+
+                    b.Property<string>("TagColor")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<DateTime?>("UpdatedAt");
 
                     b.Property<Guid?>("UpdatedById");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions","System");
+                    b.HasIndex("PageId");
+
+                    b.ToTable("Permission","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.ProfilePicture", b =>
@@ -266,7 +348,7 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfilePictures","System");
+                    b.ToTable("ProfilePicture","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Prompt", b =>
@@ -306,11 +388,7 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("Prompts","System");
+                    b.ToTable("Prompt","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Role", b =>
@@ -318,9 +396,7 @@ namespace Sun.DatingApp.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(30);
+                    b.Property<bool>("Active");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -346,32 +422,32 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles","System");
+                    b.ToTable("Role","system");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a5b4dc16-aa7f-4925-8617-176227750cf6"),
-                            Code = "SuperAdmin",
-                            CreatedAt = new DateTime(2019, 3, 3, 13, 30, 25, 182, DateTimeKind.Local).AddTicks(6994),
+                            Id = new Guid("917cfe90-a330-4a06-a3ba-577fe4418568"),
+                            Active = false,
+                            CreatedAt = new DateTime(2019, 3, 13, 14, 56, 52, 552, DateTimeKind.Local).AddTicks(6581),
                             Deleted = false,
                             Intro = "超级管理员拥有所有的权限",
                             Name = "超级管理员"
                         },
                         new
                         {
-                            Id = new Guid("1376a86a-dd43-4df3-b7e1-91d31f815a8d"),
-                            Code = "Admin",
-                            CreatedAt = new DateTime(2019, 3, 3, 13, 30, 25, 183, DateTimeKind.Local).AddTicks(7586),
+                            Id = new Guid("3711b967-cfb8-4e48-9db6-551ad2d48a31"),
+                            Active = false,
+                            CreatedAt = new DateTime(2019, 3, 13, 14, 56, 52, 553, DateTimeKind.Local).AddTicks(6072),
                             Deleted = false,
                             Intro = "管理员用于管理用户权限",
                             Name = "管理员"
                         },
                         new
                         {
-                            Id = new Guid("5e1ced11-4703-44e5-b23a-4c7aaa96435b"),
-                            Code = "User",
-                            CreatedAt = new DateTime(2019, 3, 3, 13, 30, 25, 183, DateTimeKind.Local).AddTicks(7595),
+                            Id = new Guid("6d494fed-e660-42ce-89c5-27699e2dadcd"),
+                            Active = false,
+                            CreatedAt = new DateTime(2019, 3, 13, 14, 56, 52, 553, DateTimeKind.Local).AddTicks(6079),
                             Deleted = false,
                             Intro = "可以使用基本功能",
                             Name = "用户"
@@ -393,9 +469,9 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.Property<Guid?>("DeletedById");
 
-                    b.Property<string>("PermissionName")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<Guid>("PageId");
+
+                    b.Property<Guid>("PermissionId");
 
                     b.Property<Guid>("RoleId");
 
@@ -407,7 +483,7 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermissions","System");
+                    b.ToTable("RolePermission","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.UserInfo", b =>
@@ -461,49 +537,22 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CurrentAddressId");
-
-                    b.HasIndex("OccupationId");
-
-                    b.ToTable("UserInfos","System");
-                });
-
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.Basic.Occupation", b =>
-                {
-                    b.HasOne("Sun.DatingApp.Data.Entities.Basic.Occupation", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-                });
-
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.Basic.Region", b =>
-                {
-                    b.HasOne("Sun.DatingApp.Data.Entities.Basic.Region", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
+                    b.ToTable("UserInfo","system");
                 });
 
             modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Account", b =>
                 {
-                    b.HasOne("Sun.DatingApp.Data.Entities.System.Role", "Role")
+                    b.HasOne("Sun.DatingApp.Data.Entities.System.Role")
                         .WithMany("Accounts")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Organization", b =>
+            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Permission", b =>
                 {
-                    b.HasOne("Sun.DatingApp.Data.Entities.System.Organization", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-                });
-
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.Prompt", b =>
-                {
-                    b.HasOne("Sun.DatingApp.Data.Entities.System.Organization", "Organization")
-                        .WithMany("Prompts")
-                        .HasForeignKey("OrganizationId")
+                    b.HasOne("Sun.DatingApp.Data.Entities.System.Page", "Page")
+                        .WithMany()
+                        .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -512,19 +561,6 @@ namespace Sun.DatingApp.Data.Migrations
                     b.HasOne("Sun.DatingApp.Data.Entities.System.Role", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Sun.DatingApp.Data.Entities.System.UserInfo", b =>
-                {
-                    b.HasOne("Sun.DatingApp.Data.Entities.Basic.Region", "Region")
-                        .WithMany("UserInfos")
-                        .HasForeignKey("CurrentAddressId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Sun.DatingApp.Data.Entities.Basic.Occupation", "Occupation")
-                        .WithMany("UserInfos")
-                        .HasForeignKey("OccupationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
