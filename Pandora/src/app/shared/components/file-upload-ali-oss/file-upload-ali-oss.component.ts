@@ -78,11 +78,16 @@ export class FileUploadAliOssComponent implements OnInit {
       if (file.isLoad) {
         continue;
       }
+      console.log(file);
       const key = UUID.UUID();
+      const fileName = file.name;
+      const index = fileName.lastIndexOf('.');
+      const uploadFileName = key + fileName.substring(index);
+      console.log(uploadFileName);
 
       file.isLoad = true;
       this.isDisabled();
-      this.client.put(key, file).then(((res: any) => {
+      this.client.put(uploadFileName, file).then(((res: any) => {
         console.log(res);
         console.log(file);
         const href = res.res.requestUrls[0];
