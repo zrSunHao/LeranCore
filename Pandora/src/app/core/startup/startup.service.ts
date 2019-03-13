@@ -17,6 +17,7 @@ import { I18NService } from '../i18n/i18n.service';
 import { NzIconService } from 'ng-zorro-antd';
 import { ICONS_AUTO } from '../../../style-icons-auto';
 import { ICONS } from '../../../style-icons';
+import { environment } from '@env/environment';
 
 /**
  * 用于应用启动时
@@ -115,57 +116,33 @@ export class StartupService {
     this.settingService.setUser(user);
     // ACL：设置权限为全量
     this.aclService.setFull(true);
-    // 初始化菜单
-    // this.menuService.add([
-    //   {
-    //     text: '主导航',
-    //     group: true,
-    //     children: [
-    //       {
-    //         text: '仪表盘',
-    //         link: '/dashboard',
-    //         icon: { type: 'icon', value: 'appstore' }
-    //       },
-    //       {
-    //         text: '快捷菜单',
-    //         icon: { type: 'icon', value: 'rocket' },
-    //         shortcutRoot: true
-    //       }
-    //     ]
-    //   }
-    // ]);
-    // 设置页面标题的后缀
-    this.titleService.suffix = app.name;
-
     resolve({});
   }
 
   load(): Promise<any> {
-    // only works with promises
-    // https://github.com/angular/angular/issues/15088
     return new Promise((resolve, reject) => {
-      // http
-      // this.viaHttp(resolve, reject);
-      // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
-      // this.viaMockI18n(resolve, reject);
-
-      // this.translate.setTranslation(this.i18n.defaultLang, langData);
-      // 应用信息：包括站点名、描述、年份
+      // 国际化配置
       this.viaMockI18n(resolve, reject);
-      const appInfo = {
-        name: 'ng alialn',
-        description: '自定义',
-      };
+
+      // 应用信息：包括站点名、描述、年份
+      const appInfo = environment.appInfo;
       this.settingService.setApp(appInfo);
+      // 设置页面标题的后缀
+      this.titleService.suffix = appInfo.name;
+
       // 用户信息：包括姓名、头像、邮箱地址
       const userInfo = {
+        accountId: '123456',
         name: 'Admin',
         avatar: './assets/tmp/img/avatar.jpg',
         email: 'cipchk@qq.com',
+        role: '管理员',
       };
       this.settingService.setUser(userInfo);
+
       // ACL：设置权限为全量
       this.aclService.setFull(true);
+
       // 初始化菜单
       const menuInfo = [
         {
@@ -200,8 +177,7 @@ export class StartupService {
         },
       ];
       this.menuService.add(menuInfo);
-      // 设置页面标题的后缀
-      this.titleService.suffix = appInfo.name;
+
       resolve(null);
     });
   }

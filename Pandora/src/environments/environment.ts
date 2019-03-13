@@ -7,6 +7,11 @@ export const environment = {
   production: false,
   useHash: true,
   hmr: false,
+  // 系统信息
+  appInfo: {
+    name: 'Pandora',
+    description: '潘多拉---个人前端管理',
+  },
 };
 
 /*
