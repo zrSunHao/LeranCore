@@ -34,7 +34,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<RoleListModel>>();
             try
             {
-                var roles = await _dataContext.Roles.Select(x => new RoleListModel
+                var roles = await _dataContext.Roles.Where(x => !x.Deleted).Select(x => new RoleListModel
                 {
                     Id = x.Id,
                     Name = x.Name,

@@ -76,8 +76,6 @@ export class SysRoleRoleListComponent implements OnInit {
   loadRoles() {
     this.http.post(GetRolesUrl, { name: '' }).subscribe((res: any) => {
       if (!res.success) {
-        console.log(res);
-        return;
       } else {
         this.datas = res.data;
       }
@@ -103,7 +101,11 @@ export class SysRoleRoleListComponent implements OnInit {
         { entity, isEdit, title },
         { size: 'md' },
       )
-      .subscribe(() => this.loadRoles());
+      .subscribe(res => {
+        if (res != null) {
+          this.loadRoles();
+        }
+      });
   }
 
   edit(item: any) {
@@ -117,14 +119,17 @@ export class SysRoleRoleListComponent implements OnInit {
         { entity, isEdit, title },
         { size: 'md' },
       )
-      .subscribe(() => this.loadRoles());
+      .subscribe(res => {
+        if (res != null) {
+          this.loadRoles();
+        }
+      });
   }
 
   delete(item: any) {
-    this.http.get(DeleteRoleUrl, { id: item.id }).subscribe((res: any) => {
+    this.http.get(DeleteRoleUrl, { roleId: item.id }).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '删除失败', res.allMessages);
-        return;
       } else {
         this.notification.create('success', '删除成功', res.allMessages);
         this.loadRoles();
@@ -141,7 +146,8 @@ export class SysRoleRoleListComponent implements OnInit {
       msg = '开启';
     }
 
-    this.http.post(ActiveRoleUrl, { id: item.id, active: !active })
+    this.http
+      .post(ActiveRoleUrl, { id: item.id, active: !active })
       .subscribe((res: any) => {
         if (!res.success) {
           this.notification.create('error', msg + '失败', res.allMessages);

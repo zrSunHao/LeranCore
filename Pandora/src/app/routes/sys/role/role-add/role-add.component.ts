@@ -16,8 +16,8 @@ const EditRoleUrl = 'Role/EditRole';
 })
 export class SysRoleListRoleAddComponent implements OnInit {
   entity: any = {};
-  i: any;
-  title = '新建角色';
+  title = '';
+  isEdit = false;
 
   record: any = {};
   schema: SFSchema = {
@@ -53,9 +53,11 @@ export class SysRoleListRoleAddComponent implements OnInit {
   }
 
   save(value: any) {
-    console.log(value);
-    this.msgSrv.success('保存成功');
-    this.modal.close(value);
+    if (this.isEdit) {
+      this.edit(value);
+    } else {
+      this.add(value);
+    }
   }
 
   add(entity: any) {
