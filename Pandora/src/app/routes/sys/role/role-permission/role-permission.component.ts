@@ -1,6 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { _HttpClient } from '@delon/theme';
+import { NzNotificationService } from 'ng-zorro-antd';
 
 const GetRolePermissionsUrl = 'Role/GetRolePermissions';
 const EditRolePermissionUrl = 'Role/EditRolePermission';
@@ -18,6 +19,7 @@ export class RolePermissionComponent implements OnInit {
     private route: ActivatedRoute,
     private http: _HttpClient,
     private injector: Injector,
+    private notification: NzNotificationService,
   ) {}
 
   ngOnInit() {
@@ -67,32 +69,40 @@ export class RolePermissionComponent implements OnInit {
   }
 
   save() {
-    const pageIds = [];
-    const permissionAndPageIds = [];
+    // const pageIds = [];
+    const permissions = [];
     const pages = this.listOfData;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < pages.length; i++) {
       if (pages[i].checked) {
-        pageIds.push(pages[i].id);
-        const permissions = pages[i].permissions;
+        // pageIds.push(pages[i].id);
+        const perm = pages[i].permissions;
         // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < permissions.length; j++) {
-          if (permissions[j].checked) {
+        for (let j = 0; j < perm.length; j++) {
+          if (perm[j].checked) {
             const dto = {
               pageId: pages[i].id,
-              PermissionId: permissions[j].id,
+              permissionId: perm[j].id,
             };
-            permissionAndPageIds.push(dto);
+            permissions.push(dto);
           }
         }
       }
     }
     const dto = {
       roleId: this.roleId,
-      permissionAndPageIds,
-      pageIds,
+      permissions,
     };
     console.log(dto);
+
+    this.http.post(EditRolePermissionUrl, dto).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '权限配置失败', res.allMessages);
+      } else {
+        this.notification.create('success', '权限配置成功', res.allMessages);
+        this.back();
+      }
+    });
   }
 
   back() {

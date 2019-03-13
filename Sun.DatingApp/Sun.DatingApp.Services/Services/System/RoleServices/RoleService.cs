@@ -12,6 +12,7 @@ using Sun.DatingApp.Utility.CacheUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Sun.DatingApp.Model.System.Menus.Model;
 
@@ -271,6 +272,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                                 PageId = x.PageId,
                                 Checked = rolePermissionIds.Contains(x.Id)
                             }).ToList();
+                        page.Checked = page.Permissions.Any(x => x.Checked);
                     }
                 }
 
@@ -295,38 +297,14 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
-                var deletePages = await _dataContext.RolePages.Where(x => x.RoleId == dto.RoleId).ToListAsync();
-                _dataContext.RolePages.RemoveRange(deletePages);
-
                 var deletePermissions = await _dataContext.RolePermissions.Where(x => x.RoleId == dto.RoleId).ToListAsync();
                 _dataContext.RolePermissions.RemoveRange(deletePermissions);
-
                 await _dataContext.SaveChangesAsync();
 
-
-                if (dto.PageIds != null && dto.PageIds.Any())
-                {
-                    var pages = new List<RolePage>();
-                    foreach (var pageId in dto.PageIds)
-                    {
-                        var page = new RolePage
-                        {
-                            Id = Guid.NewGuid(),
-                            RoleId = dto.RoleId,
-                            PageId = pageId,
-                            CreatedAt = DateTime.Now,
-                            CreatedById = accountId,
-                            Deleted = false
-                        };
-                        pages.Add(page);
-                    }
-                    _dataContext.RolePages.AddRange(pages);
-                }
-
-                if (dto.PermissionAndPageIds != null && dto.PermissionAndPageIds.Any())
+                if (dto.Permissions != null && dto.Permissions.Any())
                 {
                     var permissions = new List<RolePermission>();
-                    foreach (var permissionAndPageId in dto.PermissionAndPageIds)
+                    foreach (var permissionAndPageId in dto.Permissions)
                     {
                         var permission = new RolePermission
                         {
