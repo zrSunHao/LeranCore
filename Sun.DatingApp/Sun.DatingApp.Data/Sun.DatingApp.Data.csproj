@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="Entities\Business\" />
     <Folder Include="EntityConfigurations\Business\" />
-    <Folder Include="Seed\" />
   </ItemGroup>
 
   <ItemGroup>
