@@ -17,7 +17,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
         Task<WebApiResult> EditRole(CreateOrEditRoleDto dto, Guid accountId);
 
-        Task<WebApiResult> ActiveAccount(ActiveDto dto, Guid accountId);
+        Task<WebApiResult> ActiveRole(ActiveDto dto, Guid accountId);
 
         Task<WebApiResult> DeleteRole(Guid roleId, Guid accountId);
 

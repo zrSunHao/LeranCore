@@ -4,6 +4,7 @@ import { STColumn, STComponent } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { SysRoleListRoleAddComponent } from '../role-add/role-add.component';
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd';
 
 const GetRolesUrl = 'Role/GetRoles';
 const ActiveRoleUrl = 'Role/ActiveRole';
@@ -65,6 +66,7 @@ export class SysRoleRoleListComponent implements OnInit {
     private http: _HttpClient,
     private modal: ModalHelper,
     private injector: Injector,
+    private notification: NzNotificationService,
   ) {}
 
   ngOnInit() {
@@ -118,9 +120,36 @@ export class SysRoleRoleListComponent implements OnInit {
       .subscribe(() => this.loadRoles());
   }
 
-  delete(item: any) {}
+  delete(item: any) {
+    this.http.get(DeleteRoleUrl, { id: item.id }).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '删除失败', res.allMessages);
+        return;
+      } else {
+        this.notification.create('success', '删除成功', res.allMessages);
+        this.loadRoles();
+      }
+    });
+  }
 
-  active(item: any) {}
+  active(item: any) {
+    const active = item.active;
+    let msg = '';
+    if (active) {
+      msg = '关闭';
+    } else {
+      msg = '开启';
+    }
 
-  perssion(item: any) {}
+    this.http.post(ActiveRoleUrl, { id: item.id, active: !active })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create('error', msg + '失败', res.allMessages);
+          item.active = active;
+          return;
+        }
+        this.notification.create('success', msg + '成功', res.allMessages);
+        item.active = !active;
+      });
+  }
 }

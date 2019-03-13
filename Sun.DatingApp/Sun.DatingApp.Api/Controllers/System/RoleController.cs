@@ -76,13 +76,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("ActiveAccount")]
-        public async Task<WebApiResult> ActiveAccount(ActiveDto dto)
+        [HttpPost("ActiveRole")]
+        public async Task<WebApiResult> ActiveRole(ActiveDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
             {
-                result = await _service.ActiveAccount(dto, CurrentUserId.Value);
+                result = await _service.ActiveRole(dto, CurrentUserId.Value);
             }
             else
             {
