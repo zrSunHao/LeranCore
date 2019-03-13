@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
-using Sun.DatingApp.Model.Common.Model;
 using Sun.DatingApp.Model.System.Permissions.Dto;
 using Sun.DatingApp.Model.System.Permissions.Model;
 using Sun.DatingApp.Services.Services.System.Permissions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sun.DatingApp.Api.Controllers.System
 {
