@@ -98,7 +98,7 @@ namespace Sun.DatingApp.Api.Controllers.System
                         new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()),
                         new Claim(ClaimTypes.Name, model.UserName),
                         new Claim(ClaimTypes.Email, model.Email),
-                        new Claim(ClaimTypes.Role, model.Role),
+                        // new Claim(ClaimTypes.Role, model.Role),
             }),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),

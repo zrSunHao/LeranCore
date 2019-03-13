@@ -13,6 +13,9 @@ import { TranslateModule } from '@ngx-translate/core';
 // #region third libs
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
+
+import { FileUploadAliOssComponent } from './components/file-upload-ali-oss/file-upload-ali-oss.component';
+
 const THIRDMODULES = [
   NgZorroAntdModule,
   CountdownModule
@@ -20,7 +23,7 @@ const THIRDMODULES = [
 // #endregion
 
 // #region your componets & directives
-const COMPONENTS = [];
+const COMPONENTS = [FileUploadAliOssComponent];
 const DIRECTIVES = [];
 // #endregion
 

@@ -1,5 +1,6 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
+    <app-file-upload-ali-oss></app-file-upload-ali-oss>
     <button nz-button nzType="primary" (click)="add()"><i nz-icon type="plus" theme="outline"></i>添加菜单</button>
   </ng-template>
 </page-header>
@@ -8,27 +9,29 @@
     <nz-alert nzType="info" nzMessage="菜单管理列表" [nzBanner]="true" nzShowIcon>
     </nz-alert>
     <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
-    [nzRenderItem]="item">
-    <ng-template #item let-item>
-      <nz-list-item [nzContent]="" [nzActions]="item.loading?[]:[forbidAction,editAction,addAction,deleteAction]" (click)="clickRow(item)">
-        <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
-          <ng-template #forbidAction>
-            <nz-switch [ngModel]="true" (click)='active(item)' nzCheckedChildren="开" nzUnCheckedChildren="关">
-            </nz-switch>
-          </ng-template>
-          <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
-          <ng-template #addAction><a (click)="addPage(item)">添加页面</a></ng-template>
-          <ng-template #deleteAction><a (click)="delete(item)">删除</a></ng-template>
-          <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.intro">
-            <ng-template #nzTitle>
-              <!-- <a href="#">{{item.name}}</a> -->
-              <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}</nz-tag>
+      [nzRenderItem]="item">
+      <ng-template #item let-item>
+        <nz-list-item [nzContent]="" [nzActions]="item.loading?[]:[forbidAction,editAction,addAction,deleteAction]"
+          (click)="clickRow(item)">
+          <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
+            <ng-template #forbidAction>
+              <nz-switch [ngModel]="true" (click)='active(item)' nzCheckedChildren="开" nzUnCheckedChildren="关">
+              </nz-switch>
             </ng-template>
-          </nz-list-item-meta>
-        </nz-skeleton>
-      </nz-list-item>
-    </ng-template>
-  </nz-list>
+            <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
+            <ng-template #addAction><a (click)="addPage(item)">添加页面</a></ng-template>
+            <ng-template #deleteAction><a (click)="delete(item)">删除</a></ng-template>
+            <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.intro">
+              <ng-template #nzTitle>
+                <!-- <a href="#">{{item.name}}</a> -->
+                <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
+                </nz-tag>
+              </ng-template>
+            </nz-list-item-meta>
+          </nz-skeleton>
+        </nz-list-item>
+      </ng-template>
+    </nz-list>
   </nz-card>
 </div>
 <div nz-col nzSpan="1"></div>
