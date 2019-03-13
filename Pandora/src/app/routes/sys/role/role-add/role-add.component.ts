@@ -33,7 +33,7 @@ export class SysRoleListRoleAddComponent implements OnInit {
     required: ['name', 'code', 'intro'],
     ui: {
       spanLabelFixed: 70,
-      grid: { span: 12 },
+      grid: { span: 24 },
     },
   };
 

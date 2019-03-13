@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using Sun.DatingApp.Model.System.Menus.Model;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
@@ -47,7 +48,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     var roleIds = roles.Select(x => x.Id).ToList();
 
-                    var pages = await (from rp in _dataContext.RolePages
+                    var pages = await (from rp in _dataContext.RolePermissions
                         join p in _dataContext.Pages on rp.PageId equals p.Id into tp
                         from rrp in tp.DefaultIfEmpty()
                         where roleIds.Contains(rp.RoleId)
@@ -66,7 +67,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     {
                         foreach (var role in roles)
                         {
-                            role.Pages = pages.Where(x => x.RoleId == role.Id).ToList();
+                            var names = pages.Where(x => x.RoleId == role.Id).Select(x => x.Name).ToList().Distinct();
+                            role.PageNames = names.ToArray().Join("；"); 
                         }
                     }
                 }

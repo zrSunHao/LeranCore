@@ -7,18 +7,9 @@
   <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
   <st #st [data]="datas" [columns]="columns" [bordered]="true">
     <ng-template st-row="name" let-item let-index="index">
-      <label class="pb-0 text-volcano">{{item.name}}</label>
+      <nz-tag [nzColor]="'#2db7f5'">{{item.name}}</nz-tag>
     </ng-template>
-    <ng-template st-row="modules" let-item let-index="index">
-      <div *ngFor="let page of item.pages">
-        <nz-tag [nzColor]="page.tagColor"><i nz-icon [type]="page.icon" theme="outline"></i>&nbsp;{{page.name}}
-        </nz-tag>
-      </div>
-    </ng-template>
-    <ng-template st-row="intro" let-item let-index="index">
-      <label class="pb-0 text-geekblue">{{item.intro}}</label>
-    </ng-template>
-    <ng-template st-row="custom" let-item let-index="index">
+    <ng-template st-row="active" let-item let-index="index">
       <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="active(item)">
       </nz-switch>
     </ng-template>

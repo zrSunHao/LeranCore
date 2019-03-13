@@ -27,27 +27,34 @@ export class SysRoleRoleListComponent implements OnInit {
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
     { title: '角色名称', render: 'name', className: 'text-center' },
-    { title: '模块', render: 'modules', className: 'text-center' },
-    { title: '简介', render: 'intro', className: 'text-center' },
+    { title: '访问页面', index: 'pageNames', className: 'text-center' },
+    { title: '简介', index: 'intro', className: 'text-center' },
     {
-      title: '是否启用', render: 'custom', className: 'text-center',
-      click: (item: any) => this.active(item)
+      title: '开关',
+      render: 'active',
+      className: 'text-center',
+      click: (item: any) => this.active(item),
     },
     {
-      title: '操作', className: 'text-center',
+      title: '操作',
+      className: 'text-center',
       buttons: [
         {
-          text: '编辑', icon: 'anticon anticon-edit',
+          text: '编辑',
+          icon: 'anticon anticon-edit',
           click: (item: any) => this.edit(item),
         },
         {
-          text: '权限', icon: 'anticon anticon-warning',
+          text: '权限',
+          icon: 'anticon anticon-warning',
           click: (item: any) =>
-            this.injector.get(Router)
+            this.injector
+              .get(Router)
               .navigateByUrl(`/sys/role-permission-list/${item.id}`),
         },
         {
-          text: '删除', icon: 'anticon anticon-delete',
+          text: '删除',
+          icon: 'anticon anticon-delete',
           click: (item: any) => this.delete(item),
         },
       ],
@@ -58,22 +65,21 @@ export class SysRoleRoleListComponent implements OnInit {
     private http: _HttpClient,
     private modal: ModalHelper,
     private injector: Injector,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadRoles();
   }
 
   loadRoles() {
-    this.http.post(GetRolesUrl, { name: '' })
-      .subscribe((res: any) => {
-        if (!res.success) {
-          console.log(res);
-          return;
-        } else {
-          this.datas = res.data;
-        }
-      });
+    this.http.post(GetRolesUrl, { name: '' }).subscribe((res: any) => {
+      if (!res.success) {
+        console.log(res);
+        return;
+      } else {
+        this.datas = res.data;
+      }
+    });
   }
 
   search(event) {
@@ -90,7 +96,7 @@ export class SysRoleRoleListComponent implements OnInit {
     const entity = { name: null, code: null, intro: null };
 
     this.modal
-      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title })
+      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title }, { size: 'md' })
       .subscribe(() => this.loadRoles());
   }
 
@@ -100,13 +106,13 @@ export class SysRoleRoleListComponent implements OnInit {
     const entity = item;
 
     this.modal
-      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title })
+      .createStatic(SysRoleListRoleAddComponent, { entity, isEdit, title }, { size: 'md' })
       .subscribe(() => this.loadRoles());
   }
 
-  delete(item: any) { }
+  delete(item: any) {}
 
-  active(item: any) { }
+  active(item: any) {}
 
-  perssion(item: any) { }
+  perssion(item: any) {}
 }
