@@ -3,6 +3,10 @@ import { NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { PermissionAddComponent } from '../permission-add/permission-add.component';
 
+const GetPermissionUrl = 'Permission/GetPermission';
+const ActivePermissionUrl = 'Permission/ActivePermission';
+const DeletePermissionUrl = 'Permission/DeletePermission';
+
 @Component({
   selector: 'app-permission-operation',
   templateUrl: './permission-operation.component.html',
@@ -27,14 +31,13 @@ export class PermissionOperationComponent implements OnInit {
   ngOnInit() {}
 
   public loadData(item: any) {
-    const url = 'permission/getoperatepermission';
     this.item = item;
 
     this.alertMsgShow = true;
-    this.alertMsgTitle = `${item.name}模块`;
-    this.alertMsgContent = `注：列表显示内容为${item.name}模块下的操作权限`;
+    this.alertMsgTitle = `${item.name}`;
+    this.alertMsgContent = `注：列表显示内容为[${item.name}]下的操作权限`;
 
-    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+    this.http.get(GetPermissionUrl, { id: item.id }).subscribe((res: any) => {
       if (!res.success) {
         console.log(res);
         return;
@@ -69,7 +72,6 @@ export class PermissionOperationComponent implements OnInit {
   }
 
   active(item: any) {
-    const url = 'permission/active';
     const active = item.active;
     let msg = '';
     if (active) {
@@ -79,28 +81,26 @@ export class PermissionOperationComponent implements OnInit {
     }
 
     this.http
-      .post(url, { id: item.id, active: !active })
+      .post(ActivePermissionUrl, { id: item.id, active: !active })
       .subscribe((res: any) => {
         if (!res.success) {
           item.active = active;
           this.notification.create('error', msg + '失败', res.allMessages);
-          return;
+        } else {
+          this.notification.create('success', msg + '成功', res.allMessages);
+          this.loadData(this.item);
         }
-        this.notification.create('success', msg + '成功', res.allMessages);
-        this.loadData(this.item);
       });
   }
 
   delete(item: any): void {
-    const url = 'permission/delete';
-
-    this.http.get(url, { id: item.id }).subscribe((res: any) => {
+    this.http.get(DeletePermissionUrl, { id: item.id }).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create('error', '删除失败', res.allMessages);
-        return;
+      } else {
+        this.notification.create('success', '删除成功', res.allMessages);
+        this.loadData(this.item);
       }
-      this.notification.create('success', '删除成功', res.allMessages);
-      this.loadData(this.item);
     });
   }
 }

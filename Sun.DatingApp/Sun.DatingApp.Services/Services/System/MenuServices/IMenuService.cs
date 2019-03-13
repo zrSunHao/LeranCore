@@ -35,5 +35,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 
         Task<WebApiResult<List<ItemModel>>> GetPageItems();
 
+        Task<WebApiResult<List<PageListModel>>> GetAllPages(string name);
+
     }
 }

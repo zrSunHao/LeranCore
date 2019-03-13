@@ -29,22 +29,26 @@ export class PermissionAddComponent implements OnInit {
         maxLength: 200,
         ui: {
           widget: 'textarea',
+          spanLabelFixed: 100,
+          grid: { span: 24 },
           autosize: { minRows: 2, maxRows: 6 },
         },
       },
     },
     required: ['name', 'code', 'icon', 'intro', 'tagColor'],
     ui: {
-      spanLabelFixed: 150,
-      grid: { span: 24 },
+      spanLabelFixed: 100,
+      grid: { span: 12 },
     },
   };
 
   constructor(
-    private modal: NzModalRef, public http: _HttpClient, private notification: NzNotificationService
-  ) { }
+    private modal: NzModalRef,
+    public http: _HttpClient,
+    private notification: NzNotificationService,
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   save(value: any) {
     if (this.isEdit) {

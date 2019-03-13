@@ -222,5 +222,15 @@ namespace Sun.DatingApp.Api.Controllers.System
         {
             return await _service.GetPageItems();
         }
+
+        /// <summary>
+        /// 权限列表页获取全部的页面数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAllPages")]
+        public async Task<WebApiResult<List<PageListModel>>> GetAllPages(string name)
+        {
+            return await _service.GetAllPages(name);
+        }
     }
 }

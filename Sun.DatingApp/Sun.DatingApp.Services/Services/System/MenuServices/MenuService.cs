@@ -4,6 +4,7 @@ using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
+using Sun.DatingApp.Model.Common.Model;
 using Sun.DatingApp.Model.Menus.Model;
 using Sun.DatingApp.Model.System.Menus.Dto;
 using Sun.DatingApp.Model.System.Menus.Model;
@@ -13,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sun.DatingApp.Model.Common.Model;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -349,6 +349,41 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     {
                         Value = x.Id,
                         Label = x.Name
+                    }).ToListAsync();
+
+                result.Data = data;
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<List<PageListModel>>> GetAllPages(string name)
+        {
+            var result = new WebApiResult<List<PageListModel>>();
+            try
+            {
+                var data = await (from p in _dataContext.Pages
+                    join m in _dataContext.Menus on p.MenuId equals m.Id into tm
+                    from pm in tm.DefaultIfEmpty() 
+                    where !p.Deleted
+                    where string.IsNullOrEmpty(name) || (!string.IsNullOrEmpty(name) && p.Name.Contains(name))
+                    select new PageListModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Url = p.Url,
+                        TagColor = p.TagColor,
+                        Intro = p.Intro,
+                        Icon = p.Icon,
+                        Active = p.Active,
+                        MenuId = p.MenuId,
+                        MenuName = pm.Name,
+                        MenuIcon = pm.Icon,
+                        MenuTagColor = pm.TagColor
                     }).ToListAsync();
 
                 result.Data = data;

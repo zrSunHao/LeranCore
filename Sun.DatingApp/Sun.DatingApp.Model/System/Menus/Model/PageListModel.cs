@@ -19,5 +19,11 @@ namespace Sun.DatingApp.Model.System.Menus.Model
         public string Intro { get; set; }
 
         public Guid MenuId { get; set; }
+
+        public string MenuName { get; set; }
+
+        public string MenuTagColor { get; set; }
+
+        public string MenuIcon { get; set; }
     }
 }

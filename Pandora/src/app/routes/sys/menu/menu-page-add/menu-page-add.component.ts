@@ -22,10 +22,6 @@ export class MenuPageAddComponent implements OnInit {
       menuName: { type: 'string', title: '菜单', readOnly: true },
       tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       url: { type: 'string', title: 'URL', maxLength: 100 },
-      moduleId: {
-        type: 'string', title: '所属模块',
-        enum: JSON.parse(localStorage.getItem('moudleItems')),
-      },
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
         type: 'string', title: '备注', maxLength: 200,
@@ -36,7 +32,7 @@ export class MenuPageAddComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'url', 'icon', 'intro', 'moduleId', 'tagColor'],
+    required: ['name', 'url', 'icon', 'intro', 'tagColor'],
     ui: {
       spanLabelFixed: 100,
       grid: { span: 12 },
