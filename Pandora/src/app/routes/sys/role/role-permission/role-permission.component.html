@@ -10,7 +10,8 @@
   <nz-table #basicTable [nzData]="listOfData" [nzBordered]="true" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
-        <th [nzAlign]="'left'" nzWidth="230px">模块</th>
+        <th [nzAlign]="'left'" nzWidth="230px">页面</th>
+        <th [nzAlign]="'center'" nzWidth="230px">模块</th>
         <th [nzAlign]="'left'">操作权限</th>
       </tr>
     </thead>
@@ -21,9 +22,13 @@
             {{ item.name }}
           </label>
         </td>
+        <td [nzAlign]="'center'">
+          <nz-tag [nzColor]="item.menuTagColor"><i nz-icon [type]="item.menuIcon" theme="outline"></i>&nbsp;{{item.menuName}}
+          </nz-tag>
+        </td>
         <td [nzAlign]="'left'">
-          <label nz-checkbox [(ngModel)]="operate.checked" (click)="checkOperate(operate)" *ngFor="let operate of item.children">
-            {{ operate.name }}
+          <label nz-checkbox [(ngModel)]="permission.checked" (click)="checkOperate(permission)" *ngFor="let permission of item.permissions">
+            {{ permission.name }}
           </label>
         </td>
       </tr>

@@ -27,87 +27,72 @@ export class RolePermissionComponent implements OnInit {
   }
 
   loadDatas() {
-    this.http.get(GetRolePermissionsUrl, { id: this.roleId }).subscribe((res: any) => {
-      if (!res.success) {
-        return;
-      }
-      this.listOfData = res.data;
-    });
-  }
-
-  checkModule(data) {
-    const checked = data.checked;
-    // console.log(data.checked);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.listOfData.length; i++) {
-      // console.log(`${data.id}:${this.listOfData[i].id}`);
-      if (this.listOfData[i].id === data.id) {
-        // console.log(data.checked);
-        this.listOfData[i].checked = checked;
-        // console.log(this.listOfData[i].children.length);
-        if (this.listOfData[i].children.length > 0) {
-          // tslint:disable-next-line:prefer-for-of
-          for (let j = 0; j < this.listOfData[i].children.length; j++) {
-            this.listOfData[i].children[j].checked = checked;
-          }
+    this.http
+      .get(GetRolePermissionsUrl, { id: this.roleId })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          return;
         }
-      }
-    }
-    console.log(this.listOfData);
+        this.listOfData = res.data;
+      });
   }
 
-  checkOperate(data) {
-    const checked = data.checked;
-    // console.log(checked);
-    const parentId = data.parentId;
-
+  checkModule(item) {
+    const checked = item.checked;
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.listOfData.length; i++) {
-      // console.log(`${data.id}:${this.listOfData[i].id}`);
-      if (this.listOfData[i].id === parentId) {
-        let flag = true;
+      if (this.listOfData[i].id === item.id) {
         // tslint:disable-next-line:prefer-for-of
-        for (let j = 0; j < this.listOfData[i].children.length; j++) {
-          if (this.listOfData[i].children[j].id === data.id) {
-            this.listOfData[i].children[j].checked = checked;
-          }
-          if (this.listOfData[i].children[j].checked !== checked) {
-            // console.log(111111);
-            flag = false;
-          }
-        }
-        if (flag) {
-          // console.log(222222);
-          this.listOfData[i].checked = checked;
-        } else {
-          // console.log(333333);
-          const parentChecked = this.listOfData[i].checked;
-          if (parentChecked) {
-            this.listOfData[i].checked = false;
-          }
+        for (let j = 0; j < this.listOfData[i].permissions.length; j++) {
+          this.listOfData[i].permissions[j].checked = checked;
         }
       }
     }
-    // console.log(this.listOfData);
+  }
+
+  checkOperate(item) {
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.listOfData.length; i++) {
+      if (this.listOfData[i].id === item.pageId) {
+        let flag = false;
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < this.listOfData[i].permissions.length; j++) {
+          if (this.listOfData[i].permissions[j].checked) {
+            flag = true;
+          }
+        }
+        this.listOfData[i].checked = flag;
+      }
+    }
   }
 
   save() {
-    const modules = [];
-    const operates = [];
+    const pageIds = [];
+    const permissionAndPageIds = [];
+    const pages = this.listOfData;
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.listOfData.length; i++) {
-      if (this.listOfData[i].checked) {
-        modules.push(this.listOfData[i].id);
-      }
-      // tslint:disable-next-line:prefer-for-of
-      for (let j = 0; j < this.listOfData[i].children.length; j++) {
-        if (this.listOfData[i].children[j].checked) {
-          operates.push(this.listOfData[i].children[j].id);
+    for (let i = 0; i < pages.length; i++) {
+      if (pages[i].checked) {
+        pageIds.push(pages[i].id);
+        const permissions = pages[i].permissions;
+        // tslint:disable-next-line:prefer-for-of
+        for (let j = 0; j < permissions.length; j++) {
+          if (permissions[j].checked) {
+            const dto = {
+              pageId: pages[i].id,
+              PermissionId: permissions[j].id,
+            };
+            permissionAndPageIds.push(dto);
+          }
         }
       }
     }
-    console.log(modules);
-    console.log(operates);
+    const dto = {
+      roleId: this.roleId,
+      permissionAndPageIds,
+      pageIds,
+    };
+    console.log(dto);
   }
 
   back() {

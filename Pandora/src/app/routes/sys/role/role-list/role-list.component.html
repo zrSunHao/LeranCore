@@ -10,8 +10,8 @@
       <label class="pb-0 text-volcano">{{item.name}}</label>
     </ng-template>
     <ng-template st-row="modules" let-item let-index="index">
-      <div *ngFor="let module of item.modules">
-        <nz-tag [nzColor]="module.tagColor"><i nz-icon [type]="module.icon" theme="outline"></i>&nbsp;{{module.name}}
+      <div *ngFor="let page of item.pages">
+        <nz-tag [nzColor]="page.tagColor"><i nz-icon [type]="page.icon" theme="outline"></i>&nbsp;{{page.name}}
         </nz-tag>
       </div>
     </ng-template>

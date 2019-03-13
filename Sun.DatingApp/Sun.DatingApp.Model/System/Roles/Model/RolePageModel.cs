@@ -19,6 +19,8 @@ namespace Sun.DatingApp.Model.System.Roles.Model
 
         public string Icon { get; set; }
 
+        public bool Checked { get; set; }
+
         public bool Active { get; set; }
 
         public List<RolePermissionModel> Permissions { get; set; }

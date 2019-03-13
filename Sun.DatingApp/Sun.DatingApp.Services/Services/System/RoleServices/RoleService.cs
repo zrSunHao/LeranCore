@@ -253,7 +253,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                 if (pages.Any())
                 {
-                    var allPermissions = await _dataContext.Permissions.Where(x => x.Deleted).ToListAsync();
+                    var allPermissions = await _dataContext.Permissions.Where(x => !x.Deleted).ToListAsync();
                     var rolePermissionIds = await _dataContext.RolePermissions.Where(x => x.RoleId == id && !x.Deleted)
                         .Select(x => x.PermissionId).ToListAsync();
 
@@ -303,8 +303,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                 await _dataContext.SaveChangesAsync();
 
-                
-                if (dto.PageIds!=null && dto.PageIds.Any())
+
+                if (dto.PageIds != null && dto.PageIds.Any())
                 {
                     var pages = new List<RolePage>();
                     foreach (var pageId in dto.PageIds)
@@ -326,14 +326,14 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 if (dto.PermissionAndPageIds != null && dto.PermissionAndPageIds.Any())
                 {
                     var permissions = new List<RolePermission>();
-                    foreach (var PermissionAndPageId in dto.PermissionAndPageIds)
+                    foreach (var permissionAndPageId in dto.PermissionAndPageIds)
                     {
                         var permission = new RolePermission
                         {
                             Id = Guid.NewGuid(),
                             RoleId = dto.RoleId,
-                            PermissionId = PermissionAndPageId.PermissionId,
-                            PageId = PermissionAndPageId.PageId,
+                            PermissionId = permissionAndPageId.PermissionId,
+                            PageId = permissionAndPageId.PageId,
                             CreatedAt = DateTime.Now,
                             CreatedById = accountId,
                             Deleted = false
