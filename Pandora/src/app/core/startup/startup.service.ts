@@ -1,5 +1,4 @@
 import { Injectable, Injector, Inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { zip } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -20,7 +19,6 @@ import { ICONS_AUTO } from '../../../style-icons-auto';
 import { ICONS } from '../../../style-icons';
 import { environment } from '@env/environment';
 import { CacheService } from '@delon/cache';
-import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
 const GetAccountInfoUrl = 'Auth/GetAccountInfo';
 const GetAccountMenuUrl = 'Auth/GetAccountMenu';
@@ -61,34 +59,7 @@ export class StartupService {
       });
   }
 
-  private viaMock(resolve: any, reject: any) {
-    // const tokenData = this.tokenService.get();
-    // if (!tokenData.token) {
-    //   this.injector.get(Router).navigateByUrl('/passport/login');
-    //   resolve({});
-    //   return;
-    // }
-    // mock
-
-    const app: any = {
-      name: `ng-alain`,
-      description: `Ng-zorro admin panel front-end framework`,
-    };
-    const user: any = {
-      name: 'Admin',
-      avatar: './assets/tmp/img/avatar.jpg',
-      email: 'cipchk@qq.com',
-      token: '123456789',
-    };
-    // 应用信息：包括站点名、描述、年份
-    this.settingService.setApp(app);
-    // 用户信息：包括姓名、头像、邮箱地址
-    this.settingService.setUser(user);
-    // ACL：设置权限为全量
-    this.aclService.setFull(true);
-    resolve({});
-  }
-
+  // 初始化应用信息
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
       // 国际化配置
@@ -110,6 +81,7 @@ export class StartupService {
     });
   }
 
+  // 缓存中获取账号信息
   private loadAccountInfo(resolve: any, reject: any) {
     this.cacheService.get('PandoraCurrentInfo').subscribe(res => {
       this.settingService.setUser(res);
@@ -121,6 +93,7 @@ export class StartupService {
     });
   }
 
+  // 获取账号信息
   private viaHttp(resolve: any, reject: any, accountId: string) {
     const getAccountInfoUrl = `${GetAccountInfoUrl}?id=${accountId}`;
     const getAccountMenuUrl = `${GetAccountMenuUrl}?id=${accountId}`;
@@ -152,7 +125,8 @@ export class StartupService {
       );
   }
 
-  setPermission(datas: any) {
+  // 设置权限
+  private setPermission(datas: any) {
     const useAcl = environment.useAcl;
     if (!useAcl) {
       this.aclService.setFull(true);
@@ -162,66 +136,4 @@ export class StartupService {
     }
   }
 
-  // load1(): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     // 国际化配置
-  //     this.viaMockI18n(resolve, reject);
-
-  //     // 应用信息：包括站点名、描述、年份
-  //     const appInfo = environment.appInfo;
-  //     this.settingService.setApp(appInfo);
-  //     // 设置页面标题的后缀
-  //     this.titleService.suffix = appInfo.name;
-
-  //     // 用户信息：包括姓名、头像、邮箱地址
-  //     const userInfo = {
-  //       accountId: '123456',
-  //       name: 'Admin',
-  //       avatar: './assets/tmp/img/avatar.jpg',
-  //       email: 'cipchk@qq.com',
-  //       role: '管理员',
-  //     };
-  //     this.settingService.setUser(userInfo);
-
-  //     // ACL：设置权限为全量
-  //     this.aclService.setFull(true);
-
-  //     // 初始化菜单
-  //     const menuInfo = [
-  //       {
-  //         text: '主导航',
-  //         group: true,
-  //         hideInBreadcrumb: false,
-  //         children: [
-  //           {
-  //             text: '系统设置',
-  //             icon: 'anticon anticon-setting',
-  //             shortcutRoot: false,
-  //             children: [
-  //               {
-  //                 text: '角色管理列表',
-  //                 link: '/sys/role-list',
-  //               },
-  //               {
-  //                 text: '权限管理列表',
-  //                 link: '/sys/permission-list',
-  //               },
-  //               {
-  //                 text: '菜单管理列表',
-  //                 link: '/sys/menu-list',
-  //               },
-  //               {
-  //                 text: '账号管理列表',
-  //                 link: '/sys/account-list',
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     ];
-  //     this.menuService.add(menuInfo);
-
-  //     resolve(null);
-  //   });
-  // }
 }
