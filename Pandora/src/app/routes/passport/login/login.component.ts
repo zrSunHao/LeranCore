@@ -12,6 +12,7 @@ import {
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
 import { StartupService } from '@core';
+import { CacheService } from '@delon/cache';
 
 const LoginUrl = 'Auth/Login?_allow_anonymous=true';
 
@@ -29,7 +30,6 @@ export class UserLoginComponent implements OnDestroy {
   count = 0;
   interval$: any;
 
-
   constructor(
     fb: FormBuilder,
     modalSrv: NzModalService,
@@ -43,6 +43,8 @@ export class UserLoginComponent implements OnDestroy {
     private startupSrv: StartupService,
     public http: _HttpClient,
     public msg: NzMessageService,
+    private settingService: SettingsService,
+    public cacheService: CacheService,
   ) {
     this.form = fb.group({
       userName: [null, [Validators.required, Validators.minLength(4)]],
@@ -127,9 +129,13 @@ export class UserLoginComponent implements OnDestroy {
         console.log();
         const model = {
           key: 'jwt',
-          token: res.data.accessToken
+          token: res.data.accessToken,
         };
         this.tokenService.set(model);
+        // 用户信息：包括姓名、头像、邮箱地址
+        this.settingService.setUser(res.data);
+        this.cacheService.set('PandoraCurrentInfo', res.data);
+
         // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
         this.startupSrv.load().then(() => {
           let url = this.tokenService.referrer.url || '/';

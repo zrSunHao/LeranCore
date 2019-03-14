@@ -14,6 +14,7 @@ const LANG = {
   zorro: zorroLang,
   delon: delonLang,
 };
+import { DelonCacheModule } from '@delon/cache';
 // register angular
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(LANG.ng, LANG.abbr);
@@ -103,6 +104,7 @@ import { LayoutModule } from './layout/layout.module';
     BrowserAnimationsModule,
     HttpClientModule,
     DelonModule.forRoot(),
+    DelonCacheModule,
     CoreModule,
     SharedModule,
     LayoutModule,

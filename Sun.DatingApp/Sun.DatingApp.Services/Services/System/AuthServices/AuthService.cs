@@ -66,9 +66,9 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult<AccessDataModel>> Login(string email, string password)
+        public async Task<WebApiResult<AccountInfo>> Login(string email, string password)
         {
-            var result = new WebApiResult<AccessDataModel>();
+            var result = new WebApiResult<AccountInfo>();
             try
             {
                 var exist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == email);
@@ -100,22 +100,32 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 account.RefreshToken = refreshToken;
                 await _dataContext.SaveChangesAsync();
 
-                var permissions = await (from rp in _dataContext.RolePermissions
-                    join p in _dataContext.Permissions on rp.RoleId equals p.Id into tp
-                    from prp in tp.DefaultIfEmpty()
-                    where !rp.Deleted && rp.RoleId == account.RoleId
-                    select prp.Code).ToListAsync();
+                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
+                if (role == null)
+                {
+                    result.AddError("该账号没有角色，请联系管理员");
+                    return result;
+                }
 
-                var data = _mapper.Map<Account, AccessDataModel>(account);
-                
-                data.Permissions = permissions;
-                _catchHandler.Add(data.Id.ToString(), data);
-                result.Data = data;
+                var info = new AccountInfo()
+                {
+                    Id = account.Id,
+                    Email = account.Email,
+                    Name = account.UserName,
+                    Avatar = account.Avatar,
+                    RoleId = role.Id,
+                    RoleName = role.Name,
+                    RefreshToken = account.RefreshToken
+                };
+
+                result.Data = info;
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 result.AddError("出现异常，请联系管理员");
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
                 return result;
             }
         }
@@ -675,6 +685,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     {
                         var accountMenu = new AccountMenu
                         {
+                            Key = menu.Id,
                             Text = menu.Name,
                             Icon = menu.Icon,
                             ShortcutRoot = true,
@@ -682,6 +693,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
                         accountMenu.Children = pages.Where(x => x.MenuId == menu.Id).Select(x => new AccountPage
                         {
+                            Key = x.Id,
                             Text = x.Name,
                             Link = x.Url
                         }).ToList();

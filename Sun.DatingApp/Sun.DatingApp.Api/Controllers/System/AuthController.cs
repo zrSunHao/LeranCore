@@ -76,9 +76,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<WebApiResult<AccessDataModel>> Login(LoginDto dto)
+        public async Task<WebApiResult<AccountInfo>> Login(LoginDto dto)
         {
-            var result = new WebApiResult<AccessDataModel>();
+            var result = new WebApiResult<AccountInfo>();
             try
             {
                 result = await _service.Login(dto.Email, dto.Password);
@@ -87,7 +87,7 @@ namespace Sun.DatingApp.Api.Controllers.System
                     return result;
                 }
 
-                var model = result.Data;
+                var info = result.Data;
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
@@ -95,10 +95,10 @@ namespace Sun.DatingApp.Api.Controllers.System
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim(ClaimTypes.NameIdentifier, model.Id.ToString()),
-                        new Claim(ClaimTypes.Name, model.UserName),
-                        new Claim(ClaimTypes.Email, model.Email),
-                        // new Claim(ClaimTypes.Role, model.Role),
+                        new Claim(ClaimTypes.NameIdentifier, info.Id.ToString()),
+                        new Claim(ClaimTypes.Name, info.Name),
+                        new Claim(ClaimTypes.Email, info.Email),
+                        new Claim(ClaimTypes.Role, info.RoleId.ToString()),
             }),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -107,8 +107,8 @@ namespace Sun.DatingApp.Api.Controllers.System
                 var accessToken = tokenHandler.CreateToken(tokenDescriptor);
                 var accessTokenString = tokenHandler.WriteToken(accessToken);
 
-                model.AccessToken = accessTokenString;
-                result.Data = model;
+                info.AccessToken = accessTokenString;
+                result.Data = info;
             }
             catch (Exception e)
             {

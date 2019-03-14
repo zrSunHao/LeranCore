@@ -26,7 +26,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// <param name="account"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<WebApiResult<AccessDataModel>> Login(string account, string password);
+        Task<WebApiResult<AccountInfo>> Login(string account, string password);
 
         /// <summary>
         /// 获取新的RefreshToken

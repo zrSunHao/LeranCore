@@ -17,5 +17,7 @@ namespace Sun.DatingApp.Model.System.Auth.Info
         public string RoleName { get; set; }
 
         public Guid? RefreshToken { get; set; }
+
+        public string AccessToken { get; set; }
     }
 }

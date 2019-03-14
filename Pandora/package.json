@@ -34,7 +34,7 @@
     "@delon/abc": "^7.0.0-rc.10",
     "@delon/acl": "^7.0.0-rc.10",
     "@delon/auth": "^7.0.0-rc.10",
-    "@delon/cache": "^7.0.0-rc.10",
+    "@delon/cache": "^7.0.2",
     "@delon/chart": "^7.0.0-rc.10",
     "@delon/form": "^7.0.0-rc.10",
     "@delon/mock": "^7.0.0-rc.10",

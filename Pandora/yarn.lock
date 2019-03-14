@@ -431,9 +431,10 @@
   dependencies:
     tslib "^1.9.0"
 
-"@delon/cache@^7.0.0-rc.10":
-  version "7.0.1"
-  resolved "http://registry.npm.taobao.org/@delon/cache/download/@delon/cache-7.0.1.tgz#a59cfc9125bcb166a7555d84d16c41c2a0f1a136"
+"@delon/cache@^7.0.2":
+  version "7.0.2"
+  resolved "http://registry.npm.taobao.org/@delon/cache/download/@delon/cache-7.0.2.tgz#491f403c986a09738416b1c6daff27f5f7ce2058"
+  integrity sha1-SR9APJhqCXOEFrHG2v8n9ffOIFg=
   dependencies:
     tslib "^1.9.0"
 
