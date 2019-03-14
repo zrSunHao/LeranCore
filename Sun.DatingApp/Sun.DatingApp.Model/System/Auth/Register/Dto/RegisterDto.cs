@@ -4,9 +4,9 @@ namespace Sun.DatingApp.Model.System.Auth.Register.Dto
 {
     public class RegisterDto
     {
-        //姓名
+        //电话号码
         [Required]
-        public string UserName { get; set; }
+        public string Mobile { get; set; }
 
         //邮箱
         [Required]
@@ -15,5 +15,8 @@ namespace Sun.DatingApp.Model.System.Auth.Register.Dto
         //密码
         [Required]
         public string Password { get; set; }
+
+        //验证码
+        public string Captcha { get; set; }
     }
 }

@@ -128,6 +128,8 @@ export class UserRegisterComponent implements OnDestroy {
   submit() {
     this.error = '';
     for (const i in this.form.controls) {
+      const uuuu = this.form.controls[i].value;
+      console.log(uuuu);
       this.form.controls[i].markAsDirty();
       this.form.controls[i].updateValueAndValidity();
     }
