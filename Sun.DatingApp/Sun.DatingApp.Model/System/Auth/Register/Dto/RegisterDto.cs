@@ -4,6 +4,10 @@ namespace Sun.DatingApp.Model.System.Auth.Register.Dto
 {
     public class RegisterDto
     {
+        //昵称
+        [Required]
+        public string Nickname { get; set; }
+
         //电话号码
         [Required]
         public string Mobile { get; set; }

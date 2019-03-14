@@ -16,7 +16,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
             CreateMap<Account, AccessDataModel>()
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
-                .ForMember(x => x.UserName, x => x.MapFrom(y => y.UserName))
+                .ForMember(x => x.UserName, x => x.MapFrom(y => y.Nickname))
                 .ForMember(x => x.RefreshToken, x => x.MapFrom(y => y.RefreshToken))
                 .ForMember(x => x.Permissions, x => x.Ignore());
 
@@ -24,6 +24,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
             CreateMap<RegisterDto, Account>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => Guid.NewGuid()))
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
+                .ForMember(x => x.Mobile, x => x.MapFrom(y => y.Mobile))
                 .ForMember(x => x.RoleId, x => x.Ignore())
                 .ForMember(x => x.PasswordSalt, x => x.Ignore())
                 .ForMember(x => x.PasswordHash, x => x.Ignore())
@@ -37,7 +38,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
             CreateMap<Account, AccountListModel>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
-                .ForMember(x => x.UserName, x => x.MapFrom(y => y.UserName))
+                .ForMember(x => x.UserName, x => x.MapFrom(y => y.Nickname))
                 .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
                 .ForMember(x => x.RoleId, x => x.MapFrom(y => y.RoleId))
                 .ForMember(x => x.LatestLoginAt, x => x.MapFrom(y => y.LatestLoginAt))

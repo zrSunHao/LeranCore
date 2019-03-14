@@ -3,6 +3,21 @@
   <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
   <nz-form-item>
     <nz-form-control>
+      <nz-input-group nzSize="large" nzAddonBeforeIcon="anticon anticon-lock">
+        <input nz-input type="text" formControlName="nickname" placeholder="请输入昵称">
+      </nz-input-group>
+      <nz-form-explain *ngIf="nickname.dirty && nickname.errors">
+        <ng-container *ngIf="nickname.errors.required">
+          请输入昵称!
+        </ng-container>
+        <ng-container *ngIf="nickname.errors.equar">
+          请输入昵称!
+        </ng-container>
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
       <nz-input-group nzSize="large" nzAddonBeforeIcon="anticon anticon-user">
         <input nz-input formControlName="mail" placeholder="请输入您的邮箱地址">
       </nz-input-group>
@@ -44,7 +59,7 @@
       </nz-input-group>
       <nz-form-explain *ngIf="confirm.dirty && confirm.errors">
         <ng-container *ngIf="confirm.errors.required">
-          请确认密码！
+          请输入确认密码!
         </ng-container>
         <ng-container *ngIf="confirm.errors.equar">
           两次输入的密码不匹配!

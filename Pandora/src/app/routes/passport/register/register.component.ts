@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormGroup,
@@ -6,8 +6,10 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
+
+const RegisterUrl = 'Auth/Register?_allow_anonymous=true';
 
 @Component({
   selector: 'passport-register',
@@ -27,13 +29,19 @@ export class UserRegisterComponent implements OnDestroy {
     pool: 'exception',
   };
 
+  count = 0;
+  interval$: any;
+
   constructor(
     fb: FormBuilder,
     private router: Router,
     public http: _HttpClient,
     public msg: NzMessageService,
+    private notification: NzNotificationService,
+    private injector: Injector,
   ) {
     this.form = fb.group({
+      nickname: [null, [Validators.required]],
       mail: [null, [Validators.required, Validators.email]],
       password: [
         null,
@@ -103,12 +111,14 @@ export class UserRegisterComponent implements OnDestroy {
     return this.form.controls.captcha;
   }
 
+  get nickname() {
+    return this.form.controls.nickname;
+  }
+
   // #endregion
 
   // #region get captcha
 
-  count = 0;
-  interval$: any;
 
   getCaptcha() {
     if (this.mobile.invalid) {
@@ -127,6 +137,7 @@ export class UserRegisterComponent implements OnDestroy {
 
   submit() {
     this.error = '';
+    // tslint:disable-next-line:forin
     for (const i in this.form.controls) {
       const uuuu = this.form.controls[i].value;
       console.log(uuuu);
@@ -137,11 +148,24 @@ export class UserRegisterComponent implements OnDestroy {
       return;
     }
 
-    const data = this.form.value;
-    this.http.post('/register', data).subscribe(() => {
-      this.router.navigateByUrl('/passport/register-result', {
-        queryParams: { email: data.mail },
-      });
+    const data = {
+      nickname: this.nickname,
+      mobile: this.mobile.value,
+      email: this.mail.value,
+      password: this.password.value,
+      captcha: this.captcha.value
+    };
+
+    this.http.post(RegisterUrl, data).subscribe((res: any) => {
+      if (res.success) {
+        this.notification.create('success', '注册成功，请登录', res.allMessages);
+        this.injector.get(Router).navigateByUrl(`/passport/login`);
+      } else {
+        this.notification.create('error', '注册失败', res.allMessages);
+      }
+      // this.router.navigateByUrl('/passport/register-result', {
+      //   queryParams: { email: data.mail },
+      // });
     });
   }
 

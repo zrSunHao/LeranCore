@@ -14,7 +14,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
             
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.UserName).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.Nickname).HasMaxLength(100);
             builder.Property(x => x.RoleId).IsRequired();
             builder.Property(x => x.PasswordHash).IsRequired();
             builder.Property(x => x.PasswordSalt).IsRequired();

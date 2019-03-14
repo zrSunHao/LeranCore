@@ -9,8 +9,8 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("邮件")]
         public string Email { get; set; }
 
-        [Description("用户名")]
-        public string UserName { get; set; }
+        [Description("昵称")]
+        public string Nickname { get; set; }
 
         [Description("手机号码")]
         public string Mobile { get; set; }

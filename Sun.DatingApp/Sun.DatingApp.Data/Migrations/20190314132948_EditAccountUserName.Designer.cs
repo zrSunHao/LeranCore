@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sun.DatingApp.Data.Database;
 
 namespace Sun.DatingApp.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190314132948_EditAccountUserName")]
+    partial class EditAccountUserName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,9 +120,6 @@ namespace Sun.DatingApp.Data.Migrations
 
                     b.Property<string>("Mobile");
 
-                    b.Property<string>("Nickname")
-                        .HasMaxLength(100);
-
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired();
 
@@ -134,6 +133,9 @@ namespace Sun.DatingApp.Data.Migrations
                     b.Property<DateTime?>("UpdatedAt");
 
                     b.Property<Guid?>("UpdatedById");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -426,27 +428,27 @@ namespace Sun.DatingApp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8ea3381a-8dfe-4160-ab58-1f6a91720791"),
+                            Id = new Guid("98c68160-46d1-48cf-b5a1-7bd04f02105c"),
                             Active = false,
-                            CreatedAt = new DateTime(2019, 3, 14, 21, 51, 17, 344, DateTimeKind.Local).AddTicks(5451),
+                            CreatedAt = new DateTime(2019, 3, 14, 21, 29, 48, 362, DateTimeKind.Local).AddTicks(8008),
                             Deleted = false,
                             Intro = "超级管理员拥有所有的权限",
                             Name = "超级管理员"
                         },
                         new
                         {
-                            Id = new Guid("81d01448-7098-4443-9d2a-cdfe5ed257c9"),
+                            Id = new Guid("838d4a2b-1cb3-445c-b80a-37e65511fe9b"),
                             Active = false,
-                            CreatedAt = new DateTime(2019, 3, 14, 21, 51, 17, 345, DateTimeKind.Local).AddTicks(5298),
+                            CreatedAt = new DateTime(2019, 3, 14, 21, 29, 48, 364, DateTimeKind.Local).AddTicks(5109),
                             Deleted = false,
                             Intro = "管理员用于管理用户权限",
                             Name = "管理员"
                         },
                         new
                         {
-                            Id = new Guid("dcad6818-7bbd-4eef-8260-1cb3ee52d71c"),
+                            Id = new Guid("b1b41ebe-cb4b-4f6e-b83f-8f19e11a50c1"),
                             Active = false,
-                            CreatedAt = new DateTime(2019, 3, 14, 21, 51, 17, 345, DateTimeKind.Local).AddTicks(5310),
+                            CreatedAt = new DateTime(2019, 3, 14, 21, 29, 48, 364, DateTimeKind.Local).AddTicks(5131),
                             Deleted = false,
                             Intro = "可以使用基本功能",
                             Name = "用户"

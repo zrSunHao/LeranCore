@@ -19,6 +19,7 @@ import { ICONS_AUTO } from '../../../style-icons-auto';
 import { ICONS } from '../../../style-icons';
 import { environment } from '@env/environment';
 import { CacheService } from '@delon/cache';
+import { Router } from '@angular/router';
 
 const GetAccountInfoUrl = 'Auth/GetAccountInfo';
 const GetAccountMenuUrl = 'Auth/GetAccountMenu';
@@ -75,6 +76,7 @@ export class StartupService {
       if (tokenInfo.token == null || tokenInfo.token === undefined) {
         console.log('账号未登录');
         resolve(null);
+        this.injector.get(Router).navigateByUrl(`/passport/login`);
       } else {
         this.loadAccountInfo(resolve, reject);
       }
@@ -83,14 +85,21 @@ export class StartupService {
 
   // 缓存中获取账号信息
   private loadAccountInfo(resolve: any, reject: any) {
-    this.cacheService.get('PandoraCurrentInfo').subscribe(res => {
-      this.settingService.setUser(res);
+
+    const accountInfo = this.cacheService.getNone('PandoraCurrentInfo');
+    if (accountInfo == null) {
+      console.log('账号未登录');
+      resolve(null);
+      this.injector.get(Router).navigateByUrl(`/passport/login`);
+    } else {
+      this.settingService.setUser(accountInfo);
+      console.log(accountInfo);
       // tslint:disable-next-line:no-string-literal
-      const accountId = res['id'];
+      const accountId = accountInfo['id'];
       console.log(accountId);
       this.viaHttp(resolve, reject, accountId);
       resolve(null);
-    });
+    }
   }
 
   // 获取账号信息
@@ -116,9 +125,14 @@ export class StartupService {
           // ACL：设置权限
           this.setPermission(accountPermissionRes.data);
           // 初始化菜单
-          this.menuService.add([accountMenuRes.data]);
+          console.log(accountMenuRes.data);
+          if (accountMenuRes.data == null) {
+            this.menuService.add([]);
+          } else {
+            this.menuService.add([accountMenuRes.data]);
+          }
         },
-        () => {},
+        () => { },
         () => {
           resolve(null);
         },

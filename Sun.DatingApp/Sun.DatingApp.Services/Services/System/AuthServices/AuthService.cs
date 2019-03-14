@@ -31,10 +31,17 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var exist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
-                if (exist)
+                var emailExist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                if (emailExist)
                 {
-                    result.AddError(dto.Email + "邮箱已被注册");
+                    result.AddError(dto.Email + "该邮箱已被注册");
+                    return result;
+                }
+
+                var mobileExist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                if (mobileExist)
+                {
+                    result.AddError(dto.Email + "该手机号码已被注册");
                     return result;
                 }
 
@@ -111,7 +118,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 {
                     Id = account.Id,
                     Email = account.Email,
-                    Name = account.UserName,
+                    Name = account.Nickname,
                     Avatar = account.Avatar,
                     RoleId = role.Id,
                     RoleName = role.Name,
@@ -208,7 +215,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 query = from u in query
                         where (!string.IsNullOrEmpty(filters.Email) && u.Email.Contains(filters.Email)) ||
                               string.IsNullOrEmpty(filters.Email)
-                        where (!string.IsNullOrEmpty(filters.UserName) && u.UserName.Contains(filters.UserName)) ||
+                        where (!string.IsNullOrEmpty(filters.UserName) && u.Nickname.Contains(filters.UserName)) ||
                               string.IsNullOrEmpty(filters.UserName)
                         where (!string.IsNullOrEmpty(filters.Role) && u.Email.Contains(filters.Role)) ||
                               string.IsNullOrEmpty(filters.Role)
@@ -235,8 +242,8 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                         break;
                     case "UserName":
                         if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.UserName);
-                        query = query.OrderByDescending(x => x.UserName);
+                            query = query.OrderBy(x => x.Nickname);
+                        query = query.OrderByDescending(x => x.Nickname);
                         break;
                     case "Active":
                         if (opt.SortOrder == "asc")
@@ -265,7 +272,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     {
                         Id = a.Id,
                         Email = a.Email,
-                        UserName = a.UserName,
+                        UserName = a.Nickname,
                         RoleId = a.RoleId,
                         Active = a.Active,
                         LatestLoginAt = a.LatestLoginAt,
@@ -306,7 +313,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 {
                     Id = Guid.NewGuid(),
                     Email = dto.Email,
-                    UserName = dto.UserName,
+                    Nickname = dto.UserName,
                     RoleId = dto.RoleId,
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
@@ -348,7 +355,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 entity.Email = dto.Email;
-                entity.UserName = dto.UserName;
+                entity.Nickname = dto.UserName;
                 entity.RoleId = dto.RoleId;
 
                 await _dataContext.SaveChangesAsync();
@@ -555,7 +562,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 {
                     Id = account.Id,
                     Email = account.Email,
-                    Name = account.UserName,
+                    Name = account.Nickname,
                     Avatar = account.Avatar,
                     RoleId = role.Id,
                     RoleName = role.Name,
