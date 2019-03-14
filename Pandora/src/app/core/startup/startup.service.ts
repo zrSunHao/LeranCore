@@ -89,69 +89,6 @@ export class StartupService {
     resolve({});
   }
 
-  load1(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      // 国际化配置
-      this.viaMockI18n(resolve, reject);
-
-      // 应用信息：包括站点名、描述、年份
-      const appInfo = environment.appInfo;
-      this.settingService.setApp(appInfo);
-      // 设置页面标题的后缀
-      this.titleService.suffix = appInfo.name;
-
-      // 用户信息：包括姓名、头像、邮箱地址
-      const userInfo = {
-        accountId: '123456',
-        name: 'Admin',
-        avatar: './assets/tmp/img/avatar.jpg',
-        email: 'cipchk@qq.com',
-        role: '管理员',
-      };
-      this.settingService.setUser(userInfo);
-
-      // ACL：设置权限为全量
-      this.aclService.setFull(true);
-
-      // 初始化菜单
-      const menuInfo = [
-        {
-          text: '主导航',
-          group: true,
-          hideInBreadcrumb: false,
-          children: [
-            {
-              text: '系统设置',
-              icon: 'anticon anticon-setting',
-              shortcutRoot: false,
-              children: [
-                {
-                  text: '角色管理列表',
-                  link: '/sys/role-list',
-                },
-                {
-                  text: '权限管理列表',
-                  link: '/sys/permission-list',
-                },
-                {
-                  text: '菜单管理列表',
-                  link: '/sys/menu-list',
-                },
-                {
-                  text: '账号管理列表',
-                  link: '/sys/account-list',
-                },
-              ],
-            },
-          ],
-        },
-      ];
-      this.menuService.add(menuInfo);
-
-      resolve(null);
-    });
-  }
-
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
       // 国际化配置
@@ -163,16 +100,14 @@ export class StartupService {
       // 设置页面标题的后缀
       this.titleService.suffix = appInfo.name;
 
-      this.cacheService
-        .get('PandoraCurrentInfo')
-        .subscribe(res => {
-          // tslint:disable-next-line:no-string-literal
-          this.settingService.setUser(res);
-          const accountId = res['id'];
-          console.log(accountId);
-          this.viaHttp(resolve, reject, accountId);
-          resolve(null);
-        });
+      this.cacheService.get('PandoraCurrentInfo').subscribe(res => {
+        // tslint:disable-next-line:no-string-literal
+        this.settingService.setUser(res);
+        const accountId = res['id'];
+        console.log(accountId);
+        this.viaHttp(resolve, reject, accountId);
+        resolve(null);
+      });
     });
   }
 
@@ -196,7 +131,7 @@ export class StartupService {
       .subscribe(
         ([accountInfoRes, accountMenuRes, accountPermissionRes]) => {
           // ACL：设置权限为全量
-          this.aclService.setFull(true);
+          this.setPermission(accountPermissionRes.data);
           // 初始化菜单
           console.log(accountMenuRes.data);
           this.menuService.add([accountMenuRes.data]);
@@ -207,4 +142,77 @@ export class StartupService {
         },
       );
   }
+
+  setPermission(datas: any) {
+    const useAcl = environment.useAcl;
+    if (!useAcl) {
+      this.aclService.setFull(true);
+    } else {
+      const permis = datas as [];
+      this.aclService.setAbility(permis);
+    }
+  }
+
+  // load1(): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  //     // 国际化配置
+  //     this.viaMockI18n(resolve, reject);
+
+  //     // 应用信息：包括站点名、描述、年份
+  //     const appInfo = environment.appInfo;
+  //     this.settingService.setApp(appInfo);
+  //     // 设置页面标题的后缀
+  //     this.titleService.suffix = appInfo.name;
+
+  //     // 用户信息：包括姓名、头像、邮箱地址
+  //     const userInfo = {
+  //       accountId: '123456',
+  //       name: 'Admin',
+  //       avatar: './assets/tmp/img/avatar.jpg',
+  //       email: 'cipchk@qq.com',
+  //       role: '管理员',
+  //     };
+  //     this.settingService.setUser(userInfo);
+
+  //     // ACL：设置权限为全量
+  //     this.aclService.setFull(true);
+
+  //     // 初始化菜单
+  //     const menuInfo = [
+  //       {
+  //         text: '主导航',
+  //         group: true,
+  //         hideInBreadcrumb: false,
+  //         children: [
+  //           {
+  //             text: '系统设置',
+  //             icon: 'anticon anticon-setting',
+  //             shortcutRoot: false,
+  //             children: [
+  //               {
+  //                 text: '角色管理列表',
+  //                 link: '/sys/role-list',
+  //               },
+  //               {
+  //                 text: '权限管理列表',
+  //                 link: '/sys/permission-list',
+  //               },
+  //               {
+  //                 text: '菜单管理列表',
+  //                 link: '/sys/menu-list',
+  //               },
+  //               {
+  //                 text: '账号管理列表',
+  //                 link: '/sys/account-list',
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //       },
+  //     ];
+  //     this.menuService.add(menuInfo);
+
+  //     resolve(null);
+  //   });
+  // }
 }

@@ -33,18 +33,23 @@ export class MenuListComponent implements OnInit {
     { title: '页面名称', render: 'name', className: 'text-center' },
     { title: '备注', index: 'intro', className: 'text-center' },
     {
-      title: '是否启用', render: 'custom', className: 'text-center',
+      title: '是否启用',
+      render: 'custom',
+      className: 'text-center',
       click: (item: any) => this.active(item),
     },
     {
-      title: '操作', className: 'text-center',
+      title: '操作',
+      className: 'text-center',
       buttons: [
         {
-          text: '编辑', icon: 'anticon anticon-edit',
+          text: '编辑',
+          icon: 'anticon anticon-edit',
           click: (item: any) => this.edit(item),
         },
         {
-          text: '删除', icon: 'anticon anticon-delete',
+          text: '删除',
+          icon: 'anticon anticon-delete',
           click: (item: any) => this.delete(item),
         },
       ],
@@ -55,16 +60,20 @@ export class MenuListComponent implements OnInit {
     private modal: ModalHelper,
     private http: _HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   loadData(menu: any) {
     console.log(menu);
     this.menu = menu;
     this.http.get(GetPagesUrl, { id: menu.id }).subscribe((res: any) => {
       if (!res.success) {
-        this.notification.create('error', menu.name + '下的页面列表数据加载失败', res.allMessages);
+        this.notification.create(
+          'error',
+          menu.name + '下的页面列表数据加载失败',
+          res.allMessages,
+        );
       } else {
         this.datas = res.data;
       }
