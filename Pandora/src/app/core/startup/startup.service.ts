@@ -100,14 +100,24 @@ export class StartupService {
       // 设置页面标题的后缀
       this.titleService.suffix = appInfo.name;
 
-      this.cacheService.get('PandoraCurrentInfo').subscribe(res => {
-        // tslint:disable-next-line:no-string-literal
-        this.settingService.setUser(res);
-        const accountId = res['id'];
-        console.log(accountId);
-        this.viaHttp(resolve, reject, accountId);
+      const tokenInfo = this.tokenService.get();
+      if (tokenInfo.token == null || tokenInfo.token === undefined) {
+        console.log('账号未登录');
         resolve(null);
-      });
+      } else {
+        this.loadAccountInfo(resolve, reject);
+      }
+    });
+  }
+
+  private loadAccountInfo(resolve: any, reject: any) {
+    this.cacheService.get('PandoraCurrentInfo').subscribe(res => {
+      this.settingService.setUser(res);
+      // tslint:disable-next-line:no-string-literal
+      const accountId = res['id'];
+      console.log(accountId);
+      this.viaHttp(resolve, reject, accountId);
+      resolve(null);
     });
   }
 
@@ -130,10 +140,9 @@ export class StartupService {
       )
       .subscribe(
         ([accountInfoRes, accountMenuRes, accountPermissionRes]) => {
-          // ACL：设置权限为全量
+          // ACL：设置权限
           this.setPermission(accountPermissionRes.data);
           // 初始化菜单
-          console.log(accountMenuRes.data);
           this.menuService.add([accountMenuRes.data]);
         },
         () => {},
