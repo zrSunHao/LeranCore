@@ -56,7 +56,7 @@ export class AccountListComponent implements OnInit {
     { title: 'ID', index: 'id', type: 'checkbox', selections: [] },
     { title: '用户名', index: 'userName', className: 'text-center' },
     { title: '邮箱', index: 'email', className: 'text-center' },
-    { title: '角色', index: 'role', className: 'text-center' },
+    { title: '角色', index: 'roleName', className: 'text-center' },
     { title: '创建时间', index: 'createdAt', type: 'date', className: 'text-center', },
     {
       title: '最近登录时间', index: 'latestLoginAt', type: 'date', className: 'text-center',
@@ -139,8 +139,6 @@ export class AccountListComponent implements OnInit {
     const title = '添加账号';
     const warningMsg = '添加账号的正常途径是用户自行注册，请慎重考虑';
     const entity = { userName: null, email: null, roleId: null, };
-
-    localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
 
     this.modal
       .createStatic(AccountAddComponent, { entity, isEdit, title, warningMsg }, { size: 'md' })
@@ -285,6 +283,7 @@ export class AccountListComponent implements OnInit {
       }
       if (res.data != null) {
         this.roleItems = res.data;
+        localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
       }
     });
   }

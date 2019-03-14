@@ -248,10 +248,26 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                         break;
                 }
 
-                var users = await query.Skip(10 * opt.PageIndex).Take(10).ToListAsync();
+                var queryR = from a in query
+                    join r in _dataContext.Roles on a.RoleId equals r.Id into tr
+                    from ar in tr.DefaultIfEmpty()
+                    select new AccountListModel
+                    {
+                        Id = a.Id,
+                        Email = a.Email,
+                        UserName = a.UserName,
+                        RoleId = a.RoleId,
+                        Active = a.Active,
+                        LatestLoginAt = a.LatestLoginAt,
+                        LockoutEndAt = a.LockoutEndAt,
+                        AccessFailedCount = a.AccessFailedCount,
+                        CreatedAt = a.CreatedAt,
+                        UpdatedAt = a.UpdatedAt,
+                        RoleName = ar.Name
+                    };
 
-                if (users.Any())
-                    result.Data = _mapper.Map<List<Account>, List<AccountListModel>>(users);
+                var accounts = await queryR.Skip(10 * opt.PageIndex).Take(10).ToListAsync();
+                result.Data = accounts;
             }
             catch (Exception ex)
             {
@@ -504,7 +520,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         #endregion
 
 
-        #region 私有方法
+        #region 账号登录信息
 
         public async Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id)
         {

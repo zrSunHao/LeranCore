@@ -14,16 +14,5 @@ namespace Sun.DatingApp.Data.Entities.System
 
         [Description("是否启用")]
         public bool Active { get; set; }
-
-
-        #region 索引
-
-        [Description("账号")]
-        public virtual ICollection<Account> Accounts { get; set; }
-
-        public virtual ICollection<RolePermission> RolePermissions { get; set; }
-
-        #endregion
-
     }
 }

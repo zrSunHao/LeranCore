@@ -12,6 +12,8 @@ namespace Sun.DatingApp.Model.System.Auth.Accounts.Model
 
         public Guid RoleId { get; set; }
 
+        public string RoleName { get; set; }
+
         public bool Active { get; set; }
 
         public DateTime? LatestLoginAt { get; set; }
