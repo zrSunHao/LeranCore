@@ -144,24 +144,27 @@ export class UserRegisterComponent implements OnDestroy {
       this.form.controls[i].markAsDirty();
       this.form.controls[i].updateValueAndValidity();
     }
+    console.log(this.form.invalid);
     if (this.form.invalid) {
       return;
     }
 
     const data = {
-      nickname: this.nickname,
+      nickname: this.nickname.value,
       mobile: this.mobile.value,
       email: this.mail.value,
       password: this.password.value,
       captcha: this.captcha.value
     };
-
+    console.log(data);
     this.http.post(RegisterUrl, data).subscribe((res: any) => {
+      console.log(res);
       if (res.success) {
         this.notification.create('success', '注册成功，请登录', res.allMessages);
         this.injector.get(Router).navigateByUrl(`/passport/login`);
       } else {
         this.notification.create('error', '注册失败', res.allMessages);
+        return;
       }
       // this.router.navigateByUrl('/passport/register-result', {
       //   queryParams: { email: data.mail },
