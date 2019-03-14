@@ -12,6 +12,9 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("用户名")]
         public string UserName { get; set; }
 
+        [Description("手机号码")]
+        public string Mobile { get; set; }
+
         [Description("角色Id")]
         public Guid RoleId { get; set; }
 

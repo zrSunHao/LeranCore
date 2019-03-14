@@ -28,7 +28,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         private readonly IAuthService _service;
         private readonly IConfiguration _config;
 
-        public AuthController(IAuthService service,IConfiguration config)
+        public AuthController(IAuthService service, IConfiguration config)
         {
             _service = service;
             _config = config;

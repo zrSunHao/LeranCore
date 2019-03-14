@@ -24,7 +24,6 @@ namespace Sun.DatingApp.Services.MappingProfiles
             CreateMap<RegisterDto, Account>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => Guid.NewGuid()))
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
-                .ForMember(x => x.UserName, x => x.MapFrom(y => y.UserName))
                 .ForMember(x => x.RoleId, x => x.Ignore())
                 .ForMember(x => x.PasswordSalt, x => x.Ignore())
                 .ForMember(x => x.PasswordHash, x => x.Ignore())
