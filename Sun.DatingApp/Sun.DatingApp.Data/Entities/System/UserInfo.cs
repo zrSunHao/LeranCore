@@ -48,5 +48,10 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("Current地址Id")]
         public Guid CurrentAddressId { get; set; }
 
+        //座右铭
+
+        //个人标签
+
+        //学校/公司
     }
 }
