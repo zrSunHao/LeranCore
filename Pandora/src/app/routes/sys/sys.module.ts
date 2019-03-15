@@ -28,6 +28,13 @@ import { AccountAddComponent } from './account/account-add/account-add.component
 import { AccountListComponent } from './account/account-list/account-list.component';
 import { AccountStatusComponent } from './account/account-status/account-status.component';
 
+// 用户信息管理模块
+import { UserInfoComponent } from './user/user-info/user-info.component';
+import { UserBindingComponent } from './user/user-binding/user-binding.component';
+import { UserNotificationComponent } from './user/user-notification/user-notification.component';
+import { UserSecurityComponent } from './user/user-security/user-security.component';
+import { UserComponent } from './user/user.component';
+
 const COMPONENTS = [SysRoleRoleListComponent];
 
 const COMPONENTS_NOROUNT = [
@@ -43,7 +50,12 @@ const COMPONENTS_NOROUNT = [
   AccountListComponent,
   AccountAddComponent,
   AccountLockoutComponent,
-  AccountStatusComponent
+  AccountStatusComponent,
+  UserComponent,
+  UserInfoComponent,
+  UserBindingComponent,
+  UserNotificationComponent,
+  UserSecurityComponent,
 ];
 
 @NgModule({
@@ -55,4 +67,4 @@ const COMPONENTS_NOROUNT = [
     BasicOperateService,
   ],
 })
-export class SysModule { }
+export class SysModule {}

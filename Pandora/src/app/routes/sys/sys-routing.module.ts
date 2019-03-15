@@ -5,6 +5,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { SysRoleRoleListComponent } from './role/role-list/role-list.component';
 import { RolePermissionComponent } from './role/role-permission/role-permission.component';
 import { MenuRootComponent } from './menu/menu-root/menu-root.component';
+import { UserComponent } from './user/user.component';
+import { UserInfoComponent } from './user/user-info/user-info.component';
+import { UserSecurityComponent } from './user/user-security/user-security.component';
+import { UserNotificationComponent } from './user/user-notification/user-notification.component';
+import { UserBindingComponent } from './user/user-binding/user-binding.component';
 
 const routes: Routes = [
   {
@@ -31,6 +36,33 @@ const routes: Routes = [
     path: 'account-list',
     component: AccountListComponent,
     data: { title: '账号管理列表' },
+  },
+  {
+    path: 'user',
+    component: UserComponent,
+    children: [
+      { path: '', redirectTo: 'info', pathMatch: 'full' },
+      {
+        path: 'info',
+        component: UserInfoComponent,
+        data: { title: '用户信息' },
+      },
+      {
+        path: 'security',
+        component: UserSecurityComponent,
+        data: { title: '安全设置' },
+      },
+      {
+        path: 'binding',
+        component: UserNotificationComponent,
+        data: { title: '账号绑定' },
+      },
+      {
+        path: 'notification',
+        component: UserBindingComponent,
+        data: { title: '消息通知' },
+      },
+    ],
   },
 ];
 

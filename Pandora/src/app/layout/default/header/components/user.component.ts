@@ -15,7 +15,7 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
       <div nz-menu-item routerLink="/pro/account/center"><i nz-icon type="user" class="mr-sm"></i>
         {{ 'menu.account.center' | translate }}
       </div>
-      <div nz-menu-item routerLink="/pro/account/settings"><i nz-icon type="setting" class="mr-sm"></i>
+      <div nz-menu-item routerLink="/sys/user/info"><i nz-icon type="setting" class="mr-sm"></i>
         {{ 'menu.account.settings' | translate }}
       </div>
       <li nz-menu-divider></li>
