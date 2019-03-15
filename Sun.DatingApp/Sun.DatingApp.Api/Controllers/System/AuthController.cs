@@ -88,6 +88,7 @@ namespace Sun.DatingApp.Api.Controllers.System
                 }
 
                 var info = result.Data;
+                var nickName = string.IsNullOrEmpty(info.Name) ? "" : info.Name;
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
@@ -96,7 +97,7 @@ namespace Sun.DatingApp.Api.Controllers.System
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim(ClaimTypes.NameIdentifier, info.Id.ToString()),
-                        new Claim(ClaimTypes.Name, info.Name),
+                        new Claim(ClaimTypes.Name, nickName),
                         new Claim(ClaimTypes.Email, info.Email),
                         new Claim(ClaimTypes.Role, info.RoleId.ToString()),
             }),
