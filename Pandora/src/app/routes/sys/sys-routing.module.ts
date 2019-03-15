@@ -45,22 +45,22 @@ const routes: Routes = [
       {
         path: 'info',
         component: UserInfoComponent,
-        data: { title: '用户信息' },
+        data: { titleI18n: '用户信息' },
       },
       {
         path: 'security',
         component: UserSecurityComponent,
-        data: { title: '安全设置' },
-      },
-      {
-        path: 'binding',
-        component: UserNotificationComponent,
-        data: { title: '账号绑定' },
+        data: { titleI18n: '安全设置' },
       },
       {
         path: 'notification',
+        component: UserNotificationComponent,
+        data: { titleI18n: '账号绑定' },
+      },
+      {
+        path: 'binding',
         component: UserBindingComponent,
-        data: { title: '消息通知' },
+        data: { titleI18n: '消息通知' },
       },
     ],
   },

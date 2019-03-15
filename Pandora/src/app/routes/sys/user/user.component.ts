@@ -15,7 +15,7 @@ import { _HttpClient } from '@delon/theme';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styles: [],
+  styleUrls: ['./user.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -26,7 +26,7 @@ export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
   user: any;
   menus: any[] = [
     {
-      key: 'base',
+      key: 'info',
       title: '基本设置',
     },
     {
@@ -74,7 +74,7 @@ export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   to(item: any) {
-    this.router.navigateByUrl(`/pro/account/settings/${item.key}`);
+    this.router.navigateByUrl(`/sys/user/${item.key}`);
   }
 
   private resize() {

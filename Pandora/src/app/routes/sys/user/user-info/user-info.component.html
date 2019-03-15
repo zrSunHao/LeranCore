@@ -39,15 +39,10 @@
         </se>
       </form>
     </div>
-    <div class="right">
-      <div class="avatar_title">Avatar</div>
-      <div class="avatar"><img src="{{user.avatar}}" alt="Avatar"></div>
-      <nz-upload nzAction="/user/avatar" [nzShowUploadList]="false">
-        <button nz-button class="button_view">
-          <i nz-icon type="upload"></i>
-          <span>更换头像</span>
-        </button>
-      </nz-upload>
+    <div class="right" (click)="editAvatar()">
+      <div class="avatar_title">头像:</div>
+      <!-- <div class="avatar"><img src="{{user.avatar}}" alt="Avatar"></div> -->
+      <nz-avatar [nzSize]="130" [nzShape]="'circle'" nzSrc="{{user.avatar}}"></nz-avatar>
     </div>
   </div>
 </nz-spin>
