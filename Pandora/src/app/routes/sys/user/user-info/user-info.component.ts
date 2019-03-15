@@ -40,7 +40,7 @@ export class UserInfoComponent implements OnInit {
       avatar:
         'http://zeus-dev.oss-cn-qingdao.aliyuncs.com/a54af76a-0c2c-99ed-8694-997d7fe49b26.jpg',
       userid: null,
-      email: 'cipchk@qq.com',
+      email: null,
       signature: '海纳百川，有容乃大',
       title: '交互专家',
       group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
