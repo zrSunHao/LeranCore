@@ -1,50 +1,16 @@
 <nz-spin [nzSpinning]="userLoading">
-  <div class="main" *ngIf="user">
+  <div class="main" >
     <div class="left">
-      <form nz-form nzLayout="vertical" #f="ngForm" (submit)="save()" se-container="1">
-        <se label="邮箱" error="请输入您的邮箱!">
-          <input nz-input type="email" [(ngModel)]="user.email" name="email" required>
-        </se>
-        <se label="昵称" error="请输入您的昵称!">
-          <input nz-input [(ngModel)]="user.name" name="name" required>
-        </se>
-        <se label="个人简介">
-          <textarea nz-input [(ngModel)]="user.profile" name="profile" [nzAutosize]="{ minRows: 4, maxRows: 10 }"
-            placeholder="个人简介"></textarea>
-        </se>
-        <se label="国家/地区">
-          <nz-select [(ngModel)]="user.country" name="country" required>
-            <nz-option nzLabel="中国" nzValue="China"></nz-option>
-          </nz-select>
-        </se>
-        <se label="所在省市">
-          <div class="d-flex justify-content-between">
-            <nz-select [(ngModel)]="user.geographic.province.key" (ngModelChange)="choProvince($event)" name="geographic.province.key"
-              required class="width-50 mr-sm">
-              <nz-option *ngFor="let p of provinces" [nzLabel]="p.name" [nzValue]="p.id"></nz-option>
-            </nz-select>
-            <nz-select [(ngModel)]="user.geographic.city.key" name="geographic.city.key" required class="width-50">
-              <nz-option *ngFor="let p of cities" [nzLabel]="p.name" [nzValue]="p.id"></nz-option>
-            </nz-select>
-          </div>
-        </se>
-        <se label="街道地址" error="请输入您的街道地址!">
-          <input nz-input [(ngModel)]="user.address" name="address" required>
-        </se>
-        <se label="联系电话" error="请输入您的联系电话!">
-          <input nz-input [(ngModel)]="user.phone" name="phone" required>
-        </se>
-        <se>
-          <button nz-button nzType="primary" [disabled]="f.invalid">更新基本信息</button>
-        </se>
-      </form>
+      <sf #sf mode="edit"  [schema]="schema" [formData]="info" button="none">
+        <button nz-button style="display:block;margin:0 auto" type="submit" [nzType]="'primary'" (click)="submit(sf.value)" [disabled]="!sf.valid">保存</button>
+      </sf>
     </div>
     <div class="right">
       <div class="avatar_title">头像:</div>
       <!-- <div class="avatar"><img src="{{user.avatar}}" alt="Avatar"></div> -->
-      <nz-avatar [nzSize]="130" [nzShape]="'circle'" nzSrc="{{user.avatar}}"></nz-avatar>
+      <nz-avatar [nzSize]="130" [nzShape]="'circle'" [nzSrc]="avatar"></nz-avatar>
       &nbsp;&nbsp;&nbsp;
-      <nz-upload nzAction="/user/avatar" [nzShowUploadList]="false">
+      <nz-upload [nzShowUploadList]="false">
         <button nz-button class="button_view">
           <i nz-icon type="upload"></i>
           <span>更换头像</span>
