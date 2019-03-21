@@ -24,7 +24,7 @@ export class MenuRootComponent implements OnInit {
     private modal: ModalHelper,
     private http: _HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadData();
@@ -33,7 +33,11 @@ export class MenuRootComponent implements OnInit {
   loadData() {
     this.http.get(GetMenusUrl).subscribe((res: any) => {
       if (!res.success) {
-        this.notification.create('error', '菜单列表数据加载失败', res.allMessages);
+        this.notification.create(
+          'error',
+          '菜单列表数据加载失败',
+          res.allMessages,
+        );
       } else {
         this.list = res.data;
       }
@@ -134,6 +138,10 @@ export class MenuRootComponent implements OnInit {
       .subscribe(res => {
         this.menulist.loadData(item);
       });
+  }
 
+  uploadResult(res: any) {
+    console.log(111111111111111111);
+    console.log(res);
   }
 }

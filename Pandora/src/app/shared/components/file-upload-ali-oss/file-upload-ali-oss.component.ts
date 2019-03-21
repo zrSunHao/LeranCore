@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UUID } from 'angular2-uuid';
 import * as OSS from 'ali-oss';
@@ -5,15 +6,14 @@ import * as OSS from 'ali-oss';
 @Component({
   selector: 'app-file-upload-ali-oss',
   templateUrl: './file-upload-ali-oss.component.html',
-  styles: []
+  styles: [],
 })
 export class FileUploadAliOssComponent implements OnInit {
-
   client = new OSS({
     accessKeyId: 'LTAIMNBcPWNlAsER',
     accessKeySecret: 'iWeW3vbfvZSNsCD2u914Uw1yzazW34',
     bucket: 'zeus-dev',
-    region: 'oss-cn-qingdao'
+    region: 'oss-cn-qingdao',
   });
 
   // tslint:disable-next-line:no-inferrable-types
@@ -31,27 +31,29 @@ export class FileUploadAliOssComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   isDisabledUploadButton: Boolean = true;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   // click select files
   clickSelectFiles($event: any) {
     console.log($event.target.files[0]);
-    this.handleFiles($event.target.files).then((file: any[]) => {
-      console.log($event.target.files);
-      this.filesList.push(...file);
-    }).then(() => {
-      this.isDisabled();
-    }).then(() => {
-      this.uploadFile();
-    });
+    this.handleFiles($event.target.files)
+      .then((file: any[]) => {
+        console.log($event.target.files);
+        this.filesList.push(...file);
+      })
+      .then(() => {
+        this.isDisabled();
+      })
+      .then(() => {
+        this.uploadFile();
+      });
   }
 
   // Handle files
   handleFiles(files: any[]) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.filterFileType(files).then((file: any[]) => {
         this.filterFileNumber(file).then((fil: any[]) => {
           this.filterFileSize(fil).then((filesArr: any[]) => {
@@ -87,18 +89,21 @@ export class FileUploadAliOssComponent implements OnInit {
 
       file.isLoad = true;
       this.isDisabled();
-      this.client.put(uploadFileName, file).then(((res: any) => {
-        console.log(res);
-        console.log(file);
-        const href = res.res.requestUrls[0];
+      this.client
+        .put(uploadFileName, file)
+        .then((res: any) => {
+          console.log(res);
+          console.log(file);
+          const href = res.res.requestUrls[0];
 
-        file.status = 'success';
-        file.displaySize = file.size;
-        this.uploadStatus.emit(res);
-      })).catch((reason: any) => {
-        file.status = 'error';
-        this.uploadStatus.emit(reason);
-      });
+          file.status = 'success';
+          file.displaySize = file.size;
+          this.uploadStatus.emit(res);
+        })
+        .catch((reason: any) => {
+          file.status = 'error';
+          this.uploadStatus.emit(reason);
+        });
     }
   }
 
@@ -119,7 +124,7 @@ export class FileUploadAliOssComponent implements OnInit {
 
   // filter file type
   filterFileType(files: any[]) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const filesFilter: any[] = [];
       if (this.accept === '*') {
         resolve(files);
@@ -139,7 +144,7 @@ export class FileUploadAliOssComponent implements OnInit {
   // filter file size
   filterFileSize(files: any[]) {
     const filesFilter: any[] = [];
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (!this.fileSize) {
         resolve(files);
       } else {
@@ -156,7 +161,7 @@ export class FileUploadAliOssComponent implements OnInit {
 
   // filter file number
   filterFileNumber(files: any[]) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (files.length > this.fileNumber) {
         return;
       } else {
@@ -164,8 +169,6 @@ export class FileUploadAliOssComponent implements OnInit {
       }
     });
   }
-
-
 
   // remove files
   removeFile(index: number) {
@@ -175,5 +178,4 @@ export class FileUploadAliOssComponent implements OnInit {
       this.isDisabled();
     }, 300);
   }
-
 }
