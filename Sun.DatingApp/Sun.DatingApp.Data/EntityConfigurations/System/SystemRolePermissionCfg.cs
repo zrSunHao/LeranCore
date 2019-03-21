@@ -7,11 +7,11 @@ using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.System
 {
-    public class RolePermissionCfg : IEntityTypeConfiguration<RolePermission>
+    public class RolePermissionCfg : IEntityTypeConfiguration<SystemRolePermission>
     {
-        public void Configure(EntityTypeBuilder<RolePermission> builder)
+        public void Configure(EntityTypeBuilder<SystemRolePermission> builder)
         {
-            builder.ToTable("RolePermission");
+            builder.ToTable("SystemRolePermission");
 
             builder.HasKey(x => x.Id);
 

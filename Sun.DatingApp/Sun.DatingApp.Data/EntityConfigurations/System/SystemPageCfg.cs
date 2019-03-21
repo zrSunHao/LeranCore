@@ -7,11 +7,11 @@ using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.System
 {
-    public class PageCfg : IEntityTypeConfiguration<Page>
+    public class SystemPageCfg : IEntityTypeConfiguration<SystemPage>
     {
-        public void Configure(EntityTypeBuilder<Page> builder)
+        public void Configure(EntityTypeBuilder<SystemPage> builder)
         {
-            builder.ToTable("Page");
+            builder.ToTable("SystemPage");
 
             builder.HasKey(x => x.Id);
 

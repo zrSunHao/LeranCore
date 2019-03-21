@@ -5,11 +5,11 @@ using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.System
 {
-    public class UserInfoCfg : IEntityTypeConfiguration<UserInfo>
+    public class SystemUserInfoCfg : IEntityTypeConfiguration<SystemUserInfo>
     {
-        public void Configure(EntityTypeBuilder<UserInfo> builder)
+        public void Configure(EntityTypeBuilder<SystemUserInfo> builder)
         {
-            builder.ToTable("UserInfo");
+            builder.ToTable("SystemUserInfo");
 
             builder.HasKey(x => x.Id);
 

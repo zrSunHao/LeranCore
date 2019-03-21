@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Sun.DatingApp.Data.Entities.System
 {
     [Description("用户信息")]
-    public class UserInfo : BaseEntity
+    public class SystemUserInfo : BaseEntity
     {
         [Description("账号Id")]
         public Guid AccountId { get; set; }

@@ -92,7 +92,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
-                var role = new Role()
+                var role = new SystemRole()
                 {
                     Id = Guid.NewGuid(),
                     Name = dto.Name,
@@ -301,10 +301,10 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                 if (dto.Permissions != null && dto.Permissions.Any())
                 {
-                    var permissions = new List<RolePermission>();
+                    var permissions = new List<SystemRolePermission>();
                     foreach (var permissionAndPageId in dto.Permissions)
                     {
-                        var permission = new RolePermission
+                        var permission = new SystemRolePermission
                         {
                             Id = Guid.NewGuid(),
                             RoleId = dto.RoleId,

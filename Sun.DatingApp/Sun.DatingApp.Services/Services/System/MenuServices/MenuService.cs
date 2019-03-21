@@ -55,7 +55,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = new Menu
+                var entity = new SystemMenu
                 {
                     Id = Guid.NewGuid(),
                     Name = dto.Name,
@@ -216,7 +216,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = new Page
+                var entity = new SystemPage
                 {
                     Id = Guid.NewGuid(),
                     Name = dto.Name,

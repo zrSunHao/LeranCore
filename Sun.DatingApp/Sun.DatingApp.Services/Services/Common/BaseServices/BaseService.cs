@@ -51,14 +51,14 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             }
         }
 
-        public async Task<List<Permission>> GetPerssionEntitys()
+        public async Task<List<SystemPermission>> GetPerssionEntitys()
         {
-            var entitys = new List<Permission>();
+            var entitys = new List<SystemPermission>();
             var catchKey = "PerssionEntitys";
             var exist = this._catchHandler.Exists(catchKey);
             if (exist)
             {
-                entitys = this._catchHandler.Get<List<Permission>>(catchKey);
+                entitys = this._catchHandler.Get<List<SystemPermission>>(catchKey);
             }
             else
             {
@@ -69,14 +69,14 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
 
         }
 
-        public async Task<List<Role>> GetRoleEntitys()
+        public async Task<List<SystemRole>> GetRoleEntitys()
         {
-            var entitys = new List<Role>();
+            var entitys = new List<SystemRole>();
             var catchKey = "RoleEntitys";
             var exist = this._catchHandler.Exists(catchKey);
             if (exist)
             {
-                entitys = this._catchHandler.Get<List<Role>>(catchKey);
+                entitys = this._catchHandler.Get<List<SystemRole>>(catchKey);
             }
             else
             {
@@ -87,14 +87,14 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
 
         }
 
-        public async Task<List<RolePermission>> GetRolePerssionEntitys(Guid roleId)
+        public async Task<List<SystemRolePermission>> GetRolePerssionEntitys(Guid roleId)
         {
-            var entitys = new List<RolePermission>();
+            var entitys = new List<SystemRolePermission>();
             var catchKey = roleId.ToString();
             var exist = this._catchHandler.Exists(catchKey);
             if (exist)
             {
-                entitys = this._catchHandler.Get<List<RolePermission>>(catchKey);
+                entitys = this._catchHandler.Get<List<SystemRolePermission>>(catchKey);
             }
             else
             {

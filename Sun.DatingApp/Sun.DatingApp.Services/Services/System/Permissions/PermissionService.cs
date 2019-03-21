@@ -56,7 +56,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
             var result = new WebApiResult<PermissionListModel>();
             try
             {
-                var entity = new Permission
+                var entity = new SystemPermission
                 {
                     Id = Guid.NewGuid(),
                     Name = dto.Name,

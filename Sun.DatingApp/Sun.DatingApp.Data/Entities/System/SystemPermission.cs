@@ -2,7 +2,7 @@
 
 namespace Sun.DatingApp.Data.Entities.System
 {
-    public class Permission : BaseEntity
+    public class SystemPermission : BaseEntity
     {
         public string Name { get; set; }
 
@@ -18,6 +18,6 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public Guid PageId { get; set; }
 
-        public virtual Page Page { get; set; }
+        public virtual SystemPage Page { get; set; }
     }
 }

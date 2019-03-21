@@ -2,7 +2,7 @@
 
 namespace Sun.DatingApp.Data.Entities.System
 {
-    public class RolePermission : BaseEntity
+    public class SystemRolePermission : BaseEntity
     {
         public Guid RoleId { get; set; }
 
@@ -10,6 +10,6 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public Guid PageId { get; set; }
 
-        public Role Role { get; set; }
+        public SystemRole Role { get; set; }
     }
 }

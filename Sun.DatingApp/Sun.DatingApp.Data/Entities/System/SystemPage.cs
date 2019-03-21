@@ -2,7 +2,7 @@
 
 namespace Sun.DatingApp.Data.Entities.System
 {
-    public class Page : BaseEntity
+    public class SystemPage : BaseEntity
     {
         public string Name { get; set; }
 

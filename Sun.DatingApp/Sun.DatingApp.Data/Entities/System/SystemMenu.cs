@@ -1,6 +1,6 @@
 ﻿namespace Sun.DatingApp.Data.Entities.System
 {
-    public class Menu : BaseEntity
+    public class SystemMenu : BaseEntity
     {
         public string Name { get; set; }
 

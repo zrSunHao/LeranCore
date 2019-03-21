@@ -16,15 +16,12 @@ namespace Sun.DatingApp.Data.Database
 
         public DbSet<SystemAccount> SystemAccounts { get; set; }
         public DbSet<SystemAccountAvatar> SystemAccountAvatars { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<UserInfo> UserInfos { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Prompt> Prompts { get; set; }
-        public DbSet<Organization> Organizations { get; set; }
-        public DbSet<ProfilePicture> ProfilePictures { get; set; }
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<Page> Pages { get; set; }
+        public DbSet<SystemRolePermission> RolePermissions { get; set; }
+        public DbSet<SystemPermission> Permissions { get; set; }
+        public DbSet<SystemUserInfo> UserInfos { get; set; }
+        public DbSet<SystemRole> Roles { get; set; }
+        public DbSet<SystemMenu> Menus { get; set; }
+        public DbSet<SystemPage> Pages { get; set; }
 
         #endregion
 
@@ -52,13 +49,10 @@ namespace Sun.DatingApp.Data.Database
             modelBuilder.ApplyConfiguration(new SystemAccountAvatarCfg());
             modelBuilder.ApplyConfiguration(new RolePermissionCfg());
             modelBuilder.ApplyConfiguration(new PermissionCfg());
-            modelBuilder.ApplyConfiguration(new UserInfoCfg());
-            modelBuilder.ApplyConfiguration(new RoleCfg());
-            modelBuilder.ApplyConfiguration(new PromptCfg());
-            modelBuilder.ApplyConfiguration(new OrganizationCfg());
-            modelBuilder.ApplyConfiguration(new ProfilePictureCfg());
-            modelBuilder.ApplyConfiguration(new MenuCfg());
-            modelBuilder.ApplyConfiguration(new PageCfg());
+            modelBuilder.ApplyConfiguration(new SystemUserInfoCfg());
+            modelBuilder.ApplyConfiguration(new SystemRoleCfg());
+            modelBuilder.ApplyConfiguration(new SystemMenuCfg());
+            modelBuilder.ApplyConfiguration(new SystemPageCfg());
 
             #endregion
 
