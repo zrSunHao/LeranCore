@@ -27,8 +27,8 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
             var result = new WebApiResult<List<PermissionListModel>>();
             try
             {
-                var datas = await (from p in _dataContext.Permissions
-                    where p.PageId == id && !p.Deleted
+                var datas = await (from p in _dataContext.SystemPermissions
+                                   where p.PageId == id && !p.Deleted
                     select new PermissionListModel
                     {
                         Id = p.Id,
@@ -71,7 +71,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
                     Deleted = false
                 };
 
-                _dataContext.Permissions.Add(entity);
+                _dataContext.SystemPermissions.Add(entity);
 
                 await _dataContext.SaveChangesAsync();
             }
@@ -94,14 +94,14 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
                     return result;
                 }
 
-                var entity = await _dataContext.Permissions.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                var entity = await _dataContext.SystemPermissions.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
                     return result;
                 }
 
-                var exist = await _dataContext.Permissions.AnyAsync(x => !x.Deleted && x.Id != dto.Id && x.Code == dto.Code);
+                var exist = await _dataContext.SystemPermissions.AnyAsync(x => !x.Deleted && x.Id != dto.Id && x.Code == dto.Code);
                 if (exist)
                 {
                     result.AddError("存在相同的编号");
@@ -131,7 +131,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Permissions.FirstOrDefaultAsync(x => x.Id == id);
+                var entity = await _dataContext.SystemPermissions.FirstOrDefaultAsync(x => x.Id == id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -157,7 +157,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Permissions.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemPermissions.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");

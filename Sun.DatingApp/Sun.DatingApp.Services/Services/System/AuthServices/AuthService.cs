@@ -45,7 +45,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var role = await _dataContext.Roles.AsNoTracking()
+                var role = await _dataContext.SystemRoles.AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Name == "用户" && !x.Deleted);
                 if (role == null)
                 {
@@ -107,7 +107,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 account.RefreshToken = refreshToken;
                 await _dataContext.SaveChangesAsync();
 
-                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
+                var role = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
                 if (role == null)
                 {
                     result.AddError("该账号没有角色，请联系管理员");
@@ -266,7 +266,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 var queryR = from a in query
-                    join r in _dataContext.Roles on a.RoleId equals r.Id into tr
+                    join r in _dataContext.SystemRoles on a.RoleId equals r.Id into tr
                     from ar in tr.DefaultIfEmpty()
                     select new AccountListModel
                     {
@@ -551,7 +551,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
+                var role = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
                 if (role == null)
                 {
                     result.AddError("该账号没有角色，请联系管理员");
@@ -592,7 +592,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var permsItems = await _dataContext.RolePermissions.Where(x=>x.RoleId == account.RoleId && !x.Deleted).ToListAsync();
+                var permsItems = await _dataContext.SystemRolePermissions.Where(x=>x.RoleId == account.RoleId && !x.Deleted).ToListAsync();
                 var pageIds = permsItems.Select(x => x.PageId).ToList();
 
                 if (pageIds.Any())
@@ -622,8 +622,8 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var permsIds = await _dataContext.RolePermissions.Where(x => x.RoleId == account.RoleId && !x.Deleted).Select(x=>x.PermissionId).ToListAsync();
-                var perms = await _dataContext.Permissions.Where(x => permsIds.Contains(x.Id) && !x.Deleted)
+                var permsIds = await _dataContext.SystemRolePermissions.Where(x => x.RoleId == account.RoleId && !x.Deleted).Select(x=>x.PermissionId).ToListAsync();
+                var perms = await _dataContext.SystemPermissions.Where(x => permsIds.Contains(x.Id) && !x.Deleted)
                     .Select(x => x.Code).ToArrayAsync();
 
                 result.Data = perms;
@@ -680,9 +680,9 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     HideInBreadcrumb = true,
                 };
 
-                var pages = await _dataContext.Pages.Where(x => pageIds.Contains(x.Id) && !x.Deleted).ToListAsync();
+                var pages = await _dataContext.SystemPages.Where(x => pageIds.Contains(x.Id) && !x.Deleted).ToListAsync();
                 var menuIds = pages.Select(x => x.MenuId).ToList();
-                var menus = await _dataContext.Menus.Where(x => menuIds.Contains(x.Id)).ToListAsync();
+                var menus = await _dataContext.SystemMenus.Where(x => menuIds.Contains(x.Id)).ToListAsync();
 
                 if (menus.Any())
                 {

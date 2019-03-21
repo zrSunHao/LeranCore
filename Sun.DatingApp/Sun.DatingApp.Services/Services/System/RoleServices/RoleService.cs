@@ -34,7 +34,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<RoleListModel>>();
             try
             {
-                var roles = await _dataContext.Roles.Where(x => !x.Deleted).Select(x => new RoleListModel
+                var roles = await _dataContext.SystemRoles.Where(x => !x.Deleted).Select(x => new RoleListModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -46,8 +46,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     var roleIds = roles.Select(x => x.Id).ToList();
 
-                    var pages = await (from rp in _dataContext.RolePermissions
-                        join p in _dataContext.Pages on rp.PageId equals p.Id into tp
+                    var pages = await (from rp in _dataContext.SystemRolePermissions
+                                       join p in _dataContext.SystemPages on rp.PageId equals p.Id into tp
                         from rrp in tp.DefaultIfEmpty()
                         where roleIds.Contains(rp.RoleId)
                         where !rp.Deleted
@@ -101,7 +101,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     CreatedAt = DateTime.Now,
                     CreatedById = accountId,
                 };
-                _dataContext.Roles.Add(role);
+                _dataContext.SystemRoles.Add(role);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -129,7 +129,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     return result;
                 }
 
-                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                var role = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
                 if (role == null)
                 {
                     result.AddError("数据为空");
@@ -162,7 +162,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -202,7 +202,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
-                var role = await _dataContext.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+                var role = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == roleId);
                 if (role == null)
                 {
                     result.AddError("数据为空");
@@ -234,8 +234,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<RolePageModel>>();
             try
             {
-                var pages = await (from p in _dataContext.Pages
-                    join m in _dataContext.Menus on p.MenuId equals m.Id into tm
+                var pages = await (from p in _dataContext.SystemPages
+                                   join m in _dataContext.SystemMenus on p.MenuId equals m.Id into tm
                     from mp in tm.DefaultIfEmpty()
                     where !p.Deleted
                     select new RolePageModel
@@ -252,8 +252,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                 if (pages.Any())
                 {
-                    var allPermissions = await _dataContext.Permissions.Where(x => !x.Deleted).ToListAsync();
-                    var rolePermissionIds = await _dataContext.RolePermissions.Where(x => x.RoleId == id && !x.Deleted)
+                    var allPermissions = await _dataContext.SystemPermissions.Where(x => !x.Deleted).ToListAsync();
+                    var rolePermissionIds = await _dataContext.SystemRolePermissions.Where(x => x.RoleId == id && !x.Deleted)
                         .Select(x => x.PermissionId).ToListAsync();
 
                     foreach (var page in pages)
@@ -295,8 +295,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
-                var deletePermissions = await _dataContext.RolePermissions.Where(x => x.RoleId == dto.RoleId).ToListAsync();
-                _dataContext.RolePermissions.RemoveRange(deletePermissions);
+                var deletePermissions = await _dataContext.SystemRolePermissions.Where(x => x.RoleId == dto.RoleId).ToListAsync();
+                _dataContext.SystemRolePermissions.RemoveRange(deletePermissions);
                 await _dataContext.SaveChangesAsync();
 
                 if (dto.Permissions != null && dto.Permissions.Any())
@@ -316,7 +316,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                         };
                         permissions.Add(permission);
                     }
-                    _dataContext.RolePermissions.AddRange(permissions);
+                    _dataContext.SystemRolePermissions.AddRange(permissions);
                 }
 
                 await _dataContext.SaveChangesAsync();
@@ -340,7 +340,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<ItemModel>>();
             try
             {
-                var data = await _dataContext.Roles.Where(x => !x.Deleted).Select(x =>
+                var data = await _dataContext.SystemRoles.Where(x => !x.Deleted).Select(x =>
                     new ItemModel
                     {
                         Value = x.Id,

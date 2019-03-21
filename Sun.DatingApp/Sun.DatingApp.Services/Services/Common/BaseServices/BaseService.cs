@@ -17,8 +17,6 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
         public readonly ICacheHandler _catchHandler;
 
         public Guid? CurrentUserId = null;
-        private DataContext dataContext;
-        private IMapper mapper;
 
         public BaseService(
             DataContext dataContext,
@@ -62,7 +60,7 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             }
             else
             {
-                entitys = await _dataContext.Permissions.Where(x => !x.Deleted).ToListAsync();
+                entitys = await _dataContext.SystemPermissions.Where(x => !x.Deleted).ToListAsync();
                 this._catchHandler.Add(catchKey, entitys);
             }
             return entitys;
@@ -80,7 +78,7 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             }
             else
             {
-                entitys = await _dataContext.Roles.Where(x => !x.Deleted).ToListAsync();
+                entitys = await _dataContext.SystemRoles.Where(x => !x.Deleted).ToListAsync();
                 this._catchHandler.Add(catchKey, entitys);
             }
             return entitys;
@@ -98,7 +96,7 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             }
             else
             {
-                entitys = await _dataContext.RolePermissions.Where(x => !x.Deleted && x.RoleId == roleId).ToListAsync();
+                entitys = await _dataContext.SystemRolePermissions.Where(x => !x.Deleted && x.RoleId == roleId).ToListAsync();
                 this._catchHandler.Add(catchKey, entitys);
             }
             return entitys;

@@ -28,8 +28,8 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult<List<MenuListModel>>();
             try
             {
-                var data = await (from m in _dataContext.Menus
-                    where !m.Deleted
+                var data = await (from m in _dataContext.SystemMenus
+                                  where !m.Deleted
                     select new MenuListModel
                     {
                         Id = m.Id,
@@ -68,7 +68,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     CreatedById = CurrentUserId
                 };
 
-                _dataContext.Menus.Add(entity);
+                _dataContext.SystemMenus.Add(entity);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     return result;
                 }
 
-                var entity = await _dataContext.Menus.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                var entity = await _dataContext.SystemMenus.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -119,7 +119,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Menus.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemMenus.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -153,7 +153,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Menus.FirstOrDefaultAsync(x => x.Id == id);
+                var entity = await _dataContext.SystemMenus.FirstOrDefaultAsync(x => x.Id == id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -164,7 +164,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.DeletedAt = DateTime.Now;
                 entity.DeletedById = accountId;
 
-                await _dataContext.Pages.Where(x => x.MenuId == entity.Id).ForEachAsync(c =>
+                await _dataContext.SystemPages.Where(x => x.MenuId == entity.Id).ForEachAsync(c =>
                 {
                     c.Deleted = true;
                     c.DeletedAt = DateTime.Now;
@@ -187,8 +187,8 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult<List<PageListModel>>();
             try
             {
-                var data = await (from p in _dataContext.Pages
-                    where !p.Deleted && p.MenuId == id
+                var data = await (from p in _dataContext.SystemPages
+                                  where !p.Deleted && p.MenuId == id
                     select new PageListModel
                     {
                         Id = p.Id,
@@ -231,7 +231,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     CreatedById = CurrentUserId
                 };
 
-                _dataContext.Pages.Add(entity);
+                _dataContext.SystemPages.Add(entity);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -253,7 +253,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     return result;
                 }
 
-                var entity = await _dataContext.Pages.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
+                var entity = await _dataContext.SystemPages.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -284,7 +284,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Pages.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemPages.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -318,7 +318,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Pages.FirstOrDefaultAsync(x => x.Id == id);
+                var entity = await _dataContext.SystemPages.FirstOrDefaultAsync(x => x.Id == id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -344,7 +344,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult<List<ItemModel>>();
             try
             {
-                var data = await _dataContext.Pages.Where(x => !x.Deleted).Select(x =>
+                var data = await _dataContext.SystemPages.Where(x => !x.Deleted).Select(x =>
                     new ItemModel
                     {
                         Value = x.Id,
@@ -366,8 +366,8 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult<List<PageListModel>>();
             try
             {
-                var data = await (from p in _dataContext.Pages
-                    join m in _dataContext.Menus on p.MenuId equals m.Id into tm
+                var data = await (from p in _dataContext.SystemPages
+                                  join m in _dataContext.SystemMenus on p.MenuId equals m.Id into tm
                     from pm in tm.DefaultIfEmpty() 
                     where !p.Deleted
                     where string.IsNullOrEmpty(name) || (!string.IsNullOrEmpty(name) && p.Name.Contains(name))

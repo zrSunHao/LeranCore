@@ -16,12 +16,12 @@ namespace Sun.DatingApp.Data.Database
 
         public DbSet<SystemAccount> SystemAccounts { get; set; }
         public DbSet<SystemAccountAvatar> SystemAccountAvatars { get; set; }
-        public DbSet<SystemRolePermission> RolePermissions { get; set; }
-        public DbSet<SystemPermission> Permissions { get; set; }
-        public DbSet<SystemUserInfo> UserInfos { get; set; }
-        public DbSet<SystemRole> Roles { get; set; }
-        public DbSet<SystemMenu> Menus { get; set; }
-        public DbSet<SystemPage> Pages { get; set; }
+        public DbSet<SystemRolePermission> SystemRolePermissions { get; set; }
+        public DbSet<SystemPermission> SystemPermissions { get; set; }
+        public DbSet<SystemUserInfo> SystemUserInfos { get; set; }
+        public DbSet<SystemRole> SystemRoles { get; set; }
+        public DbSet<SystemMenu> SystemMenus { get; set; }
+        public DbSet<SystemPage> SystemPages { get; set; }
 
         #endregion
 
