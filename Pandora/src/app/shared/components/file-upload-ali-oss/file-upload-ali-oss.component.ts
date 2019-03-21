@@ -9,12 +9,7 @@ import * as OSS from 'ali-oss';
   styles: [],
 })
 export class FileUploadAliOssComponent implements OnInit {
-  client = new OSS({
-    accessKeyId: 'LTAIMNBcPWNlAsER',
-    accessKeySecret: 'iWeW3vbfvZSNsCD2u914Uw1yzazW34',
-    bucket: 'zeus-dev',
-    region: 'oss-cn-qingdao',
-  });
+  client: any;
 
   // tslint:disable-next-line:no-inferrable-types
   @Input() accept?: string = '*';
@@ -25,6 +20,9 @@ export class FileUploadAliOssComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   @Input() uploadButtonBg?: String = 'btn-success';
 
+  // tslint:disable-next-line:no-inferrable-types
+  @Input() bucket: string = '';
+
   @Output() uploadStatus = new EventEmitter();
 
   filesList: any[] = [];
@@ -33,7 +31,15 @@ export class FileUploadAliOssComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.client = new OSS({
+      accessKeyId: 'LTAIMNBcPWNlAsER',
+      accessKeySecret: 'iWeW3vbfvZSNsCD2u914Uw1yzazW34',
+      bucket: this.bucket,
+      region: 'oss-cn-qingdao',
+    });
+    console.log(this.bucket);
+  }
 
   // click select files
   clickSelectFiles($event: any) {
@@ -107,7 +113,7 @@ export class FileUploadAliOssComponent implements OnInit {
         .catch((reason: any) => {
           file.status = 'error';
           const event = {
-            success: true,
+            success: false,
             reason,
           };
           this.uploadStatus.emit(event);

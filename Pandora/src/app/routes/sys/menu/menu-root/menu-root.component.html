@@ -1,6 +1,6 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
-    <app-file-upload-ali-oss (uploadStatus)="uploadResult($event)"></app-file-upload-ali-oss>
+    <app-file-upload-ali-oss bucket="zeus-dev" (uploadStatus)="uploadResult($event)"></app-file-upload-ali-oss>
     <button nz-button nzType="primary" (click)="add()" [acl]="{ ability: [10, 'Menu.CreateMenu'], mode: 'oneOf' }"><i
         nz-icon type="plus" theme="outline"></i>添加模块</button>
   </ng-template>
