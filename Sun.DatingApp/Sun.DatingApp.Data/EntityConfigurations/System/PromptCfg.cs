@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Prompt> builder)
         {
-            builder.ToTable("Prompt", "system");
+            builder.ToTable("Prompt");
 
             builder.HasKey(x => x.Id);
 

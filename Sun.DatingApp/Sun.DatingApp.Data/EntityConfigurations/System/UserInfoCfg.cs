@@ -9,7 +9,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<UserInfo> builder)
         {
-            builder.ToTable("UserInfo", "system");
+            builder.ToTable("UserInfo");
 
             builder.HasKey(x => x.Id);
 

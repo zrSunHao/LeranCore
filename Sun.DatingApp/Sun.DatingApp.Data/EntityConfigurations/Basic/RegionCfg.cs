@@ -9,7 +9,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.Basic
     {
         public void Configure(EntityTypeBuilder<Region> builder)
         {
-            builder.ToTable("Region", "basic");
+            builder.ToTable("Region");
 
             builder.HasKey(x => x.Id);
 

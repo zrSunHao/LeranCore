@@ -15,6 +15,7 @@ namespace Sun.DatingApp.Data.Database
         #region System
 
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountAvatar> AccountAvatars { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
@@ -48,6 +49,7 @@ namespace Sun.DatingApp.Data.Database
             #region System
 
             modelBuilder.ApplyConfiguration(new AccountCfg());
+            modelBuilder.ApplyConfiguration(new AccountAvatarCfg());
             modelBuilder.ApplyConfiguration(new RolePermissionCfg());
             modelBuilder.ApplyConfiguration(new PermissionCfg());
             modelBuilder.ApplyConfiguration(new UserInfoCfg());

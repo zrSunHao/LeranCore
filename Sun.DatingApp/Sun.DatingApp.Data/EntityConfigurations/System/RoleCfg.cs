@@ -10,7 +10,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.ToTable("Role", "system");
+            builder.ToTable("Role");
 
             builder.HasKey(x => x.Id);
 

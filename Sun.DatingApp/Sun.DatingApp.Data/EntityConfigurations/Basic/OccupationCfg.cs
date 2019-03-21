@@ -9,7 +9,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.Basic
     {
         public void Configure(EntityTypeBuilder<Occupation> builder)
         {
-            builder.ToTable("Occupation", "basic");
+            builder.ToTable("Occupation");
 
             builder.HasKey(x => x.Id);
 

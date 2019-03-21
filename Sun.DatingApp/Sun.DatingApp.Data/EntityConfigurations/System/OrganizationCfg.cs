@@ -12,7 +12,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
     {
         public void Configure(EntityTypeBuilder<Organization> builder)
         {
-            builder.ToTable("Organization", "system");
+            builder.ToTable("Organization");
 
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name).HasMaxLength(50);
