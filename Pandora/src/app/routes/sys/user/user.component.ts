@@ -16,7 +16,7 @@ import { _HttpClient } from '@delon/theme';
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
   private resize$: Subscription;
@@ -44,7 +44,7 @@ export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
   constructor(
     private router: Router,
-    private cdr: ChangeDetectorRef,
+    // private cdr: ChangeDetectorRef,
     private el: ElementRef,
   ) {
     this.router$ = this.router.events
@@ -88,6 +88,6 @@ export class UserComponent implements OnInit, AfterViewInit, OnDestroy {
       mode = 'horizontal';
     }
     this.mode = mode;
-    this.cdr.detectChanges();
+    // this.cdr.detectChanges();
   }
 }

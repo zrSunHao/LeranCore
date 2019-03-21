@@ -3,12 +3,16 @@ import {
   ChangeDetectionStrategy,
   OnInit,
   ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { zip, of } from 'rxjs';
-import { NzMessageService } from 'ng-zorro-antd';
-import { SFSchema, SFButton } from '@delon/form';
+import { SFSchema, SFButton, SFComponent } from '@delon/form';
+import { NzNotificationService } from 'ng-zorro-antd';
+import { STComponent } from '@delon/abc';
+import { DatePipe } from '@angular/common';
 
+const EditUserInfoUrl = 'User/EditUserInfo';
+const GetUserInfoUrl = 'User/GetUserInfo';
 const sexList = [{ label: '男', value: true }, { label: '女', value: false }];
 
 @Component({
@@ -18,9 +22,7 @@ const sexList = [{ label: '男', value: true }, { label: '女', value: false }];
 })
 export class UserInfoComponent implements OnInit {
   userLoading = false;
-  info: {
-    avatar: 'http://zeus-dev.oss-cn-qingdao.aliyuncs.com/a54af76a-0c2c-99ed-8694-997d7fe49b26.jpg';
-  };
+  info: any;
   avatar =
     'http://zeus-dev.oss-cn-qingdao.aliyuncs.com/a54af76a-0c2c-99ed-8694-997d7fe49b26.jpg';
 
@@ -71,19 +73,65 @@ export class UserInfoComponent implements OnInit {
     submit: '提交',
   };
 
+  @ViewChild('st') st: STComponent;
+
   constructor(
-    private http: _HttpClient,
-    private cdr: ChangeDetectorRef,
-    private msg: NzMessageService,
+    public http: _HttpClient,
+    private datePipe: DatePipe,
+    private notification: NzNotificationService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userLoading = true;
+    this.getUserInfo();
+  }
 
   editAvatar() {
     console.log(1111111111);
   }
 
   submit(value: any) {
-    this.msg.success(JSON.stringify(value));
+    this.userLoading = true;
+    this.http.post(EditUserInfoUrl, value).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '更新失败', res.allMessages);
+      } else {
+        this.notification.create('success', '更新成功', res.allMessages);
+      }
+      this.userLoading = false;
+    });
+  }
+
+  getUserInfo() {
+    this.http
+      .get(GetUserInfoUrl)
+      .subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create(
+            'error',
+            '基本信息获取失败',
+            res.allMessages,
+          );
+        } else {
+          if (res.data != null) {
+            this.info = res.data;
+            if (this.info.birthday) {
+              this.info.birthday = this.datePipe.transform(
+                this.info.birthday,
+                'yyyy-MM-dd',
+              );
+            }
+            console.log(this.info);
+          }
+        }
+        this.userLoading = false;
+        console.log(this.userLoading);
+      });
+    console.log(this.userLoading);
+  }
+
+  test(event: any) {
+    console.log(event.valid);
+    console.log(event.errors);
   }
 }

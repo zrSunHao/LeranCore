@@ -19,6 +19,7 @@ namespace Sun.DatingApp.Api
         {
             var host = CreateWebHostBuilder(args).Build();
 
+            //初始化数据
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
