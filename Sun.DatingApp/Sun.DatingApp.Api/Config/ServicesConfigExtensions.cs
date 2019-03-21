@@ -8,7 +8,6 @@ using Sun.DatingApp.Services.Services.System.MenuServices;
 using Sun.DatingApp.Services.Services.System.Permissions;
 using Sun.DatingApp.Services.Services.System.RoleServices;
 using Sun.DatingApp.Services.Services.System.UserServices;
-using Sun.DatingApp.Services.Services.UserServices;
 
 namespace Sun.DatingApp.Api.Config
 {

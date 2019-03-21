@@ -365,5 +365,25 @@ namespace Sun.DatingApp.Api.Controllers.System
         {
             return await _service.GetAccountPermission(id);
         }
+
+        /// <summary>
+        /// 绑定头像
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost("BindAvatar")]
+        public async Task<WebApiResult> BindAvatar(FileDto dto)
+        {
+            var result = new WebApiResult();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.BindAvatar(dto, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
     }
 }

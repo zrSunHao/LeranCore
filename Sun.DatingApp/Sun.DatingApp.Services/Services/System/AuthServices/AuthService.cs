@@ -534,6 +534,32 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
+        public async Task<WebApiResult> BindAvatar(FileDto dto, Guid accountId)
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var entity = new SystemAccountAvatar
+                {
+                    Id = Guid.NewGuid(),
+                    AccountId = accountId,
+                    FileName = dto.FileName,
+                    Url = dto.Url,
+                    FileType = dto.Url,
+                    FileLength = dto.FileLength
+                };
+
+                _dataContext.Add(entity);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
         #endregion
 
 
