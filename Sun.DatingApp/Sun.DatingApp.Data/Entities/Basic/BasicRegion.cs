@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Sun.DatingApp.Data.Entities.Basic
 {
     [Description("地区")]
-    public class Region
+    public class BasicRegion
     {
         [Description("Id")]
         public Guid Id { get; set; }

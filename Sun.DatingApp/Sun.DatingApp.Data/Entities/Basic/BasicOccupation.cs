@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Sun.DatingApp.Data.Entities.Basic
 {
     [Description("工作岗位")]
-    public class Occupation
+    public class BasicOccupation
     {
         [Description("Id")]
         public Guid Id { get; set; }

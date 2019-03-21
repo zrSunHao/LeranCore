@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sun.DatingApp.Data.Entities.Basic;
-using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.Basic
 {
-    public class OccupationCfg : IEntityTypeConfiguration<Occupation>
+    public class BasicOccupationCfg : IEntityTypeConfiguration<BasicOccupation>
     {
-        public void Configure(EntityTypeBuilder<Occupation> builder)
+        public void Configure(EntityTypeBuilder<BasicOccupation> builder)
         {
-            builder.ToTable("Occupation");
+            builder.ToTable("BasicOccupation");
 
             builder.HasKey(x => x.Id);
 

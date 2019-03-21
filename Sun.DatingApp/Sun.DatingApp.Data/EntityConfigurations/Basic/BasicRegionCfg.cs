@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sun.DatingApp.Data.Entities.Basic;
-using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.Basic
 {
-    public class RegionCfg : IEntityTypeConfiguration<Region>
+    public class BasicRegionCfg : IEntityTypeConfiguration<BasicRegion>
     {
-        public void Configure(EntityTypeBuilder<Region> builder)
+        public void Configure(EntityTypeBuilder<BasicRegion> builder)
         {
-            builder.ToTable("Region");
+            builder.ToTable("BasicRegion");
 
             builder.HasKey(x => x.Id);
 

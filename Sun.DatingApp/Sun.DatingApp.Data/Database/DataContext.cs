@@ -36,8 +36,8 @@ namespace Sun.DatingApp.Data.Database
 
         #region Basic
 
-        public DbSet<Region> Districts { get; set; }
-        public DbSet<Occupation> Occupations { get; set; }
+        public DbSet<BasicRegion> BasicRegion { get; set; }
+        public DbSet<BasicOccupation> BasicOccupation { get; set; }
 
         #endregion
 
@@ -70,8 +70,8 @@ namespace Sun.DatingApp.Data.Database
 
             #region Basic
 
-            modelBuilder.ApplyConfiguration(new RegionCfg());
-            modelBuilder.ApplyConfiguration(new OccupationCfg());
+            modelBuilder.ApplyConfiguration(new BasicRegionCfg());
+            modelBuilder.ApplyConfiguration(new BasicOccupationCfg());
 
             #endregion
 
