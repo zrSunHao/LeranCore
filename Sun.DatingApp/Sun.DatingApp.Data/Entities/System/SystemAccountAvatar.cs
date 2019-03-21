@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sun.DatingApp.Data.Entities.System
 {
-    public class AccountAvatar : BaseEntity
+    public class SystemAccountAvatar : BaseEntity
     {
         public Guid AccountId { get; set; }
 

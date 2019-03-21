@@ -4,11 +4,11 @@ using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.System
 {
-    public class AccountCfg : IEntityTypeConfiguration<Account>
+    public class AccountCfg : IEntityTypeConfiguration<SystemAccount>
     {
-        public void Configure(EntityTypeBuilder<Account> builder)
+        public void Configure(EntityTypeBuilder<SystemAccount> builder)
         {
-            builder.ToTable("Account");
+            builder.ToTable("SystemAccount");
 
             builder.HasKey(x => x.Id);
             

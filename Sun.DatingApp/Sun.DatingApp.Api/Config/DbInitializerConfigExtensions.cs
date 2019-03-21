@@ -12,7 +12,7 @@ namespace Sun.DatingApp.Api.Config
         {
             context.Database.EnsureCreated();
 
-            var test = context.Accounts.Any();
+            var test = context.SystemAccounts.Any();
             var see = test;
         }
     }

@@ -39,13 +39,13 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
         /// <summary>
         /// 获取当前登录用户
         /// </summary>
-        public virtual Account CurrentUser
+        public virtual SystemAccount CurrentUser
         {
             get
             {
                 if (CurrentUserId.HasValue)
                 {
-                    return _dataContext.Accounts.FirstOrDefault(x => x.Id == CurrentUserId);
+                    return _dataContext.SystemAccounts.FirstOrDefault(x => x.Id == CurrentUserId);
                 }
                 return null;
             }

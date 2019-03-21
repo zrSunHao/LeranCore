@@ -31,14 +31,14 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var emailExist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                var emailExist = await _dataContext.SystemAccounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
                 if (emailExist)
                 {
                     result.AddError(dto.Email + "该邮箱已被注册");
                     return result;
                 }
 
-                var mobileExist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                var mobileExist = await _dataContext.SystemAccounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
                 if (mobileExist)
                 {
                     result.AddError(dto.Email + "该手机号码已被注册");
@@ -53,7 +53,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var account = _mapper.Map<RegisterDto, Account>(dto);
+                var account = _mapper.Map<RegisterDto, SystemAccount>(dto);
 
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(dto.Password, out passwordHash, out passwordSalt);
@@ -62,7 +62,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 account.PasswordHash = passwordHash;
                 account.RoleId = role.Id;
 
-                await _dataContext.Accounts.AddAsync(account);
+                await _dataContext.SystemAccounts.AddAsync(account);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception e)
@@ -78,14 +78,14 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult<AccountInfo>();
             try
             {
-                var exist = await _dataContext.Accounts.AsNoTracking().AnyAsync(x => x.Email == email);
+                var exist = await _dataContext.SystemAccounts.AsNoTracking().AnyAsync(x => x.Email == email);
                 if (!exist)
                 {
                     result.AddError("账号或密码错误");
                     return result;
                 }
 
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Email == email);
+                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Email == email);
 
                 bool verify = VerifyPasswordHash(password, account.PasswordHash, account.PasswordSalt);
                 if (!verify)
@@ -143,7 +143,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
             try
             {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.RefreshToken == oldRefreshToken);
+                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.RefreshToken == oldRefreshToken);
 
                 if (account == null)
                 {
@@ -160,7 +160,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 account.RefreshToken = Guid.NewGuid();
                 await _dataContext.SaveChangesAsync();
 
-                result.Data = _mapper.Map<Account, AccessDataModel>(account);
+                result.Data = _mapper.Map<SystemAccount, AccessDataModel>(account);
                 return result;
             }
             catch (Exception e)
@@ -176,7 +176,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
                 if (account == null)
                 {
                     result.AddError("未找到对应的用户");
@@ -208,7 +208,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var query = _dataContext.Accounts.Where(x => !x.Deleted).AsQueryable();
+                var query = _dataContext.SystemAccounts.Where(x => !x.Deleted).AsQueryable();
 
                 var filters = opt.Filters;
 
@@ -299,7 +299,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var emailExist = await _dataContext.Accounts.AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                var emailExist = await _dataContext.SystemAccounts.AnyAsync(x => x.Email == dto.Email && !x.Deleted);
                 if (emailExist)
                 {
                     result.AddError("邮箱已存在");
@@ -309,7 +309,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(dto.UserName, out passwordHash, out passwordSalt);
 
-                var entity = new Account
+                var entity = new SystemAccount
                 {
                     Id = Guid.NewGuid(),
                     Email = dto.Email,
@@ -324,7 +324,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     Deleted = false
                 };
 
-                _dataContext.Accounts.Add(entity);
+                _dataContext.SystemAccounts.Add(entity);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -340,14 +340,14 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
                     return result;
                 }
 
-                var emailExist = await _dataContext.Accounts.AnyAsync(x => x.Id != dto.Id && x.Email == dto.Email && !x.Deleted);
+                var emailExist = await _dataContext.SystemAccounts.AnyAsync(x => x.Id != dto.Id && x.Email == dto.Email && !x.Deleted);
                 if (emailExist)
                 {
                     result.AddError("邮箱已存在");
@@ -381,7 +381,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
                 if (dto.Active.HasValue && !dto.LockoutEndAt.HasValue)
                 {
-                    await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id))
+                    await _dataContext.SystemAccounts.Where(x => dto.Ids.Contains(x.Id))
                         .ForEachAsync(x =>
                         {
                             x.Active = dto.Active.Value;
@@ -392,7 +392,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
                 if (!dto.Active.HasValue && dto.LockoutEndAt.HasValue)
                 {
-                    await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id))
+                    await _dataContext.SystemAccounts.Where(x => dto.Ids.Contains(x.Id))
                         .ForEachAsync(x =>
                         {
                             x.LockoutEndAt = dto.LockoutEndAt.Value;
@@ -403,7 +403,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
                 if (dto.Active.HasValue && dto.LockoutEndAt.HasValue)
                 {
-                    await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id))
+                    await _dataContext.SystemAccounts.Where(x => dto.Ids.Contains(x.Id))
                         .ForEachAsync(x =>
                         {
                             x.Active = dto.Active.Value;
@@ -428,7 +428,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -462,7 +462,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
+                var entity = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == dto.Id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -488,7 +488,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult();
             try
             {
-                var entity = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                var entity = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
                 if (entity == null)
                 {
                     result.AddError("数据为空");
@@ -519,7 +519,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     result.AddError("请选择要删除的账号！");
                     return result;
                 }
-                await _dataContext.Accounts.Where(x => dto.Ids.Contains(x.Id)).ForEachAsync(y =>
+                await _dataContext.SystemAccounts.Where(x => dto.Ids.Contains(x.Id)).ForEachAsync(y =>
                 {
                     y.Deleted = true;
                     y.DeletedAt = DateTime.Now;
@@ -544,7 +544,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult<AccountInfo>();
             try
             {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
                 if (account == null)
                 {
                     result.AddError("未找到对应的用户");
@@ -585,7 +585,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult<AccountMenuInfo>();
             try
             {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
                 if (account == null)
                 {
                     result.AddError("未找到对应的用户");
@@ -615,7 +615,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiResult<string[]>();
             try
             {
-                var account = await _dataContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
                 if (account == null)
                 {
                     result.AddError("未找到对应的用户");

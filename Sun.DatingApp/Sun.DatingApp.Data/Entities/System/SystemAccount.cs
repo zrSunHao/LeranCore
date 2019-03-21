@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Sun.DatingApp.Data.Entities.System
 {
     [Description("账号")]
-    public class Account: BaseEntity
+    public class SystemAccount: BaseEntity
     {
         [Description("邮件")]
         public string Email { get; set; }

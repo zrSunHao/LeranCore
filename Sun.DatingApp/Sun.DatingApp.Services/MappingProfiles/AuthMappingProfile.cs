@@ -12,8 +12,8 @@ namespace Sun.DatingApp.Services.MappingProfiles
         public AuthMappingProfile()
         {
             //登录
-            CreateMap<AccessDataModel, Account>();
-            CreateMap<Account, AccessDataModel>()
+            CreateMap<AccessDataModel, SystemAccount>();
+            CreateMap<SystemAccount, AccessDataModel>()
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
                 .ForMember(x => x.UserName, x => x.MapFrom(y => y.Nickname))
@@ -21,7 +21,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Permissions, x => x.Ignore());
 
             //注册
-            CreateMap<RegisterDto, Account>()
+            CreateMap<RegisterDto, SystemAccount>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => Guid.NewGuid()))
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.Mobile, x => x.MapFrom(y => y.Mobile))
@@ -35,7 +35,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.LatestLoginAt, x => x.MapFrom(y => DateTime.Now));
 
             //账号管理
-            CreateMap<Account, AccountListModel>()
+            CreateMap<SystemAccount, AccountListModel>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.UserName, x => x.MapFrom(y => y.Nickname))

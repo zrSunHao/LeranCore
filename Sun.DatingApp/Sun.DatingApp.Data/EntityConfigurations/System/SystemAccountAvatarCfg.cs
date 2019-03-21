@@ -7,11 +7,11 @@ using Sun.DatingApp.Data.Entities.System;
 
 namespace Sun.DatingApp.Data.EntityConfigurations.System
 {
-    public class AccountAvatarCfg : IEntityTypeConfiguration<AccountAvatar>
+    public class SystemAccountAvatarCfg : IEntityTypeConfiguration<SystemAccountAvatar>
     {
-        public void Configure(EntityTypeBuilder<AccountAvatar> builder)
+        public void Configure(EntityTypeBuilder<SystemAccountAvatar> builder)
         {
-            builder.ToTable("AccountAvatar");
+            builder.ToTable("SystemAccountAvatar");
 
             builder.HasKey(x => x.Id);
 
