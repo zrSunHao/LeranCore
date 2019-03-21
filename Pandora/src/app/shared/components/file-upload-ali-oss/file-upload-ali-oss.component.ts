@@ -98,11 +98,19 @@ export class FileUploadAliOssComponent implements OnInit {
 
           file.status = 'success';
           file.displaySize = file.size;
-          this.uploadStatus.emit(res);
+          const event = {
+            success: true,
+            res,
+          };
+          this.uploadStatus.emit(event);
         })
         .catch((reason: any) => {
           file.status = 'error';
-          this.uploadStatus.emit(reason);
+          const event = {
+            success: true,
+            reason,
+          };
+          this.uploadStatus.emit(event);
         });
     }
   }
