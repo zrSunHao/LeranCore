@@ -114,13 +114,15 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
+                var avatar = await this.GetAccountAvatar(account.Id);
+
                 var info = new AccountInfo()
                 {
                     Id = account.Id,
                     Email = account.Email,
                     Name = account.Nickname,
-                    Avatar = account.Avatar,
                     RoleId = role.Id,
+                    Avatar = avatar,
                     RoleName = role.Name,
                     RefreshToken = account.RefreshToken
                 };
@@ -584,14 +586,16 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
+                var avatar = await this.GetAccountAvatar(account.Id);
+
                 var info = new AccountInfo()
                 {
                     Id = account.Id,
                     Email = account.Email,
                     Name = account.Nickname,
-                    Avatar = account.Avatar,
                     RoleId = role.Id,
                     RoleName = role.Name,
+                    Avatar = avatar,
                     RefreshToken = account.RefreshToken
                 };
 
@@ -738,6 +742,33 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 return menuInfo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<string> GetAccountAvatar(Guid accountId)
+        {
+            try
+            {
+                var url = "";
+                var avatars = await _dataContext.SystemAccountAvatars.Where(x => x.AccountId == accountId).ToListAsync();
+                if (avatars.Any())
+                {
+                    var createAt = DateTime.MinValue;
+                    foreach (var avatar in avatars)
+                    {
+                        if (createAt < avatar.CreatedAt)
+                        {
+                            createAt = avatar.CreatedAt;
+                            url = avatar.Url;
+                        }
+                    }
+                }
+
+                return url;
             }
             catch (Exception ex)
             {

@@ -9,9 +9,6 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("账号Id")]
         public Guid AccountId { get; set; }
 
-        [Description("头像Id")]
-        public Guid? AvatarId { get; set; }
-
         [Description("姓名")]
         public string Name { get; set; }
 
