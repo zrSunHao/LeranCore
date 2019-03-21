@@ -9,7 +9,8 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("账号Id")]
         public Guid AccountId { get; set; }
 
-        //基本信息
+        [Description("头像Id")]
+        public Guid? AvatarId { get; set; }
 
         [Description("姓名")]
         public string Name { get; set; }
@@ -20,17 +21,6 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("出生年月")]
         public DateTime Birthday { get; set; }
 
-        [Description("职业")]
-        public Guid OccupationId { get; set; }
-
-        [Description("简介")]
-        public string Intro { get; set; }
-
-        [Description("头像Id")]
-        public Guid? ProfilePictureId { get; set; }
-
-        //联系方式
-
         [Description("电话号码")]
         public string PhoneNum { get; set; }
 
@@ -40,18 +30,17 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("微信")]
         public string WeChart { get; set; }
 
-        //地理信息
+        [Description("职业")]
+        public string Occupation { get; set; }
 
-        [Description("Base地址Id")]
-        public Guid BaseAddressId { get; set; }
+        [Description("公司/学校")]
+        public string Company { get; set; }
 
-        [Description("Current地址Id")]
-        public Guid CurrentAddressId { get; set; }
+        [Description("地址")]
+        public string Address { get; set; }
 
-        //座右铭
+        [Description("个人简介")]
+        public string Intro { get; set; }
 
-        //个人标签
-
-        //学校/公司
     }
 }
