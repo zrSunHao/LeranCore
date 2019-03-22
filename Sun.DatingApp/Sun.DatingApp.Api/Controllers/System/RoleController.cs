@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Common.Model;
@@ -26,6 +27,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("GetRoles")]
+        [PermissionFilter(Permissions.GetRoles)]
         public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
         {
             return await _service.GetRoles(dto);
@@ -97,6 +99,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("DeleteRole")]
+        [PermissionFilter(Permissions.DeleteRole)]
         public async Task<WebApiResult> DeleteRole(Guid roleId)
         {
             var result = new WebApiResult();
@@ -113,6 +116,7 @@ namespace Sun.DatingApp.Api.Controllers.System
 
 
         [HttpGet("GetRolePermissions")]
+        [PermissionFilter(Permissions.GetRolePermissions)]
         public async Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id)
         {
             return await _service.GetRolePermissions(id);

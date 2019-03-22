@@ -9,6 +9,7 @@ using Sun.DatingApp.Services.Services.System.MenuServices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sun.DatingApp.Api.Extensions.Authorization;
 
 namespace Sun.DatingApp.Api.Controllers.System
 {
@@ -26,6 +27,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetMenus")]
+        [PermissionFilter(Permissions.GetMenus)]
         public async Task<WebApiResult<List<MenuListModel>>> GetMenus()
         {
             return await _service.GetMenus();
@@ -38,6 +40,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="accountId"></param>
         /// <returns></returns>
         [HttpPost("CreateMenu")]
+        [PermissionFilter(Permissions.CreateMenu)]
         public async Task<WebApiResult> CreateMenu(MenuEditDto dto, Guid accountId)
         {
             var result = new WebApiResult();
@@ -101,6 +104,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="accountId"></param>
         /// <returns></returns>
         [HttpGet("DeleteMenu")]
+        [PermissionFilter(Permissions.DeleteMenu)]
         public async Task<WebApiResult> DeleteMenu(Guid id, Guid accountId)
         {
             var result = new WebApiResult();
@@ -197,6 +201,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="accountId"></param>
         /// <returns></returns>
         [HttpGet("DeletePage")]
+        [PermissionFilter(Permissions.DeletePage)]
         public async Task<WebApiResult> DeletePage(Guid id, Guid accountId)
         {
             var result = new WebApiResult();
@@ -228,6 +233,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllPages")]
+        [PermissionFilter(Permissions.GetAllPages)]
         public async Task<WebApiResult<List<PageListModel>>> GetAllPages(string name)
         {
             return await _service.GetAllPages(name);

@@ -7,6 +7,7 @@ using Sun.DatingApp.Services.Services.System.Permissions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sun.DatingApp.Api.Extensions.Authorization;
 
 namespace Sun.DatingApp.Api.Controllers.System
 {
@@ -75,6 +76,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("DeletePermission")]
+        [PermissionFilter(Permissions.DeletePermission)]
         public async Task<WebApiResult> DeletePermission(Guid id)
         {
             var result = new WebApiResult();

@@ -17,6 +17,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Sun.DatingApp.Api.Extensions.Authorization;
 
 namespace Sun.DatingApp.Api.Controllers.System
 {
@@ -186,6 +187,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="opt"></param>
         /// <returns></returns>
         [HttpPost("Accounts")]
+        [PermissionFilter(Permissions.Accounts)]
         public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
             return await _service.Accounts(opt);
@@ -197,6 +199,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("CreateAccount")]
+        [PermissionFilter(Permissions.CreateAccount)]
         public async Task<WebApiResult> CreateAccount(EditAccountDto dto)
         {
             var result = new WebApiResult();
@@ -237,6 +240,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("BatchEditAccount")]
+        [PermissionFilter(Permissions.BatchEditAccount)]
         public async Task<WebApiResult> BatchEditAccount(BatchEditAccountDto dto)
         {
             var result = new WebApiResult();
@@ -297,6 +301,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("DeleteAccount")]
+        [PermissionFilter(Permissions.DeleteAccount)]
         public async Task<WebApiResult> DeleteAccount(Guid id)
         {
             var result = new WebApiResult();
@@ -317,6 +322,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("BatchDeleteAccount")]
+        [PermissionFilter(Permissions.BatchDeleteAccount)]
         public async Task<WebApiResult> BatchDeleteAccount(BatchDeleteAccountDto dto)
         {
             var result = new WebApiResult();
