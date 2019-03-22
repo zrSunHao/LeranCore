@@ -7,6 +7,7 @@ import { AlainThemeModule } from '@delon/theme';
 import { DelonABCModule } from '@delon/abc';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
+import { DelonChartModule } from '@delon/chart';
 // i18n
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -37,6 +38,7 @@ const DIRECTIVES = [];
     DelonABCModule,
     DelonACLModule,
     DelonFormModule,
+    DelonChartModule ,
     // third libs
     ...THIRDMODULES
   ],
@@ -54,6 +56,7 @@ const DIRECTIVES = [];
     DelonABCModule,
     DelonACLModule,
     DelonFormModule,
+    DelonChartModule ,
     // i18n
     TranslateModule,
     // third libs
