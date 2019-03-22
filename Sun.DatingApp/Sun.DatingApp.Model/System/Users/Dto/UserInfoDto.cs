@@ -10,7 +10,7 @@ namespace Sun.DatingApp.Model.System.Users.Dto
 
         public DateTime Birthday { get; set; }
 
-        public string PhoneNum { get; set; }
+        public string Motto { get; set; }
 
         public string QQ { get; set; }
 

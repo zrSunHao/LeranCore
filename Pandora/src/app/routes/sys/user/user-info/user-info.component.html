@@ -10,12 +10,7 @@
       <!-- <div class="avatar"><img src="{{user.avatar}}" alt="Avatar"></div> -->
       <nz-avatar [nzSize]="130" [nzShape]="'circle'" [nzSrc]="avatar"></nz-avatar>
       &nbsp;&nbsp;&nbsp;
-      <nz-upload [nzShowUploadList]="false">
-        <button nz-button class="button_view">
-          <i nz-icon type="upload"></i>
-          <span>更换头像</span>
-        </button>
-      </nz-upload>
+      <app-file-upload-ali-oss bucket="zeus-dev" title="头像上传" (uploadStatus)="uploadResult($event)"></app-file-upload-ali-oss>
     </div>
   </div>
 </nz-spin>

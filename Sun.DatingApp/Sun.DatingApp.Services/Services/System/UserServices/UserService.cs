@@ -36,7 +36,7 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
                     Name = entity.Name,
                     Sex = entity.Sex,
                     Birthday = entity.Birthday,
-                    PhoneNum = entity.PhoneNum,
+                    Motto = entity.Motto,
                     QQ = entity.QQ,
                     WeChart = entity.WeChart,
                     Occupation = entity.Occupation,
@@ -71,7 +71,7 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
                         Name = dto.Name,
                         Sex = dto.Sex,
                         Birthday = dto.Birthday,
-                        PhoneNum = dto.PhoneNum,
+                        Motto = dto.Motto,
                         QQ = dto.QQ,
                         WeChart = dto.WeChart,
                         Occupation = dto.Occupation,
@@ -90,7 +90,7 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
                     entity.Name = dto.Name;
                     entity.Sex = dto.Sex;
                     entity.Birthday = dto.Birthday;
-                    entity.PhoneNum = dto.PhoneNum;
+                    entity.Motto = dto.Motto;
                     entity.QQ = dto.QQ;
                     entity.WeChart = dto.WeChart;
                     entity.Occupation = dto.Occupation;

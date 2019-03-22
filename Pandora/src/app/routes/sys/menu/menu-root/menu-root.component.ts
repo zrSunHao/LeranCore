@@ -139,9 +139,4 @@ export class MenuRootComponent implements OnInit {
         this.menulist.loadData(item);
       });
   }
-
-  uploadResult(res: any) {
-    console.log(111111111111111111);
-    console.log(res);
-  }
 }

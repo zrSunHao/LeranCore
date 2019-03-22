@@ -371,8 +371,8 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("BindAvatar")]
-        public async Task<WebApiResult> BindAvatar(FileDto dto)
+        [HttpPost("BindAccountAvatar")]
+        public async Task<WebApiResult> BindAccountAvatar(FileDto dto)
         {
             var result = new WebApiResult();
             if (CurrentUserId.HasValue)
@@ -385,5 +385,25 @@ namespace Sun.DatingApp.Api.Controllers.System
             }
             return result;
         }
+
+        /// <summary>
+        /// 获取账号头像Url
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetUserAvatar")]
+        public async Task<WebApiResult<string>> GetUserAvatar()
+        {
+            var result = new WebApiResult<string>();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.GetUserAvatar( CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
+        }
+
     }
 }

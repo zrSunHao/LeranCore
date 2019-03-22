@@ -18,7 +18,6 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
             builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Sex).IsRequired();
             builder.Property(x => x.Birthday).IsRequired();
-            builder.Property(x => x.PhoneNum).IsRequired().HasMaxLength(20);
 
             builder.Property(x => x.QQ).HasMaxLength(20);
             builder.Property(x => x.WeChart).HasMaxLength(50);

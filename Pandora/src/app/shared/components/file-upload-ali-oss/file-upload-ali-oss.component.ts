@@ -12,6 +12,9 @@ export class FileUploadAliOssComponent implements OnInit {
   client: any;
 
   // tslint:disable-next-line:no-inferrable-types
+  @Input() title?: string = '文件上传';
+
+  // tslint:disable-next-line:no-inferrable-types
   @Input() accept?: string = '*';
   // tslint:disable-next-line:ban-types
   @Input() fileSize?: Number;
@@ -106,7 +109,12 @@ export class FileUploadAliOssComponent implements OnInit {
           file.displaySize = file.size;
           const event = {
             success: true,
-            res,
+            file: {
+              fileName: file.name,
+              url: res.url,
+              fileType: file.type,
+              fileLength: file.size,
+            },
           };
           this.uploadStatus.emit(event);
         })

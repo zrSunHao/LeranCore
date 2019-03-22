@@ -18,8 +18,8 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("出生年月")]
         public DateTime Birthday { get; set; }
 
-        [Description("电话号码")]
-        public string PhoneNum { get; set; }
+        [Description("座右铭")]
+        public string Motto { get; set; }
 
         [Description("QQ")]
         public string QQ { get; set; }

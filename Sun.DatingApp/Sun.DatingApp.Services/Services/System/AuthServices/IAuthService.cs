@@ -133,5 +133,12 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// <param name="accountId"></param>
         /// <returns></returns>
         Task<WebApiResult> BindAvatar(FileDto dto, Guid accountId);
+
+        /// <summary>
+        /// 获取用户头像Url
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        Task<WebApiResult<string>> GetUserAvatar(Guid accountId);
     }
 }

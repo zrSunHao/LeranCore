@@ -1,18 +1,15 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  ChangeDetectorRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { SFSchema, SFButton, SFComponent } from '@delon/form';
+import { SFSchema, SFButton } from '@delon/form';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { STComponent } from '@delon/abc';
 import { DatePipe } from '@angular/common';
 
 const EditUserInfoUrl = 'User/EditUserInfo';
 const GetUserInfoUrl = 'User/GetUserInfo';
+const BindAccountAvatarUrl = 'Auth/BindAccountAvatar';
+const GetUserAvatarUrl = 'Auth/GetUserAvatar';
+
 const sexList = [{ label: '男', value: true }, { label: '女', value: false }];
 
 @Component({
@@ -36,12 +33,6 @@ export class UserInfoComponent implements OnInit {
         ui: { widget: 'radio', change: console.log },
       },
       birthday: { type: 'string', title: '生日', format: 'date' },
-      phoneNum: {
-        type: 'string',
-        title: '电话',
-        maxLength: 11,
-        format: 'mobile',
-      },
       qQ: { type: 'string', title: 'QQ', maxLength: 15 },
       weChart: { type: 'string', title: '微信', maxLength: 30 },
       occupation: { type: 'string', title: '职业', maxLength: 150 },
@@ -66,7 +57,7 @@ export class UserInfoComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'sex', 'birthday', 'phoneNum'],
+    required: ['name', 'sex', 'birthday'],
   };
 
   sfButton: SFButton = {
@@ -84,10 +75,19 @@ export class UserInfoComponent implements OnInit {
   ngOnInit(): void {
     this.userLoading = true;
     this.getUserInfo();
+    this.GetAvatar();
   }
 
-  editAvatar() {
-    console.log(1111111111);
+  GetAvatar() {
+    this.http.get(GetUserAvatarUrl).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '获取头像信息失败', res.allMessages);
+      } else {
+        if (res.data != null) {
+          this.avatar = res.data;
+        }
+      }
+    });
   }
 
   submit(value: any) {
@@ -103,35 +103,45 @@ export class UserInfoComponent implements OnInit {
   }
 
   getUserInfo() {
-    this.http
-      .get(GetUserInfoUrl)
-      .subscribe((res: any) => {
-        if (!res.success) {
-          this.notification.create(
-            'error',
-            '基本信息获取失败',
-            res.allMessages,
-          );
-        } else {
-          if (res.data != null) {
-            this.info = res.data;
-            if (this.info.birthday) {
-              this.info.birthday = this.datePipe.transform(
-                this.info.birthday,
-                'yyyy-MM-dd',
-              );
-            }
-            console.log(this.info);
+    this.http.get(GetUserInfoUrl).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '基本信息获取失败', res.allMessages);
+      } else {
+        if (res.data != null) {
+          this.info = res.data;
+          if (this.info.birthday) {
+            this.info.birthday = this.datePipe.transform(
+              this.info.birthday,
+              'yyyy-MM-dd',
+            );
           }
+          console.log(this.info);
         }
-        this.userLoading = false;
-        console.log(this.userLoading);
-      });
-    console.log(this.userLoading);
+      }
+      this.userLoading = false;
+    });
   }
 
-  test(event: any) {
-    console.log(event.valid);
-    console.log(event.errors);
+  uploadResult(event) {
+    this.userLoading = true;
+    if (event.success) {
+      const file = event.file;
+      this.uploadFile(file);
+    } else {
+      this.notification.create('error', '头像上传失败', event.reason);
+      this.userLoading = false;
+    }
+  }
+
+  uploadFile(file: any) {
+    this.http.post(BindAccountAvatarUrl, file).subscribe((res: any) => {
+      if (!res.success) {
+        this.notification.create('error', '头像更新失败', res.allMessages);
+      } else {
+        this.notification.create('success', '头像更新成功', res.allMessages);
+        this.avatar = file.url;
+      }
+      this.userLoading = false;
+    });
   }
 }

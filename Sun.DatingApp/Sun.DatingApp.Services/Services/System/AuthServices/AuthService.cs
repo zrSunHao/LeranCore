@@ -547,12 +547,30 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     AccountId = accountId,
                     FileName = dto.FileName,
                     Url = dto.Url,
-                    FileType = dto.Url,
-                    FileLength = dto.FileLength
+                    FileType = dto.FileType,
+                    FileLength = dto.FileLength,
+                    CreatedAt = DateTime.Now,
+                    CreatedById = accountId,
+                    Deleted = false
                 };
 
                 _dataContext.Add(entity);
                 await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
+        public async Task<WebApiResult<string>> GetUserAvatar(Guid accountId)
+        {
+            var result = new WebApiResult<string>();
+            try
+            {
+                result.Data = await this.GetAccountAvatar(accountId);
             }
             catch (Exception ex)
             {

@@ -85,13 +85,13 @@ export class StartupService {
 
   // 缓存中获取账号信息
   private loadAccountInfo(resolve: any, reject: any) {
-
     const accountInfo = this.cacheService.getNone('PandoraCurrentInfo');
     if (accountInfo == null) {
       console.log('账号未登录');
       resolve(null);
       this.injector.get(Router).navigateByUrl(`/passport/login`);
     } else {
+      // 设置用户信息
       this.settingService.setUser(accountInfo);
       console.log(accountInfo);
       // tslint:disable-next-line:no-string-literal
@@ -122,6 +122,12 @@ export class StartupService {
       )
       .subscribe(
         ([accountInfoRes, accountMenuRes, accountPermissionRes]) => {
+          // 设置用户信息
+          if (accountInfoRes.success && accountInfoRes.data != null) {
+            this.cacheService.set('PandoraCurrentInfo', accountInfoRes.data);
+            this.settingService.setUser(accountInfoRes.data);
+          }
+
           // ACL：设置权限
           this.setPermission(accountPermissionRes.data);
           // 初始化菜单
@@ -132,7 +138,7 @@ export class StartupService {
             this.menuService.add([accountMenuRes.data]);
           }
         },
-        () => { },
+        () => {},
         () => {
           resolve(null);
         },
@@ -149,5 +155,4 @@ export class StartupService {
       this.aclService.setAbility(permis);
     }
   }
-
 }
