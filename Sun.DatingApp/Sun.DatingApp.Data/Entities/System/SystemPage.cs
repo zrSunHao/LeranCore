@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Sun.DatingApp.Data.Entities.System
 {
@@ -17,5 +18,8 @@ namespace Sun.DatingApp.Data.Entities.System
         public string Intro { get; set; }
 
         public Guid MenuId { get; set; }
+
+        [Description("排序")]
+        public int Order { get; set; }
     }
 }

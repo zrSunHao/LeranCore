@@ -14,6 +14,19 @@ namespace Sun.DatingApp.Api.Config
 
             var test = context.SystemAccounts.Any();
             var see = test;
+
+            //添加模块信息
+
+            //添加菜单信息
+
+            //首先添加系统超级管理员
+
+            //添加默认账号，角色默认为系统超级管理员
+        }
+
+        public static void AddModule(DataContext context)
+        {
+
         }
     }
 }

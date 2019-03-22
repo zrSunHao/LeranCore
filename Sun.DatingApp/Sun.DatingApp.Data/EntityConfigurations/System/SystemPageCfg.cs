@@ -23,6 +23,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
             builder.Property(x => x.Active).IsRequired();
             builder.Property(x => x.TagColor).IsRequired().HasMaxLength(50);
             builder.Property(x => x.MenuId).IsRequired();
+            builder.Property(x => x.Order).IsRequired();
 
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.Deleted).IsRequired();
