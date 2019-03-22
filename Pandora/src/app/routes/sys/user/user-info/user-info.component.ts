@@ -33,7 +33,7 @@ export class UserInfoComponent implements OnInit {
         ui: { widget: 'radio', change: console.log },
       },
       birthday: { type: 'string', title: '生日', format: 'date' },
-      qQ: { type: 'string', title: 'QQ', maxLength: 15 },
+      qq: { type: 'string', title: 'QQ', maxLength: 15 },
       weChart: { type: 'string', title: '微信', maxLength: 30 },
       occupation: { type: 'string', title: '职业', maxLength: 150 },
       company: { type: 'string', title: '公司/学校', maxLength: 150 },
@@ -103,23 +103,32 @@ export class UserInfoComponent implements OnInit {
   }
 
   getUserInfo() {
-    this.http.get(GetUserInfoUrl).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create('error', '基本信息获取失败', res.allMessages);
-      } else {
-        if (res.data != null) {
-          this.info = res.data;
-          if (this.info.birthday) {
-            this.info.birthday = this.datePipe.transform(
-              this.info.birthday,
-              'yyyy-MM-dd',
-            );
+    this.http
+      .get(GetUserInfoUrl)
+      .pipe((res: any) => {
+        this.userLoading = false;
+        return res;
+      })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create(
+            'error',
+            '基本信息获取失败',
+            res.allMessages,
+          );
+        } else {
+          if (res.data != null) {
+            this.info = res.data;
+            if (this.info.birthday) {
+              this.info.birthday = this.datePipe.transform(
+                this.info.birthday,
+                'yyyy-MM-dd',
+              );
+            }
+            console.log(this.info);
           }
-          console.log(this.info);
         }
-      }
-      this.userLoading = false;
-    });
+      });
   }
 
   uploadResult(event) {
@@ -134,14 +143,19 @@ export class UserInfoComponent implements OnInit {
   }
 
   uploadFile(file: any) {
-    this.http.post(BindAccountAvatarUrl, file).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create('error', '头像更新失败', res.allMessages);
-      } else {
-        this.notification.create('success', '头像更新成功', res.allMessages);
-        this.avatar = file.url;
-      }
-      this.userLoading = false;
-    });
+    this.http
+      .post(BindAccountAvatarUrl, file)
+      .pipe((res: any) => {
+        this.userLoading = false;
+        return res;
+      })
+      .subscribe((res: any) => {
+        if (!res.success) {
+          this.notification.create('error', '头像更新失败', res.allMessages);
+        } else {
+          this.notification.create('success', '头像更新成功', res.allMessages);
+          this.avatar = file.url;
+        }
+      });
   }
 }
