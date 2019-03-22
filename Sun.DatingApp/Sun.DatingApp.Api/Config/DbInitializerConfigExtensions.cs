@@ -2,31 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sun.DatingApp.Api.Extensions.SeedData;
 using Sun.DatingApp.Data.Database;
 
 namespace Sun.DatingApp.Api.Config
 {
     public class DbInitializerConfigExtensions
     {
+        /// <summary>
+        /// 首次部署的时候添加系统默认数据
+        /// </summary>
+        /// <param name="context"></param>
         public static void Initialize(DataContext context)
         {
             context.Database.EnsureCreated();
 
-            var test = context.SystemAccounts.Any();
-            var see = test;
+            var existAccount = context.SystemAccounts.Any();
+            //存在账号说明不是初次使用，不初始化数据
+            if (existAccount) return;
 
-            //添加模块信息
+            //1.添加菜单 => 页面 => 权限信息
+            MenuSeed.Initialize(context);
 
-            //添加菜单信息
+            //2.首先添加系统超级管理员
+            RoleSeed.Initialize(context);
 
-            //首先添加系统超级管理员
-
-            //添加默认账号，角色默认为系统超级管理员
-        }
-
-        public static void AddModule(DataContext context)
-        {
-
+            //3.添加默认账号，角色默认为系统超级管理员
+            AccountSeed.Initialize(context);
         }
     }
 }

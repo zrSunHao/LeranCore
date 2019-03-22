@@ -19,8 +19,6 @@ namespace Sun.DatingApp.Data.Entities.System
 
         public Guid PageId { get; set; }
 
-        public virtual SystemPage Page { get; set; }
-
         [Description("权重")]//数值越大，权重越大
         public int Weight { get; set; }
     }
