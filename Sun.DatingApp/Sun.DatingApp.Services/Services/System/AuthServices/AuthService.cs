@@ -17,6 +17,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Sun.DatingApp.Utility.Password;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -56,7 +57,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 var account = _mapper.Map<RegisterDto, SystemAccount>(dto);
 
                 byte[] passwordHash, passwordSalt;
-                CreatePasswordHash(dto.Password, out passwordHash, out passwordSalt);
+                PasswordUtility.CreatePasswordHash(dto.Password, out passwordHash, out passwordSalt);
 
                 account.PasswordSalt = passwordSalt;
                 account.PasswordHash = passwordHash;
@@ -87,7 +88,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
                 var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Email == email);
 
-                bool verify = VerifyPasswordHash(password, account.PasswordHash, account.PasswordSalt);
+                bool verify = PasswordUtility.VerifyPasswordHash(password, account.PasswordHash, account.PasswordSalt);
                 if (!verify)
                 {
                     result.AddError("账号或密码错误");
@@ -309,7 +310,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 byte[] passwordHash, passwordSalt;
-                CreatePasswordHash(dto.UserName, out passwordHash, out passwordSalt);
+                PasswordUtility.CreatePasswordHash("pandora", out passwordHash, out passwordSalt);
 
                 var entity = new SystemAccount
                 {
@@ -689,33 +690,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
 
         #region 私有方法
-
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != passwordHash[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
 
         private async Task<AccountMenuInfo> GetAccountPermission(List<Guid> pageIds)
         {

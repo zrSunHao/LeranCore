@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Utility.Password;
 
 namespace Sun.DatingApp.Api.Extensions.SeedData
 {
@@ -25,6 +26,9 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
             var role = context.SystemRoles.FirstOrDefault();
             if (role == null) throw new Exception("系统角色信息为空，新建默认账号失败！");
 
+            byte[] passwordHash, passwordSalt;
+            PasswordUtility.CreatePasswordHash("PandoraAdmin", out passwordHash, out passwordSalt);
+
             var account = new SystemAccount
             {
                 Id = Guid.NewGuid(),
@@ -32,8 +36,8 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 Nickname = "系统超级管理员",
                 Mobile = "17853711796",
                 RoleId = role.Id,
-                PasswordHash = null,//TODO
-                PasswordSalt = null,//TODO
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
                 RefreshToken = null,
                 Active = true,
                 Forbiden = false,
