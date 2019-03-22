@@ -284,11 +284,12 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         /// <param name="pageId"></param>
         private static void PermissionPagePerms(DataContext context, Guid pageId)
         {
-            var loadData = new SystemPermission
+            //加载页面数据
+            var getAllPages = new SystemPermission
             {
                 Id = Guid.NewGuid(),
-                Name = "加载页面数据",
-                Code = "",
+                Name = "加载页面列表数据",
+                Code = "Menu.GetAllPages",
                 Intro = "",
                 Icon = "eye",
                 TagColor = "",
@@ -300,7 +301,25 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 CreatedById = Guid.Empty,
             };
 
-            context.SystemPermissions.Add(loadData);
+            //删除权限
+            var deletePermission = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "删除权限",
+                Code = "Permission.DeletePermission",
+                Intro = "",
+                Icon = "delete",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            context.SystemPermissions.Add(getAllPages);
+            context.SystemPermissions.Add(deletePermission);
         }
 
         /// <summary>
@@ -310,11 +329,12 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         /// <param name="pageId"></param>
         private static void AccountPagePerms(DataContext context, Guid pageId)
         {
-            var loadData = new SystemPermission
+            //账号列表数据加载
+            var accounts = new SystemPermission
             {
                 Id = Guid.NewGuid(),
-                Name = "加载页面数据",
-                Code = "",
+                Name = "账号列表数据加载",
+                Code = "Auth.Accounts",
                 Intro = "",
                 Icon = "eye",
                 TagColor = "",
@@ -326,7 +346,79 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 CreatedById = Guid.Empty,
             };
 
-            context.SystemPermissions.Add(loadData);
+            //添加账号
+            var createAccount = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "添加账号",
+                Code = "Auth.CreateAccount",
+                Intro = "",
+                Icon = "eye",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            //批量删除账号
+            var batchDeleteAccount = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "批量删除账号",
+                Code = "Auth.BatchDeleteAccount",
+                Intro = "",
+                Icon = "eye",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            //批量修改账号状态
+            var batchEditAccount = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "批量修改账号状态",
+                Code = "Auth.BatchEditAccount",
+                Intro = "",
+                Icon = "eye",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            //删除单条帐号
+            var deleteAccount = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "删除单条帐号",
+                Code = "Auth.DeleteAccount",
+                Intro = "",
+                Icon = "delete",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            context.SystemPermissions.Add(accounts);
+            context.SystemPermissions.Add(createAccount);
+            context.SystemPermissions.Add(batchDeleteAccount);
+            context.SystemPermissions.Add(batchEditAccount);
+            context.SystemPermissions.Add(deleteAccount);
         }
 
         /// <summary>
@@ -336,11 +428,12 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         /// <param name="pageId"></param>
         private static void RolePagePerms(DataContext context, Guid pageId)
         {
-            var loadData = new SystemPermission
+            //加载角色列表数据
+            var getRoles = new SystemPermission
             {
                 Id = Guid.NewGuid(),
-                Name = "加载页面数据",
-                Code = "",
+                Name = "加载角色列表数据",
+                Code = "Role.GetRoles",
                 Intro = "",
                 Icon = "eye",
                 TagColor = "",
@@ -352,7 +445,43 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 CreatedById = Guid.Empty,
             };
 
-            context.SystemPermissions.Add(loadData);
+            //角色权限配置
+            var getRolePermissions = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "角色权限配置",
+                Code = "Role.GetRolePermissions",
+                Intro = "",
+                Icon = "eye",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            //删除角色
+            var deleteRole = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "删除角色",
+                Code = "Role.DeleteRole",
+                Intro = "",
+                Icon = "eye",
+                TagColor = "",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            context.SystemPermissions.Add(getRoles);
+            context.SystemPermissions.Add(getRolePermissions);
+            context.SystemPermissions.Add(deleteRole);
         }
     }
 }
