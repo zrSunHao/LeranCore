@@ -36,13 +36,15 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
             };
 
             context.SystemRoles.Add(role);
+
+            SetSystemSuperAdministratorPermission(context,role.Id);
         }
 
         /// <summary>
         /// 系统超级管理员赋有全部权限
         /// </summary>
         /// <param name="context"></param>
-        private static void SetSystemSuperAdministratorPermission(DataContext context)
+        private static void SetSystemSuperAdministratorPermission(DataContext context, Guid roleId)
         {
             var perms = context.SystemPermissions.ToList();
             if (perms.Any()) return;
@@ -53,6 +55,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 var rPerm = new SystemRolePermission
                 {
                     Id = Guid.NewGuid(),
+                    RoleId = roleId,
                     PermissionId = perm.Id,
                     PageId = perm.PageId,
                     CreatedAt = DateTime.Now,
