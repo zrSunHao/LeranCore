@@ -264,8 +264,11 @@ export class DashboardComponent implements OnInit {
     }));
     res.offlineData.forEach((item: any, idx: number) => {
       item.show = idx === 0;
+      console.log(item);
       item.chart = Object.assign([], res.offlineChartData);
     });
+    this.data = res;
+    this.loading = false;
     // this.http.get('/chart').subscribe((res: any) => {
     //   res.offlineData.forEach((item: any, idx: number) => {
     //     item.show = idx === 0;
