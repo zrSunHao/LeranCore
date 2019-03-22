@@ -18,7 +18,7 @@ namespace Sun.DatingApp.Data.EntityConfigurations.System
             builder.Property(x => x.Name).IsRequired().HasMaxLength(30);
             builder.Property(x => x.Intro).IsRequired().HasMaxLength(200);
             builder.Property(x => x.Active).IsRequired();
-            builder.Property(x => x.Power).IsRequired();
+            builder.Property(x => x.Rank).IsRequired();
 
 
             builder.Property(x => x.CreatedAt).IsRequired();

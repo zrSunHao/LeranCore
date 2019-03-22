@@ -13,7 +13,6 @@ namespace Sun.DatingApp.Api.Controllers.Business
         }
 
         [HttpGet("cars")]
-        [PermissionFilter(Permissions.CarRead)]
         public IActionResult Cars()
         {
             var ipp = @"";

@@ -15,7 +15,7 @@ namespace Sun.DatingApp.Data.Entities.System
         [Description("是否启用")]
         public bool Active { get; set; }
 
-        [Description("权重")]//数值越小权重越大
-        public int Power { get; set; }
+        [Description("等级")]//数值越小权重越大
+        public int Rank { get; set; }
     }
 }

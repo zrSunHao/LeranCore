@@ -29,7 +29,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 Name = "系统超级管理员",
                 Intro = "默认设置角色，拥有所有的权限",
                 Active = true,
-                Power = 0,
+                Rank = 0,
                 Deleted = false,
                 CreatedAt = DateTime.Now,
                 CreatedById = Guid.Empty,
