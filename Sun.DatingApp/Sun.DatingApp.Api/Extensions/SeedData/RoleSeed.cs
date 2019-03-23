@@ -51,7 +51,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         private static void SetSystemSuperAdministratorPermission(DataContext context, Guid roleId)
         {
             var perms = context.SystemPermissions.ToList();
-            if (perms.Any()) return;
+            if (!perms.Any()) return;
 
             var rPerms = new List<SystemRolePermission>();
             foreach (var perm in perms)
@@ -70,10 +70,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 rPerms.Add(rPerm);
             }
 
-            if (rPerms.Any())
-            {
-                context.AddRange(rPerms);
-            }
+            context.AddRange(rPerms);
         }
 
         /// <summary>
@@ -107,7 +104,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         private static void SetBusinessSuperAdministratorPermission(DataContext context, Guid roleId)
         {
             var perms = context.SystemPermissions.ToList();
-            if (perms.Any()) return;
+            if (!perms.Any()) return;
 
             var besidePages = new List<string>{"菜单管理","权限管理","角色管理"};
             var besidePageIds = context.SystemPages.Where(x => !besidePages.Contains(x.Name)).Select(x => x.Id).ToList();

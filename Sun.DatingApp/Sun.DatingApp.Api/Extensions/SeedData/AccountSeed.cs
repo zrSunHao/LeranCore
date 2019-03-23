@@ -23,7 +23,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         /// <param name="context"></param>
         private static void Default(DataContext context)
         {
-            var role = context.SystemRoles.FirstOrDefault();
+            var role = context.SystemRoles.FirstOrDefault(x=>x.Name == "系统超级管理员");
             if (role == null) throw new Exception("系统角色信息为空，新建默认账号失败！");
 
             byte[] passwordHash, passwordSalt;

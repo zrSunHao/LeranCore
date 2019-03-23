@@ -716,7 +716,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                         {
                             Key = menu.Id,
                             Text = menu.Name,
-                            Icon = menu.Icon,
+                            Icon = "anticon anticon-" + menu.Icon,
                             ShortcutRoot = true,
                         };
 
