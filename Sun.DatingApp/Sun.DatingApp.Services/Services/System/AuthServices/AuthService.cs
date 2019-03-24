@@ -199,7 +199,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
 
         #region 账号管理
-
+        //TODO Dapper视图   ViewAccountList
         public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
             var result = new WebApiPagingResult<List<AccountListModel>>();
@@ -585,7 +585,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
 
         #region 账号登录信息
-
+        //TODO Dapper视图   ViewAccountList
         public async Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id)
         {
             var result = new WebApiResult<AccountInfo>();
@@ -659,6 +659,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
+        //TODO Dapper视图   ViewAccountList   缓存
         public async Task<WebApiResult<string[]>> GetAccountPermission(Guid id)
         {
             var result = new WebApiResult<string[]>();

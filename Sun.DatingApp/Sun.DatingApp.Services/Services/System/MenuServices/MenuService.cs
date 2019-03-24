@@ -23,6 +23,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
         {
         }
 
+        //TODO Dapper
         public async Task<WebApiResult<List<MenuListModel>>> GetMenus()
         {
             var result = new WebApiResult<List<MenuListModel>>();
@@ -181,7 +182,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-
+        //TODO dapper
         public async Task<WebApiResult<List<PageListModel>>> GetPages(Guid id)
         {
             var result = new WebApiResult<List<PageListModel>>();
@@ -361,6 +362,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
+        //TODO dapper ViewPageList
         public async Task<WebApiResult<List<PageListModel>>> GetAllPages(string name)
         {
             var result = new WebApiResult<List<PageListModel>>();

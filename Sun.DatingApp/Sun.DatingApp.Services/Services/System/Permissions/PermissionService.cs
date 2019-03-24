@@ -22,6 +22,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
 
         }
 
+        //TODO dapper
         public async Task<WebApiResult<List<PermissionListModel>>> GetPermission(Guid id)
         {
             var result = new WebApiResult<List<PermissionListModel>>();

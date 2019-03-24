@@ -24,6 +24,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         {
         }
 
+        //TODO dapper 
         /// <summary>
         /// 获取角色列表
         /// </summary>
@@ -223,8 +224,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
-        
 
+        //TODO dapper   ViewPageList
         /// <summary>
         /// 获取角色权限数据
         /// </summary>
