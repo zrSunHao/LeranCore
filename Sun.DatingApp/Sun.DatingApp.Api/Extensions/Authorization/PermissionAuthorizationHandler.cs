@@ -23,6 +23,8 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
         {
             if (context.User != null)
             {
+                var roleId = Guid.Parse("1426DE8F-D0F4-428A-BC1E-91F36BE1EFE4");
+
                 if (context.User.IsInRole("admin"))
                 {
                     context.Succeed(requirement);
@@ -49,5 +51,6 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
             return Task.CompletedTask;
         }
 
+        
     }
 }

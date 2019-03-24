@@ -57,5 +57,11 @@ namespace Sun.DatingApp.Api.Controllers.System
             }
             return result;
         }
+
+        [HttpPost("Test")]
+        public WebApiResult Test()
+        {
+            return _service.Test();
+        }
     }
 }

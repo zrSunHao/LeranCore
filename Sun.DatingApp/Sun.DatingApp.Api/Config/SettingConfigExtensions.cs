@@ -12,11 +12,12 @@ namespace Sun.DatingApp.Api.Config
 {
     public static class SettingConfigExtensions
     {
-        public static void ConfigureServices(IServiceCollection services, IConfiguration Configuration)
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<DataContext>(options =>
             {
-                var connectionString = Configuration.GetConnectionString("Default");
+                
+                var connectionString = configuration.GetConnectionString("Default");
                 options.UseSqlServer(connectionString);
             });
 

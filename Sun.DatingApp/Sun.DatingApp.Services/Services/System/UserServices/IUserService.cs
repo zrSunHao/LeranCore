@@ -12,5 +12,7 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
         Task<WebApiResult<UserInfoModel>> GetUserInfo(Guid accountId);
 
         Task<WebApiResult> EditUserInfo(UserInfoDto dto, Guid accountId);
+
+        WebApiResult Test();
     }
 }

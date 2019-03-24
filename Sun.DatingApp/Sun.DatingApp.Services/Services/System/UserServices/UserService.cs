@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.System.Users.Dto;
 using Sun.DatingApp.Model.System.Users.Model;
@@ -109,6 +113,31 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
                 result.AddError(ex.InnerException?.Message);
 
             }
+            return result;
+        }
+
+        public WebApiResult Test()
+        {
+            var result = new WebApiResult();
+            try
+            {
+                var roleId = Guid.Parse("1426DE8F-D0F4-428A-BC1E-91F36BE1EFE4");
+
+                using (var conn = new SqlConnection("Data Source=192.168.1.201; Database=Sunny_D; User ID=sa; Password=123456;"))
+                {
+                    string sql = @"SELECT * FROM [dbo].[ViewAuthorizationRolePermission] WHERE [RoleId] = @RoleId";
+
+                    var ttt = conn.QueryMultiple(sql, new { RoleId = roleId });
+                    var yyy = ttt.Read<ViewAuthorizationRolePermission>().ToList();
+                    var tetete = yyy;
+                }
+            }
+            catch (Exception ex)
+            {
+               result.AddError(ex.Message);
+               result.AddError(ex.InnerException?.Message);
+            }
+
             return result;
         }
     }
