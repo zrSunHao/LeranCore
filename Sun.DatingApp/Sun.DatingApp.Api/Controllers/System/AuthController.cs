@@ -188,9 +188,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [HttpPost("Accounts")]
         [PermissionFilter(Permissions.Accounts)]
-        public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
+        public WebApiPagingResult<List<AccountListModel>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
-            return await _service.Accounts(opt);
+            return _service.Accounts(opt);
         }
 
         /// <summary>

@@ -17,6 +17,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Utility.Password;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
@@ -200,7 +202,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
         #region 账号管理
         //TODO Dapper视图   ViewAccountList
-        public async Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt)
+        public WebApiPagingResult<List<AccountListModel>> Accounts(PagingOptions<AccountListQueryDto> opt)
         {
             var result = new WebApiPagingResult<List<AccountListModel>>();
             try
@@ -211,83 +213,15 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
-                var query = _dataContext.SystemAccounts.Where(x => !x.Deleted).AsQueryable();
-
-                var filters = opt.Filters;
-
-                query = from u in query
-                        where (!string.IsNullOrEmpty(filters.Email) && u.Email.Contains(filters.Email)) ||
-                              string.IsNullOrEmpty(filters.Email)
-                        where (!string.IsNullOrEmpty(filters.UserName) && u.Nickname.Contains(filters.UserName)) ||
-                              string.IsNullOrEmpty(filters.UserName)
-                        where (!string.IsNullOrEmpty(filters.Role) && u.Email.Contains(filters.Role)) ||
-                              string.IsNullOrEmpty(filters.Role)
-                        where (filters.Active.HasValue && u.Active == filters.Active) || !filters.Active.HasValue
-                        where (filters.LatestLoginAtStart.HasValue && u.LatestLoginAt >= filters.LatestLoginAtStart) ||
-                              !filters.LatestLoginAtStart.HasValue
-                        where (filters.LatestLoginAtEnd.HasValue &&
-                               u.LatestLoginAt < (filters.LatestLoginAtEnd.Value.AddDays(1))) ||
-                              !filters.LatestLoginAtEnd.HasValue
-                        where (filters.CreatedAtStart.HasValue && u.CreatedAt >= filters.CreatedAtStart) ||
-                              !filters.CreatedAtStart.HasValue
-                        where (filters.CreatedAtEnd.HasValue && u.CreatedAt < (filters.CreatedAtEnd.Value.AddDays(1))) ||
-                              !filters.CreatedAtEnd.HasValue
-                        select u;
-
-                result.RowsCount = await query.CountAsync();
-
-                switch (opt.SortField)
+                var sql = @"SELECT * FROM [ViewAccountList]";
+                var views = _dapperContext.Conn.Query<ViewAccountList>(sql).ToList();
+                if (!views.Any())
                 {
-                    case "Email":
-                        if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.Email);
-                        query = query.OrderByDescending(x => x.Email);
-                        break;
-                    case "UserName":
-                        if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.Nickname);
-                        query = query.OrderByDescending(x => x.Nickname);
-                        break;
-                    case "Active":
-                        if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.Active);
-                        query = query.OrderByDescending(x => x.Active);
-                        break;
-                    case "LatestLoginAt":
-                        if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.LatestLoginAt);
-                        query = query.OrderByDescending(x => x.LatestLoginAt);
-                        break;
-                    case "CreatedAt":
-                        if (opt.SortOrder == "asc")
-                            query = query.OrderBy(x => x.CreatedAt);
-                        query = query.OrderByDescending(x => x.CreatedAt);
-                        break;
-                    default:
-                        query = query.OrderBy(x => x.LatestLoginAt);
-                        break;
+                    return result;
                 }
 
-                var queryR = from a in query
-                    join r in _dataContext.SystemRoles on a.RoleId equals r.Id into tr
-                    from ar in tr.DefaultIfEmpty()
-                    select new AccountListModel
-                    {
-                        Id = a.Id,
-                        Email = a.Email,
-                        UserName = a.Nickname,
-                        RoleId = a.RoleId,
-                        Active = a.Active,
-                        LatestLoginAt = a.LatestLoginAt,
-                        LockoutEndAt = a.LockoutEndAt,
-                        AccessFailedCount = a.AccessFailedCount,
-                        CreatedAt = a.CreatedAt,
-                        UpdatedAt = a.UpdatedAt,
-                        RoleName = ar.Name
-                    };
-
-                var accounts = await queryR.Skip(10 * opt.PageIndex).Take(10).ToListAsync();
-                result.Data = accounts;
+                var data = _mapper.Map<List<ViewAccountList>, List<AccountListModel>>(views);
+                result.Data = data;
             }
             catch (Exception ex)
             {
@@ -659,7 +593,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        //TODO Dapper视图   ViewAccountList   缓存
+        //TODO Dapper视图   缓存
         public async Task<WebApiResult<string[]>> GetAccountPermission(Guid id)
         {
             var result = new WebApiResult<string[]>();

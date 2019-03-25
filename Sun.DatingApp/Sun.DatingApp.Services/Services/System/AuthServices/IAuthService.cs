@@ -55,7 +55,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// </summary>
         /// <param name="opt"></param>
         /// <returns></returns>
-        Task<WebApiPagingResult<List<AccountListModel>>> Accounts(PagingOptions<AccountListQueryDto> opt);
+        WebApiPagingResult<List<AccountListModel>> Accounts(PagingOptions<AccountListQueryDto> opt);
 
         /// <summary>
         /// 编辑账号
