@@ -7,6 +7,7 @@ import { NzNotificationService } from 'ng-zorro-antd';
 import { PagingOptions } from '@shared/model/query-params.model';
 import { AccountAddComponent } from '../account-add/account-add.component';
 import { AccountStatusComponent } from '../account-status/account-status.component';
+import { ACLType } from '@delon/acl';
 
 const GetAccountsUrl = 'Auth/Accounts';
 const ActiveAccountUrl = 'Auth/ActiveAccount';
@@ -135,6 +136,7 @@ export class AccountListComponent implements OnInit {
         {
           text: '删除',
           icon: 'anticon anticon-delete',
+          acl: { ability: [10, 'Auth.DeleteAccount'], mode: 'oneOf' } as ACLType,
           click: (item: any) => this.deleteAccount(item),
         },
       ],

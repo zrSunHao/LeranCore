@@ -49,15 +49,16 @@ export class SysRoleRoleListComponent implements OnInit {
         {
           text: '权限',
           icon: 'anticon anticon-warning',
+          acl: { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' } as ACLType,
           click: (item: any) =>
             this.injector
               .get(Router)
               .navigateByUrl(`/sys/role-permission-list/${item.id}`),
-          acl: { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' } as ACLType
         },
         {
           text: '删除',
           icon: 'anticon anticon-delete',
+          acl: { ability: [10, 'Role.DeleteRole'], mode: 'oneOf' } as ACLType,
           click: (item: any) => this.delete(item),
         },
       ],

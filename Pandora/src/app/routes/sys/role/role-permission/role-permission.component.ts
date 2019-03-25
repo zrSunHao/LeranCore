@@ -80,11 +80,11 @@ export class RolePermissionComponent implements OnInit {
         // tslint:disable-next-line:prefer-for-of
         for (let j = 0; j < perm.length; j++) {
           if (perm[j].checked) {
-            const dto = {
+            const perms = {
               pageId: pages[i].id,
               permissionId: perm[j].id,
             };
-            permissions.push(dto);
+            permissions.push(perms);
           }
         }
       }

@@ -4,6 +4,7 @@ import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService, isTemplateRef } from 'ng-zorro-antd';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
+import { ACLType } from '@delon/acl';
 
 const GetPagesUrl = 'Menu/GetPages';
 const ActivePageUrl = 'Menu/ActivePage';
@@ -50,6 +51,7 @@ export class MenuListComponent implements OnInit {
         {
           text: '删除',
           icon: 'anticon anticon-delete',
+          acl: { ability: [10, 'Menu.DeletePage'], mode: 'oneOf' } as ACLType,
           click: (item: any) => this.delete(item),
         },
       ],
