@@ -5,7 +5,6 @@ using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Common.Model;
-using Sun.DatingApp.Model.Menus.Model;
 using Sun.DatingApp.Model.System.Menus.Dto;
 using Sun.DatingApp.Model.System.Menus.Model;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
@@ -15,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Sun.DatingApp.Data.View.System;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -37,15 +37,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     return result;
                 }
 
-                var data = entitis.Select(x => new MenuListModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    TagColor = x.TagColor,
-                    Intro = x.Intro,
-                    Icon = x.Icon,
-                    Active = x.Active
-                }).ToList();
+                var data = _mapper.Map<List<SystemMenu>, List<MenuListModel>>(entitis);
 
                 result.Data = data;
             }
@@ -196,18 +188,12 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             {
                 var sql = @"SELECT TOP 1000 * FROM [dbo].[SystemPage] WHERE [MenuId] = @MenuId AND [Deleted] = N'0'";
                 var entitis = _dapperContext.Conn.Query<SystemPage>(sql,new { MenuId = id }).ToList();
-
-                var data = entitis.Select(x => new PageListModel
+                if (!entitis.Any())
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Url = x.Url,
-                    TagColor = x.TagColor,
-                    Intro = x.Intro,
-                    Icon = x.Icon,
-                    Active = x.Active,
-                    MenuId = x.MenuId,
-                }).ToList();
+                    return result;
+                }
+
+                var data = _mapper.Map<List<SystemPage>, List<PageListModel>>(entitis);
 
                 result.Data = data;
             }
@@ -369,31 +355,20 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        //TODO dapper ViewPageList
-        public async Task<WebApiResult<List<PageListModel>>> GetAllPages(string name)
+        //TODO 分页
+        public WebApiResult<List<PageListModel>> GetAllPages(string name)
         {
             var result = new WebApiResult<List<PageListModel>>();
             try
             {
-                var data = await (from p in _dataContext.SystemPages
-                                  join m in _dataContext.SystemMenus on p.MenuId equals m.Id into tm
-                    from pm in tm.DefaultIfEmpty() 
-                    where !p.Deleted
-                    where string.IsNullOrEmpty(name) || (!string.IsNullOrEmpty(name) && p.Name.Contains(name))
-                    select new PageListModel
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Url = p.Url,
-                        TagColor = p.TagColor,
-                        Intro = p.Intro,
-                        Icon = p.Icon,
-                        Active = p.Active,
-                        MenuId = p.MenuId,
-                        MenuName = pm.Name,
-                        MenuIcon = pm.Icon,
-                        MenuTagColor = pm.TagColor
-                    }).ToListAsync();
+                var sql = @"SELECT TOP 1000 * FROM [dbo].[ViewPageList]";
+                var views = _dapperContext.Conn.Query<ViewPageList>(sql).ToList();
+                if (!views.Any())
+                {
+                    return result;
+                }
+
+                var data = _mapper.Map<List<ViewPageList>, List<PageListModel>>(views);
 
                 result.Data = data;
             }

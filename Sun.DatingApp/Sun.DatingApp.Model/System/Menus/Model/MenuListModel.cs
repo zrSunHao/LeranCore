@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Sun.DatingApp.Model.Menus.Model
+namespace Sun.DatingApp.Model.System.Menus.Model
 {
     public class MenuListModel
     {

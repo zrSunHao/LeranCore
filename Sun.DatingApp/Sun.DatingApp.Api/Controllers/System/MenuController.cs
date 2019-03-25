@@ -2,7 +2,6 @@
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Common.Model;
-using Sun.DatingApp.Model.Menus.Model;
 using Sun.DatingApp.Model.System.Menus.Dto;
 using Sun.DatingApp.Model.System.Menus.Model;
 using Sun.DatingApp.Services.Services.System.MenuServices;
@@ -234,9 +233,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [HttpGet("GetAllPages")]
         [PermissionFilter(Permissions.GetAllPages)]
-        public async Task<WebApiResult<List<PageListModel>>> GetAllPages(string name)
+        public WebApiResult<List<PageListModel>> GetAllPages(string name)
         {
-            return await _service.GetAllPages(name);
+            return _service.GetAllPages(name);
         }
     }
 }
