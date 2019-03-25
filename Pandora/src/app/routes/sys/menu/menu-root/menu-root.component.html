@@ -1,7 +1,7 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
     <button nz-button nzType="primary" (click)="add()" [acl]="{ ability: [10, 'Menu.CreateMenu'], mode: 'oneOf' }"><i
-        nz-icon type="plus" theme="outline"></i>添加模块</button>
+        nz-icon type="plus" theme="outline"></i>添加菜单</button>
   </ng-template>
 </page-header>
 <div nz-col nzSpan="8">
@@ -19,9 +19,9 @@
                 nzCheckedChildren="开" nzUnCheckedChildren="关">
               </nz-switch>
             </ng-template>
-            <ng-template #editAction><a [acl]="{ ability: ['Menu.EditMenu'], mode: 'oneOf' }" (click)="edit(item)">编辑</a></ng-template>
-            <ng-template #addAction><a [acl]="{ ability: ['Menu.CreatePage'], mode: 'oneOf' }" (click)="addPage(item)">添加页面</a></ng-template>
-            <ng-template #deleteAction><a [acl]="{ ability: ['Menu.DeleteMenu'], mode: 'oneOf' }" (click)="delete(item)">删除</a></ng-template>
+            <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
+            <ng-template #addAction><a (click)="addPage(item)">添加页面</a></ng-template>
+            <ng-template #deleteAction><a [acl]="{ ability: [10, 'Menu.DeleteMenu'], mode: 'oneOf' }" (click)="delete(item)">删除</a></ng-template>
             <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.intro">
               <ng-template #nzTitle>
                 <!-- <a href="#">{{item.name}}</a> -->

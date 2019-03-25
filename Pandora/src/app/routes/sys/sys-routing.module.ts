@@ -10,32 +10,57 @@ import { UserInfoComponent } from './user/user-info/user-info.component';
 import { UserSecurityComponent } from './user/user-security/user-security.component';
 import { UserNotificationComponent } from './user/user-notification/user-notification.component';
 import { UserBindingComponent } from './user/user-binding/user-binding.component';
+import { ACLGuard, ACLType, ACLCanType } from '@delon/acl';
 
 const routes: Routes = [
   {
     path: 'role-list',
     component: SysRoleRoleListComponent,
-    data: { title: '角色管理列表' },
+    canActivate: [ACLGuard],
+    data: {
+      title: '角色管理列表',
+      // tslint:disable-next-line:no-angle-bracket-type-assertion
+      guard: <ACLType> { ability: [10, 'Role.GetRoles'], mode: 'oneOf' },
+    },
   },
   {
     path: 'permission-list',
     component: PermissionListComponent,
-    data: { title: '权限管理列表' },
+    canActivate: [ACLGuard],
+    data: {
+      title: '权限管理列表',
+      // tslint:disable-next-line:no-angle-bracket-type-assertion
+      guard: <ACLType> { ability: [10, 'Menu.GetAllPages'], mode: 'oneOf' },
+    },
   },
   {
     path: 'role-permission-list/:id',
     component: RolePermissionComponent,
-    data: { title: '角色权限管理列表' },
+    data: {
+      title: '角色权限管理列表',
+      // tslint:disable-next-line:no-angle-bracket-type-assertion
+      guard: <ACLType> { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' },
+    },
   },
   {
     path: 'menu-list',
     component: MenuRootComponent,
-    data: { title: '菜单管理列表' },
+    canActivate: [ACLGuard],
+    data: {
+      title: '菜单管理列表',
+      // tslint:disable-next-line:no-angle-bracket-type-assertion
+      guard: <ACLType> { ability: [10, 'Menu.GetMenus'], mode: 'oneOf' },
+    },
   },
   {
     path: 'account-list',
     component: AccountListComponent,
-    data: { title: '账号管理列表' },
+    canActivate: [ACLGuard],
+    data: {
+      title: '账号管理列表',
+      // tslint:disable-next-line:no-angle-bracket-type-assertion
+      guard: <ACLType> { ability: [10, 'Auth.Accounts'], mode: 'oneOf' },
+    },
   },
   {
     path: 'user',

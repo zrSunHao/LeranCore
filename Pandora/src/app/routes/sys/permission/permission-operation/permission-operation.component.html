@@ -12,7 +12,7 @@
             <nz-switch [ngModel]="true" (click)='active(item)' nzCheckedChildren="开" nzUnCheckedChildren="关">
             </nz-switch>
           </ng-template>
-          <ng-template #deleteAction><a (click)="delete(item)">删除</a></ng-template>
+          <ng-template #deleteAction><a [acl]="{ ability: ['Permission.DeletePermission'], mode: 'oneOf' }" (click)="delete(item)">删除</a></ng-template>
           <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.intro">
             <ng-template #nzTitle>
               <!-- <a href="#">{{item.name}}</a> -->

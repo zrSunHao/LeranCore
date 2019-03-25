@@ -13,7 +13,7 @@ export const environment = {
     description: '潘多拉---个人前端管理',
   },
   // 使用Acl访问控制
-  useAcl: false,
+  useAcl: true,
 };
 
 /*
