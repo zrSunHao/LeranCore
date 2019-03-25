@@ -5,6 +5,7 @@ import { SFSchema } from '@delon/form';
 import { SysRoleListRoleAddComponent } from '../role-add/role-add.component';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd';
+import { ACLType } from '@delon/acl';
 
 const GetRolesUrl = 'Role/GetRoles';
 const ActiveRoleUrl = 'Role/ActiveRole';
@@ -52,6 +53,7 @@ export class SysRoleRoleListComponent implements OnInit {
             this.injector
               .get(Router)
               .navigateByUrl(`/sys/role-permission-list/${item.id}`),
+          acl: { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' } as ACLType
         },
         {
           text: '删除',

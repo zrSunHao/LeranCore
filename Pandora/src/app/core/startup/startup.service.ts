@@ -85,7 +85,7 @@ export class StartupService {
 
   // 缓存中获取账号信息
   private loadAccountInfo(resolve: any, reject: any) {
-    const accountInfo = this.cacheService.getNone('PandoraCurrentInfo');
+    const accountInfo = this.cacheService.getNone('PandoraCurrentUserInfo');
     if (accountInfo == null) {
       console.log('账号未登录');
       resolve(null);
@@ -93,10 +93,13 @@ export class StartupService {
     } else {
       // 设置用户信息
       this.settingService.setUser(accountInfo);
-      console.log(accountInfo);
       // tslint:disable-next-line:no-string-literal
       const accountId = accountInfo['id'];
-      console.log(accountId);
+      const permissions = this.cacheService.getNone('PandoraCurrentPermission') as [];
+      if (permissions != null && permissions.length > 0) {
+        this.aclService.setAbility(permissions);
+      }
+
       this.viaHttp(resolve, reject, accountId);
       resolve(null);
     }
@@ -124,12 +127,14 @@ export class StartupService {
         ([accountInfoRes, accountMenuRes, accountPermissionRes]) => {
           // 设置用户信息
           if (accountInfoRes.success && accountInfoRes.data != null) {
-            this.cacheService.set('PandoraCurrentInfo', accountInfoRes.data);
+            this.cacheService.set('PandoraCurrentUserInfo', accountInfoRes.data);
             this.settingService.setUser(accountInfoRes.data);
           }
 
           // ACL：设置权限
           this.setPermission(accountPermissionRes.data);
+          this.cacheService.set('PandoraCurrentPermission', accountPermissionRes.data);
+
           // 初始化菜单
           console.log(accountMenuRes.data);
           if (accountMenuRes.data == null) {

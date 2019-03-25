@@ -132,6 +132,11 @@ export class AccountListComponent implements OnInit {
           icon: 'anticon anticon-plus',
           click: (item: any) => this.lockoutAccount(item),
         },
+        {
+          text: '删除',
+          icon: 'anticon anticon-delete',
+          click: (item: any) => this.deleteAccount(item),
+        },
       ],
     },
   ];

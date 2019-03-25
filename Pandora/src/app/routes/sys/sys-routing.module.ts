@@ -19,8 +19,7 @@ const routes: Routes = [
     canActivate: [ACLGuard],
     data: {
       title: '角色管理列表',
-      // tslint:disable-next-line:no-angle-bracket-type-assertion
-      guard: <ACLType> { ability: [10, 'Role.GetRoles'], mode: 'oneOf' },
+      guard: { ability: [10, 'Role.GetRoles'], mode: 'oneOf' } as ACLType,
     },
   },
   {
@@ -29,8 +28,7 @@ const routes: Routes = [
     canActivate: [ACLGuard],
     data: {
       title: '权限管理列表',
-      // tslint:disable-next-line:no-angle-bracket-type-assertion
-      guard: <ACLType> { ability: [10, 'Menu.GetAllPages'], mode: 'oneOf' },
+      guard: { ability: [10, 'Menu.GetAllPages'], mode: 'oneOf' } as ACLType,
     },
   },
   {
@@ -38,8 +36,7 @@ const routes: Routes = [
     component: RolePermissionComponent,
     data: {
       title: '角色权限管理列表',
-      // tslint:disable-next-line:no-angle-bracket-type-assertion
-      guard: <ACLType> { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' },
+      guard: { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' } as ACLType,
     },
   },
   {
@@ -48,8 +45,7 @@ const routes: Routes = [
     canActivate: [ACLGuard],
     data: {
       title: '菜单管理列表',
-      // tslint:disable-next-line:no-angle-bracket-type-assertion
-      guard: <ACLType> { ability: [10, 'Menu.GetMenus'], mode: 'oneOf' },
+      guard: { ability: [10, 'Menu.GetMenus'], mode: 'oneOf' } as ACLType,
     },
   },
   {
@@ -58,8 +54,7 @@ const routes: Routes = [
     canActivate: [ACLGuard],
     data: {
       title: '账号管理列表',
-      // tslint:disable-next-line:no-angle-bracket-type-assertion
-      guard: <ACLType> { ability: [10, 'Auth.Accounts'], mode: 'oneOf' },
+      guard: { ability: [10, 'Auth.Accounts'], mode: 'oneOf' } as ACLType,
     },
   },
   {
