@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -23,23 +24,28 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
         {
         }
 
-        //TODO Dapper
-        public async Task<WebApiResult<List<MenuListModel>>> GetMenus()
+        //TODO 分页
+        public WebApiResult<List<MenuListModel>> GetMenus()
         {
             var result = new WebApiResult<List<MenuListModel>>();
             try
             {
-                var data = await (from m in _dataContext.SystemMenus
-                                  where !m.Deleted
-                    select new MenuListModel
-                    {
-                        Id = m.Id,
-                        Name = m.Name,
-                        TagColor = m.TagColor,
-                        Intro = m.Intro,
-                        Icon = m.Icon,
-                        Active = m.Active
-                    }).ToListAsync();
+                var sql = @"SELECT * FROM [SystemMenu] WHERE [Deleted] = N'0'";
+                var entitis = _dapperContext.Conn.Query<SystemMenu>(sql).ToList();
+                if (!entitis.Any())
+                {
+                    return result;
+                }
+
+                var data = entitis.Select(x => new MenuListModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    TagColor = x.TagColor,
+                    Intro = x.Intro,
+                    Icon = x.Icon,
+                    Active = x.Active
+                }).ToList();
 
                 result.Data = data;
             }
@@ -182,25 +188,26 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        //TODO dapper
-        public async Task<WebApiResult<List<PageListModel>>> GetPages(Guid id)
+        //TODO 分页
+        public WebApiResult<List<PageListModel>> GetPages(Guid id)
         {
             var result = new WebApiResult<List<PageListModel>>();
             try
             {
-                var data = await (from p in _dataContext.SystemPages
-                                  where !p.Deleted && p.MenuId == id
-                    select new PageListModel
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Url = p.Url,
-                        TagColor = p.TagColor,
-                        Intro = p.Intro,
-                        Icon = p.Icon,
-                        Active = p.Active,
-                        MenuId = p.MenuId,
-                    }).ToListAsync();
+                var sql = @"SELECT TOP 1000 * FROM [dbo].[SystemPage] WHERE [MenuId] = @MenuId AND [Deleted] = N'0'";
+                var entitis = _dapperContext.Conn.Query<SystemPage>(sql,new { MenuId = id }).ToList();
+
+                var data = entitis.Select(x => new PageListModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Url = x.Url,
+                    TagColor = x.TagColor,
+                    Intro = x.Intro,
+                    Icon = x.Icon,
+                    Active = x.Active,
+                    MenuId = x.MenuId,
+                }).ToList();
 
                 result.Data = data;
             }

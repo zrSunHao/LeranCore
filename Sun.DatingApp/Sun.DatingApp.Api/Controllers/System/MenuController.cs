@@ -28,9 +28,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [HttpGet("GetMenus")]
         [PermissionFilter(Permissions.GetMenus)]
-        public async Task<WebApiResult<List<MenuListModel>>> GetMenus()
+        public WebApiResult<List<MenuListModel>> GetMenus()
         {
-            return await _service.GetMenus();
+            return _service.GetMenus();
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetPages")]
-        public async Task<WebApiResult<List<PageListModel>>> GetPages(Guid id)
+        public WebApiResult<List<PageListModel>> GetPages(Guid id)
         {
-            return await _service.GetPages(id);
+            return _service.GetPages(id);
         }
 
         /// <summary>

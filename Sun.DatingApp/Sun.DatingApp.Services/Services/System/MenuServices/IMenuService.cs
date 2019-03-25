@@ -12,7 +12,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
     public interface IMenuService
     {
-        Task<WebApiResult<List<MenuListModel>>> GetMenus();
+        WebApiResult<List<MenuListModel>> GetMenus();
 
         Task<WebApiResult> CreateMenu(MenuEditDto dto, Guid accountId);
 
@@ -23,7 +23,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
         Task<WebApiResult> DeleteMenu(Guid id, Guid accountId);
 
 
-        Task<WebApiResult<List<PageListModel>>> GetPages(Guid id);
+        WebApiResult<List<PageListModel>> GetPages(Guid id);
 
         Task<WebApiResult> CreatePage(PageEditDto dto, Guid accountId);
 

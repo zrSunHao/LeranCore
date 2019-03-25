@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sun.DatingApp.Utility.Dapper;
 
 namespace Sun.DatingApp.Services.Services.Common.BaseServices
 {
@@ -15,6 +16,7 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
         public readonly DataContext _dataContext;
         public readonly IMapper _mapper;
         public readonly ICacheHandler _catchHandler;
+        public IDapperContext _dapperContext;
 
         public Guid? CurrentUserId = null;
 
@@ -27,6 +29,7 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             _dataContext = dataContext;
             _mapper = mapper;
             _catchHandler = catchService;
+            _dapperContext = new DapperSqlServerContext();
         }
 
         public void SetCurrentUserId(Guid? id)
