@@ -112,7 +112,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
             var rPerms = new List<SystemRolePermission>();
             foreach (var perm in perms)
             {
-                if (!besidePageIds.Contains(perm.Id))
+                if (besidePageIds.Contains(perm.PageId))
                 {
                     var rPerm = new SystemRolePermission
                     {
