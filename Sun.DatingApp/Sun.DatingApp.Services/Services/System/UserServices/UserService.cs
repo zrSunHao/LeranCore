@@ -36,21 +36,8 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
                     return result;
                 }
 
-                var model = new UserInfoModel
-                {
-                    Name = entity.Name,
-                    Sex = entity.Sex,
-                    Birthday = entity.Birthday,
-                    Motto = entity.Motto,
-                    QQ = entity.QQ,
-                    WeChart = entity.WeChart,
-                    Occupation = entity.Occupation,
-                    Company = entity.Company,
-                    Address = entity.Address,
-                    Intro = entity.Intro
-                };
-
-                result.Data = model;
+                var data = _mapper.Map<SystemUserInfo, UserInfoModel>(entity);
+                result.Data = data;
             }
             catch (Exception ex)
             {
