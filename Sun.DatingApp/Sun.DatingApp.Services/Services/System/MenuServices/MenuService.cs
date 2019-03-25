@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.Common.Model;
@@ -13,8 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using Sun.DatingApp.Data.View.System;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
