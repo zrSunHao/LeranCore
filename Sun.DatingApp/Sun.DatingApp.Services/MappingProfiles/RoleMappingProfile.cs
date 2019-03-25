@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using Sun.DatingApp.Data.Entities.System;
-using Sun.DatingApp.Data.View;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.System.Menus.Model;
 using Sun.DatingApp.Model.System.Roles.Model;
+using ViewRolePageList = Sun.DatingApp.Data.View.ViewRolePageList;
 
 namespace Sun.DatingApp.Services.MappingProfiles
 {
@@ -28,6 +29,20 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
                 .ForMember(x => x.RoleId, x => x.MapFrom(y => y.RoleId))
                 .ForMember(x => x.Order, x => x.MapFrom(y => y.Order));
+
+            CreateMap<ViewPageList, RolePageModel>()
+                .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
+                .ForMember(x => x.Name, x => x.MapFrom(y => y.Name))
+                .ForMember(x => x.TagColor, x => x.MapFrom(y => y.TagColor))
+                .ForMember(x => x.Icon, x => x.MapFrom(y => y.Icon))
+                .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
+                .ForMember(x => x.Checked, x => x.MapFrom(y => false))
+                .ForMember(x => x.MenuName, x => x.MapFrom(y => y.MenuName))
+                .ForMember(x => x.MenuTagColor, x => x.MapFrom(y => y.MenuTagColor))
+                .ForMember(x => x.MenuIcon, x => x.MapFrom(y => y.MenuIcon))
+                .ForMember(x => x.Permissions, x => x.Ignore());
+
+
         }
     }
 }

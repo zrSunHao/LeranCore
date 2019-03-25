@@ -16,7 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Sun.DatingApp.Data.View;
+using Sun.DatingApp.Data.View.System;
+using ViewRolePageList = Sun.DatingApp.Data.View.ViewRolePageList;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
@@ -26,7 +27,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         {
         }
 
-        //TODO dapper 
+        //TODO 分页
         /// <summary>
         /// 获取角色列表
         /// </summary>
@@ -220,7 +221,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         }
 
 
-        //TODO dapper   ViewPageList
+        //TODO 分页
         /// <summary>
         /// 获取角色权限数据
         /// </summary>
@@ -230,21 +231,13 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult<List<RolePageModel>>();
             try
             {
-                var pages = await (from p in _dataContext.SystemPages
-                                   join m in _dataContext.SystemMenus on p.MenuId equals m.Id into tm
-                    from mp in tm.DefaultIfEmpty()
-                    where !p.Deleted
-                    select new RolePageModel
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        MenuName = mp.Name,
-                        MenuTagColor = mp.TagColor,
-                        MenuIcon = mp.Icon,
-                        TagColor = p.TagColor,
-                        Icon = p.Icon,
-                        Active = p.Active
-                    }).ToListAsync();
+                var pageSql = @"SELECT * FROM [ViewPageList]";
+                var views = _dapperContext.Conn.Query<ViewPageList>(pageSql).ToList();
+                if (!views.Any())
+                {
+                    return result;
+                }
+                var pages = _mapper.Map<List<ViewPageList>, List<RolePageModel>>(views);
 
                 if (pages.Any())
                 {
