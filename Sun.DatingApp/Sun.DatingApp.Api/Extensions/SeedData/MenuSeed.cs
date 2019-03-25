@@ -166,7 +166,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 CreatedById = Guid.Empty,
                 Deleted = false,
             };
-            AccountPagePerms(context, rolePage.Id);//添加权限
+            RolePagePerms(context, rolePage.Id);//添加权限
 
             //账号管理页
             var accountPage = new SystemPage
@@ -184,7 +184,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 CreatedById = Guid.Empty,
                 Deleted = false,
             };
-            RolePagePerms(context,accountPage.Id);//添加权限
+            AccountPagePerms(context,accountPage.Id);//添加权限
 
             context.SystemMenus.Add(module);
             context.SystemPages.Add(accountPage);
