@@ -106,7 +106,7 @@ export class StartupService {
   private viaHttp(resolve: any, reject: any, accountId: string) {
     const getAccountInfoUrl = `${GetAccountInfoUrl}?id=${accountId}`;
     const getAccountMenuUrl = `${GetAccountMenuUrl}?id=${accountId}`;
-    const getAccountPermissionUrl = `${GetAccountPermissionUrl}?id=${accountId}`;
+    const getAccountPermissionUrl = `${GetAccountPermissionUrl}`;
 
     zip(
       this.httpClient.get(getAccountInfoUrl),

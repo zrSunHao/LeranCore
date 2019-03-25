@@ -110,14 +110,14 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id);
+        WebApiResult<AccountInfo> GetAccountInfo(Guid id);
 
         /// <summary>
         /// 获取该账号的权限信息
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<WebApiResult<string[]>> GetAccountPermission(Guid id);
+        WebApiResult<string[]> GetAccountPermission(Guid id);
 
         /// <summary>
         /// 获取该账号的菜单数据

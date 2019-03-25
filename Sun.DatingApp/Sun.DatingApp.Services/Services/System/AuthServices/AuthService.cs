@@ -519,40 +519,17 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
 
         #region 账号登录信息
-        //TODO Dapper视图   ViewAccountList
-        public async Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id)
+        //TODO 分页
+        public WebApiResult<AccountInfo> GetAccountInfo(Guid id)
         {
             var result = new WebApiResult<AccountInfo>();
             try
             {
-                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
-                if (account == null)
-                {
-                    result.AddError("未找到对应的用户");
-                    return result;
-                }
+                var sql = @"SELECT TOP 1 * FROM [ViewAccountList] WHERE  [Id] = @Id";
+                var view = _dapperContext.Conn.QueryFirst<ViewAccountList>(sql, new {Id = id});
 
-                var role = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == account.RoleId);
-                if (role == null)
-                {
-                    result.AddError("该账号没有角色，请联系管理员");
-                    return result;
-                }
-
-                var avatar = await this.GetAccountAvatar(account.Id);
-
-                var info = new AccountInfo()
-                {
-                    Id = account.Id,
-                    Email = account.Email,
-                    Name = account.Nickname,
-                    RoleId = role.Id,
-                    RoleName = role.Name,
-                    Avatar = avatar,
-                    RefreshToken = account.RefreshToken
-                };
-
-                result.Data = info;
+                var data = _mapper.Map<ViewAccountList, AccountInfo>(view);
+                result.Data = data;
             }
             catch (Exception ex)
             {
@@ -593,24 +570,16 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        //TODO Dapper视图   缓存
-        public async Task<WebApiResult<string[]>> GetAccountPermission(Guid id)
+        public WebApiResult<string[]> GetAccountPermission(Guid roleId)
         {
             var result = new WebApiResult<string[]>();
             try
             {
-                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
-                if (account == null)
-                {
-                    result.AddError("未找到对应的用户");
-                    return result;
-                }
+                var sql = @"SELECT TOP 1000 * FROM [ViewAuthorizationRolePermission] WHERE [RoleId] = @Id";
+                var perms = _dapperContext.Conn.Query<ViewAuthorizationRolePermission>(sql, new { Id = roleId }).ToList();
 
-                var permsIds = await _dataContext.SystemRolePermissions.Where(x => x.RoleId == account.RoleId && !x.Deleted).Select(x=>x.PermissionId).ToListAsync();
-                var perms = await _dataContext.SystemPermissions.Where(x => permsIds.Contains(x.Id) && !x.Deleted)
-                    .Select(x => x.Code).ToArrayAsync();
-
-                result.Data = perms;
+                var permsStr = perms.Where(x => x.PermissionActive).Select(x => x.PermissionCode).ToArray();
+                result.Data = permsStr;
             }
             catch (Exception ex)
             {

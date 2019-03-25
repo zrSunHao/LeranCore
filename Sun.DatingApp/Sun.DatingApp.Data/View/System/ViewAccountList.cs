@@ -24,6 +24,8 @@ namespace Sun.DatingApp.Data.View.System
 
         public int AccessFailedCount { get; set; }
 
+        public Guid? RefreshToken { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }

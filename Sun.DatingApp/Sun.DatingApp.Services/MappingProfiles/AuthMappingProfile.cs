@@ -3,6 +3,7 @@ using Sun.DatingApp.Data.Entities.System;
 using System;
 using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
+using Sun.DatingApp.Model.System.Auth.Info;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
 
@@ -60,6 +61,17 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.AccessFailedCount, x => x.MapFrom(y => y.AccessFailedCount))
                 .ForMember(x => x.CreatedAt, x => x.MapFrom(y => y.CreatedAt))
                 .ForMember(x => x.UpdatedAt, x => x.MapFrom(y => y.UpdatedAt));
+
+
+            CreateMap<ViewAccountList, AccountInfo>()
+                .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
+                .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
+                .ForMember(x => x.Name, x => x.MapFrom(y => y.Nickname))
+                .ForMember(x => x.RoleId, x => x.MapFrom(y => y.RoleId))
+                .ForMember(x => x.RoleName, x => x.MapFrom(y => y.RoleName))
+                .ForMember(x => x.Avatar, x => x.MapFrom(y => y.AvatarUrl))
+                .ForMember(x => x.RefreshToken, x => x.MapFrom(y => y.RefreshToken))
+                .ForMember(x => x.AccessToken, x => x.Ignore());
 
         }
     }

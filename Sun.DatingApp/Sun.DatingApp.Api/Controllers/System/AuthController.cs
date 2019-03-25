@@ -345,9 +345,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetAccountInfo")]
-        public async Task<WebApiResult<AccountInfo>> GetAccountInfo(Guid id)
+        public WebApiResult<AccountInfo> GetAccountInfo(Guid id)
         {
-            return await _service.GetAccountInfo(id);
+            return _service.GetAccountInfo(id);
         }
 
         /// <summary>
@@ -367,9 +367,18 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetAccountPermission")]
-        public async Task<WebApiResult<string[]>> GetAccountPermission(Guid id)
+        public WebApiResult<string[]> GetAccountPermission()
         {
-            return await _service.GetAccountPermission(id);
+            var result = new WebApiResult<string[]>();
+            if (CurrentUserRoleId.HasValue)
+            {
+                result = _service.GetAccountPermission(CurrentUserRoleId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户角色信息获取失败");
+            }
+            return result;
         }
 
         /// <summary>

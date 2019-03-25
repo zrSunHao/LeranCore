@@ -30,5 +30,25 @@ namespace Sun.DatingApp.Api.Controllers
                 return null;
             }
         }
+
+        public Guid? CurrentUserRoleId
+        {
+            get
+            {
+                if (User != null && User.Claims.Any())
+                {
+                    var idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+                    if (idClaim != null)
+                    {
+                        var id = Guid.Parse(idClaim.Value.ToString());
+                        if (id != Guid.Empty)
+                        {
+                            return id;
+                        }
+                    }
+                }
+                return null;
+            }
+        }
     }
 }
