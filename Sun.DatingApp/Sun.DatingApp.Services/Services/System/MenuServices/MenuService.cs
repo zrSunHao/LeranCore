@@ -37,6 +37,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     return result;
                 }
 
+                entitis = entitis.OrderBy(x => x.Order).ToList();
                 var data = _mapper.Map<List<SystemMenu>, List<MenuListModel>>(entitis);
                 result.Data = data;
             }
@@ -366,6 +367,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                     return result;
                 }
 
+                views = views.OrderBy(x => x.Order).ToList();
                 var data = _mapper.Map<List<ViewPageList>, List<PageListModel>>(views);
                 result.Data = data;
             }

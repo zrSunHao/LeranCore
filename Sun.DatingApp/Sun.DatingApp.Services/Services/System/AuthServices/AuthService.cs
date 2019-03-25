@@ -220,6 +220,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
+                views = views.OrderBy(x => x.RoleRank).ThenByDescending(x => x.LatestLoginAt).ToList();
                 var data = _mapper.Map<List<ViewAccountList>, List<AccountListModel>>(views);
                 result.Data = data;
             }

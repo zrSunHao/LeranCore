@@ -237,6 +237,8 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     return result;
                 }
+
+                views = views.OrderBy(x => x.Order).ToList();
                 var pages = _mapper.Map<List<ViewPageList>, List<RolePageModel>>(views);
 
                 if (pages.Any())
@@ -247,7 +249,9 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                     foreach (var page in pages)
                     {
-                        page.Permissions = allPermissions.Where(x => x.PageId == page.Id).Select(x =>
+                        page.Permissions = allPermissions.Where(x => x.PageId == page.Id)
+                            .OrderBy(x=>x.Rank)
+                            .Select(x =>
                             new RolePermissionModel
                             {
                                 Id = x.Id,

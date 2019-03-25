@@ -36,6 +36,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
                     return result;
                 }
 
+                entitis = entitis.OrderBy(x => x.Rank).ToList();
                 var data = _mapper.Map<List<SystemPermission>, List<PermissionListModel>>(entitis);
                 result.Data = data;
             }
