@@ -28,9 +28,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [HttpPost("GetRoles")]
         [PermissionFilter(Permissions.GetRoles)]
-        public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
+        public WebApiResult<List<RoleListModel>> GetRoles(SearchRoleDto dto)
         {
-            return await _service.GetRoles(dto);
+            return _service.GetRoles(dto);
         }
 
         /// <summary>

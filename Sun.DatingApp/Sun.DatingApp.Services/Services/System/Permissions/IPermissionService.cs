@@ -16,7 +16,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<WebApiResult<List<PermissionListModel>>> GetPermission(Guid id);
+        WebApiResult<List<PermissionListModel>> GetPermission(Guid id);
 
         /// <summary>
         /// 新建权限树节点

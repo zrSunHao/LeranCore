@@ -12,8 +12,6 @@ namespace Sun.DatingApp.Model.System.Roles.Model
 
         public bool Active { get; set; }
 
-        public string Code { get; set; }
-
         public string Intro { get; set; }
 
         public string PageNames { get; set; }

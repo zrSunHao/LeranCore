@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace Sun.DatingApp.Services.Services.System.Permissions
 {
@@ -22,27 +23,21 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
 
         }
 
-        //TODO dapper
-        public async Task<WebApiResult<List<PermissionListModel>>> GetPermission(Guid id)
+        //TODO 分页
+        public WebApiResult<List<PermissionListModel>> GetPermission(Guid id)
         {
             var result = new WebApiResult<List<PermissionListModel>>();
             try
             {
-                var datas = await (from p in _dataContext.SystemPermissions
-                                   where p.PageId == id && !p.Deleted
-                    select new PermissionListModel
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Active = p.Active,
-                        Icon = p.Icon,
-                        TagColor = p.TagColor,
-                        Code = p.Code,
-                        Intro = p.Intro,
-                        PageId = p.PageId
-                    }).ToListAsync();
+                var sql = @"SELECT TOP 1000 * FROM [dbo].[SystemPermission] WHERE [PageId] = @PageId AND [Deleted] = N'0'";
+                var entitis = _dapperContext.Conn.Query<SystemPermission>(sql,new { PageId  = id}).ToList();
+                if (!entitis.Any())
+                {
+                    return result;
+                }
 
-                result.Data = datas;
+                var data = _mapper.Map<List<SystemPermission>, List<PermissionListModel>>(entitis);
+                result.Data = data;
             }
             catch (Exception ex)
             {

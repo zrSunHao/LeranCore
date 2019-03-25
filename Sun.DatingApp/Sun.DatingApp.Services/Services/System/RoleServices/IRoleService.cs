@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
     public interface IRoleService
     {
-        Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto);
+        WebApiResult<List<RoleListModel>> GetRoles(SearchRoleDto dto);
 
         Task<WebApiResult> CreateRole(CreateOrEditRoleDto dto, Guid accountId);
 

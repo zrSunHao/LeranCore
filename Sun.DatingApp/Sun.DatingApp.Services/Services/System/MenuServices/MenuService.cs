@@ -38,7 +38,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 }
 
                 var data = _mapper.Map<List<SystemMenu>, List<MenuListModel>>(entitis);
-
                 result.Data = data;
             }
             catch (Exception ex)
@@ -194,7 +193,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 }
 
                 var data = _mapper.Map<List<SystemPage>, List<PageListModel>>(entitis);
-
                 result.Data = data;
             }
             catch (Exception ex)
@@ -361,7 +359,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult<List<PageListModel>>();
             try
             {
-                var sql = @"SELECT TOP 1000 * FROM [dbo].[ViewPageList]";
+                var sql = @"SELECT * FROM [ViewPageList]";
                 var views = _dapperContext.Conn.Query<ViewPageList>(sql).ToList();
                 if (!views.Any())
                 {
@@ -369,7 +367,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 }
 
                 var data = _mapper.Map<List<ViewPageList>, List<PageListModel>>(views);
-
                 result.Data = data;
             }
             catch (Exception ex)

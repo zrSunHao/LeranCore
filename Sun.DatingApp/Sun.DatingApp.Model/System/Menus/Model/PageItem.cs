@@ -17,5 +17,7 @@ namespace Sun.DatingApp.Model.System.Menus.Model
         public bool Active { get; set; }
 
         public Guid RoleId { get; set; }
+
+        public int Order { get; set; }
     }
 }

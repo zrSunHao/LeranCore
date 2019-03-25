@@ -25,9 +25,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetPermission")]
-        public async Task<WebApiResult<List<PermissionListModel>>> GetPermission(Guid id)
+        public WebApiResult<List<PermissionListModel>> GetPermission(Guid id)
         {
-            return await _service.GetPermission(id);
+            return  _service.GetPermission(id);
         }
 
         /// <summary>

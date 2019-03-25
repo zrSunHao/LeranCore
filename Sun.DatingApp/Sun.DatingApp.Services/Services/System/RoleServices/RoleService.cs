@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
+using Sun.DatingApp.Data.View;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
@@ -30,43 +32,36 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public async Task<WebApiResult<List<RoleListModel>>> GetRoles(SearchRoleDto dto)
+        public WebApiResult<List<RoleListModel>> GetRoles(SearchRoleDto dto)
         {
             var result = new WebApiResult<List<RoleListModel>>();
             try
             {
-                var roles = await _dataContext.SystemRoles.Where(x => !x.Deleted).Select(x => new RoleListModel
+                var roleSql = @"SELECT * FROM [SystemRole] WHERE [Deleted] = N'0'";
+                var entitis = _dapperContext.Conn.Query<SystemRole>(roleSql).ToList();
+                if (!entitis.Any())
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Active = x.Active,
-                    Intro = x.Intro,
-                }).ToListAsync();
+                    return result;
+                }
 
+                var roles = _mapper.Map<List<SystemRole>, List<RoleListModel>>(entitis);
                 if (roles.Any())
                 {
-                    var roleIds = roles.Select(x => x.Id).ToList();
+                    var pageSql = @"SELECT * FROM [ViewRolePageList]";
+                    var views = _dapperContext.Conn.Query<ViewRolePageList>(pageSql).ToList();
+                    if (!views.Any())
+                    {
+                        result.Data = roles;
+                        return result;
+                    }
 
-                    var pages = await (from rp in _dataContext.SystemRolePermissions
-                                       join p in _dataContext.SystemPages on rp.PageId equals p.Id into tp
-                        from rrp in tp.DefaultIfEmpty()
-                        where roleIds.Contains(rp.RoleId)
-                        where !rp.Deleted
-                        select new PageItem
-                        {
-                            Id = rrp.Id,
-                            Name = rrp.Name,
-                            Icon = rrp.Icon,
-                            TagColor = rrp.TagColor,
-                            Active = rrp.Active,
-                            RoleId = rp.RoleId
-                        }).ToListAsync();
-
+                    var pages = _mapper.Map<List<ViewRolePageList>, List<PageItem>>(views);
                     if (pages.Any())
                     {
                         foreach (var role in roles)
                         {
-                            var names = pages.Where(x => x.RoleId == role.Id).Select(x => x.Name).ToList().Distinct();
+                            var names = pages.Where(x => x.RoleId == role.Id).OrderBy(x => x.Order).Select(x => x.Name)
+                                .ToList();
                             role.PageNames = names.ToArray().Join("；"); 
                         }
                     }
