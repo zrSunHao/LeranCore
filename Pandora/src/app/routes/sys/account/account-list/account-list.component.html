@@ -1,20 +1,27 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
-    <button nz-button nzType="primary" [acl]="{ ability: [10, 'Auth.CreateAccount'], mode: 'oneOf' }" (click)="addAccount()"><i nz-icon type="plus" theme="outline"></i>添加账号</button>
-    <button nz-button nzType="primary" [acl]="{ ability: [10, 'Auth.BatchEditAccount'], mode: 'oneOf' }" (click)="statusAccounts()"><i nz-icon type="unlock" theme="outline"></i>状态管理</button>
-    <button nz-button nzType="primary" [acl]="{ ability: [10, 'Auth.BatchDeleteAccount'], mode: 'oneOf' }" (click)="deleteAccounts()"><i nz-icon type="delete" theme="outline"></i>删除账号</button>
+    <button nz-button nzType="primary" [acl]="{ ability: [10, 'Auth.CreateAccount'], mode: 'oneOf' }"
+      (click)="addAccount()"><i nz-icon type="plus" theme="outline"></i>添加账号</button>
+    <button nz-button nzType="primary" [acl]="{ ability: [10, 'Auth.BatchEditAccount'], mode: 'oneOf' }"
+      (click)="statusAccounts()"><i nz-icon type="unlock" theme="outline"></i>状态管理</button>
+    <button nz-button nzType="primary" [acl]="{ ability: [10, 'Auth.BatchDeleteAccount'], mode: 'oneOf' }"
+      (click)="deleteAccounts()"><i nz-icon type="delete" theme="outline"></i>删除账号</button>
   </ng-template>
 </page-header>
+
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
-  <st #st [data]="datas" [columns]="columns" (change)="rowClick($event)" [bordered]="true" [rowClickTime]="0" (change)="change($event)">
-    <ng-template st-row="name" let-item let-index="index">
-      <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
-      </nz-tag>
-    </ng-template>
-    <ng-template st-row="custom" let-item let-index="index">
-      <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="activeAccount(item)">
-      </nz-switch>
-    </ng-template>
-  </st>
+  <nz-spin [nzSpinning]="loading">
+    <st #st [data]="datas" [columns]="columns" (change)="rowClick($event)" [bordered]="true" [rowClickTime]="0"
+      (change)="change($event)">
+      <ng-template st-row="name" let-item let-index="index">
+        <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
+        </nz-tag>
+      </ng-template>
+      <ng-template st-row="custom" let-item let-index="index">
+        <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="activeAccount(item)">
+        </nz-switch>
+      </ng-template>
+    </st>
+  </nz-spin>
 </nz-card>

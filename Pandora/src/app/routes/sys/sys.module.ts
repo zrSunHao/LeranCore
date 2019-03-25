@@ -35,10 +35,11 @@ import { UserNotificationComponent } from './user/user-notification/user-notific
 import { UserSecurityComponent } from './user/user-security/user-security.component';
 import { UserComponent } from './user/user.component';
 
-const COMPONENTS = [SysRoleRoleListComponent];
+const COMPONENTS = [];
 
 const COMPONENTS_NOROUNT = [
   SysRoleListRoleAddComponent,
+  SysRoleRoleListComponent,
   RolePermissionComponent,
   PermissionAddComponent,
   PermissionListComponent,

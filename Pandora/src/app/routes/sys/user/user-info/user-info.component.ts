@@ -106,10 +106,10 @@ export class UserInfoComponent implements OnInit {
     this.http
       .get(GetUserInfoUrl)
       .pipe((res: any) => {
-        this.userLoading = false;
         return res;
       })
       .subscribe((res: any) => {
+        this.userLoading = false;
         if (!res.success) {
           this.notification.create(
             'error',

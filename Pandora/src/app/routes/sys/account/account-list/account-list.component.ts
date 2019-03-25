@@ -30,6 +30,7 @@ export class AccountListComponent implements OnInit {
   @ViewChild('st') st: STComponent;
   // 列表数据
   datas: Array<any> = [];
+  loading = false;
   // 选中的列表行
   selectRows: Array<any> = [];
   // 列表搜索条件
@@ -136,7 +137,10 @@ export class AccountListComponent implements OnInit {
         {
           text: '删除',
           icon: 'anticon anticon-delete',
-          acl: { ability: [10, 'Auth.DeleteAccount'], mode: 'oneOf' } as ACLType,
+          acl: {
+            ability: [10, 'Auth.DeleteAccount'],
+            mode: 'oneOf',
+          } as ACLType,
           click: (item: any) => this.deleteAccount(item),
         },
       ],
@@ -155,16 +159,23 @@ export class AccountListComponent implements OnInit {
   }
 
   loadData(dto: any) {
+    this.loading = true;
     const entity = this.getQueryParams(dto);
     const queryParams = new PagingOptions<any>(entity);
     this.selectRows = [];
 
-    this.http.post(GetAccountsUrl, queryParams).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create('error', '列表数据加载失败', res.errMsg);
-      }
-      this.datas = res.data;
-    });
+    this.http
+      .post(GetAccountsUrl, queryParams)
+      .pipe((res: any) => {
+        return res;
+      })
+      .subscribe((res: any) => {
+        this.loading = false;
+        if (!res.success) {
+          this.notification.create('error', '列表数据加载失败', res.errMsg);
+        }
+        this.datas = res.data;
+      });
   }
 
   getQueryParams(dto: any): any {
