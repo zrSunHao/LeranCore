@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Utility.CacheUtility;
+using Sun.DatingApp.Utility.Dapper;
 
 namespace Sun.DatingApp.Api.Extensions.Authorization
 {
@@ -23,29 +26,47 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
         {
             if (context.User != null)
             {
-                var roleId = Guid.Parse("1426DE8F-D0F4-428A-BC1E-91F36BE1EFE4");
-
-                if (context.User.IsInRole("admin"))
+                var roleClaim = context.User.FindFirst(_ => _.Type == ClaimTypes.Role);
+                if (roleClaim == null)
                 {
-                    context.Succeed(requirement);
+                    return Task.CompletedTask;
                 }
-                else
+
+                var roleIdStr = roleClaim.Value.ToString();
+                if (string.IsNullOrEmpty(roleIdStr))
                 {
-                    var userIdClaim = context.User.FindFirst(_ => _.Type == ClaimTypes.NameIdentifier);
-                    if (userIdClaim != null)
+                    return Task.CompletedTask;
+                }
+
+                var roleId = Guid.Parse(roleIdStr);
+                if (roleId == Guid.Empty)
+                {
+                    return Task.CompletedTask;
+                }
+
+                try
+                {
+                    using (var dapperContext = new DapperSqlServerContext())
                     {
-                        var account = _catchHandler.Get<AccessDataModel>(userIdClaim.Value.ToString());
-                        if (account != null && account.Permissions.Any())
+                        var sql = @"SELECT TOP 1000 * FROM [ViewAuthorizationRolePermission] WHERE [RoleId] = @Id";
+                        var pems = dapperContext.Conn.Query<ViewAuthorizationRolePermission>(sql, new { Id = roleId }).ToList();
+                        if (!pems.Any())
                         {
-                            var permissionName = requirement.Name;
-                            var exist = account.Permissions.Any(x =>
-                                permissionName.StartsWith(x));
-                            if (exist)
-                            {
-                                context.Succeed(requirement);
-                            }
+                            return Task.CompletedTask;
+                        }
+
+                        var permissionName = requirement.Name;
+                        var exist = pems.Any(x => x.PermissionCode == permissionName);
+                        if (exist)
+                        {
+                            context.Succeed(requirement);
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    var msg = ex.Message;
+                    throw new Exception("权限认证出现异常，请联系管理员！");
                 }
             }
             return Task.CompletedTask;

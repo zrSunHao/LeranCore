@@ -13,6 +13,7 @@ using Sun.DatingApp.Model.System.Users.Dto;
 using Sun.DatingApp.Model.System.Users.Model;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using Sun.DatingApp.Utility.Dapper;
 
 namespace Sun.DatingApp.Services.Services.System.UserServices
 {
@@ -130,6 +131,11 @@ namespace Sun.DatingApp.Services.Services.System.UserServices
                     var ttt = conn.QueryMultiple(sql, new { RoleId = roleId });
                     var yyy = ttt.Read<ViewAuthorizationRolePermission>().ToList();
                     var tetete = yyy;
+                }
+
+                using (var dapperContext = new DapperSqlServerContext())
+                {
+                   
                 }
             }
             catch (Exception ex)

@@ -4,12 +4,13 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace Sun.DatingApp.Utility.Dapper
 {
     public class DapperSqlServerContext : IDapperContext, IDisposable
     {
-        private readonly string connStr = "Data Source=192.168.1.201; Database=Sunny_D; User ID=sa; Password=123456;";
+        private readonly string connStr = "Data Source=DESKTOP-SKUFSUT\\SQLEXPRESS; Database=Sunny_D; User ID=test; Password=123;";
 
         public DapperSqlServerContext()
         {
