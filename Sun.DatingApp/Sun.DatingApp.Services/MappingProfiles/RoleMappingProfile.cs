@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.System.Menus.Model;
 using Sun.DatingApp.Model.System.Roles.Model;
-using ViewRolePageList = Sun.DatingApp.Data.View.ViewRolePageList;
 
 namespace Sun.DatingApp.Services.MappingProfiles
 {

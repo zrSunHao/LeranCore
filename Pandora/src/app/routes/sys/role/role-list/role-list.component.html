@@ -1,17 +1,25 @@
 <page-header [action]="phActionTpl">
   <ng-template #phActionTpl>
-    <button (click)="add()"  nz-button nzType="primary"><i nz-icon type="plus" theme="outline"></i>添加角色</button>
+    <button (click)="add()" nz-button nzType="primary"><i nz-icon type="plus" theme="outline"></i>添加角色</button>
   </ng-template>
 </page-header>
-<nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
-  <st #st [data]="datas" [columns]="columns" [bordered]="true">
-    <ng-template st-row="name" let-item let-index="index">
-      <nz-tag [nzColor]="'#2db7f5'">{{item.name}}</nz-tag>
-    </ng-template>
-    <ng-template st-row="active" let-item let-index="index">
-      <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="active(item)">
-      </nz-switch>
-    </ng-template>
-  </st>
-</nz-card>
+<nz-spin [nzSpinning]="loading">
+  <nz-card>
+    <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
+    <st #st [data]="data.list" [columns]="columns" [bordered]="true" [page]="stPage" (change)="_click($event)" [total]="10">
+      <ng-template st-row="name" let-item let-index="index">
+        <nz-tag [nzColor]="'#2db7f5'">{{item.name}}</nz-tag>
+      </ng-template>
+      <ng-template st-row="pageNames" let-item let-index="index">
+        <ellipsis length="20" tooltip>{{ item.pageNames }}</ellipsis>
+      </ng-template>
+      <ng-template st-row="intro" let-item let-index="index">
+        <ellipsis length="20" tooltip>{{ item.intro }}</ellipsis>
+      </ng-template>
+      <ng-template st-row="active" let-item let-index="index">
+        <nz-switch [ngModel]="item.active" nzCheckedChildren="开" nzUnCheckedChildren="关" (click)="active(item)">
+        </nz-switch>
+      </ng-template>
+    </st>
+  </nz-card>
+</nz-spin>

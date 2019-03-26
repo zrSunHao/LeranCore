@@ -8,10 +8,9 @@
       (click)="deleteAccounts()"><i nz-icon type="delete" theme="outline"></i>删除账号</button>
   </ng-template>
 </page-header>
-
-<nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
-  <nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading">
+  <nz-card>
+    <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
     <st #st [data]="datas" [columns]="columns" (change)="rowClick($event)" [bordered]="true" [rowClickTime]="0"
       (change)="change($event)">
       <ng-template st-row="name" let-item let-index="index">
@@ -23,5 +22,5 @@
         </nz-switch>
       </ng-template>
     </st>
-  </nz-spin>
-</nz-card>
+  </nz-card>
+</nz-spin>

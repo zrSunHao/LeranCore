@@ -80,7 +80,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 Code = "Dashboard1.LoadData",
                 Intro = "加载该起始页的数据",
                 Icon = "eye",
-                TagColor = "geekblue",
+                TagColor = "#f50",
                 Active = true,
                 PageId = pageId,
                 Rank = 0,
@@ -93,7 +93,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
         }
 
 
-
+         
         /// <summary>
         /// 设置模块
         /// </summary>

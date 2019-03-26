@@ -1,22 +1,30 @@
 export class PagingOptions<T> {
   // fields
   filters: T;
-  sortOrder: string; // asc || desc
-  sortField: string;
   pageIndex: number;
   pageSize: number;
+  sort: Array<PagingSort>;
 
   // constructor overrides
   constructor(
-    filters: T,
-    sortOrder: string = 'asc',
-    sortField: string = '',
+    filters: T = null,
     pageIndex: number = 0,
-    pageSize: number = 10) {
+    pageSize: number = 10,
+    sort: Array<PagingSort> = [],
+  ) {
     this.filters = filters;
-    this.sortOrder = sortOrder;
-    this.sortField = sortField;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
+    this.sort = sort;
+  }
+}
+
+export class PagingSort {
+  field: string;
+  sort: string;
+
+  constructor(field, sort) {
+    this.field = field;
+    this.sort = sort;
   }
 }
