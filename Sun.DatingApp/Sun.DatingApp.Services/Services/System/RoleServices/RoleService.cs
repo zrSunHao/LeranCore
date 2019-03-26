@@ -17,7 +17,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Sun.DatingApp.Data.View.System;
-using ViewRolePageList = Sun.DatingApp.Data.View.ViewRolePageList;
 
 namespace Sun.DatingApp.Services.Services.System.RoleServices
 {

@@ -24,6 +24,6 @@ namespace Sun.DatingApp.Data.View.System
 
         public int Order { get; set; }
 
-        
+        public Guid MenuId { get; set; }
     }
 }

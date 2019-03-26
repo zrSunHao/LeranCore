@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.EntityFrameworkCore.Internal;
 using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Utility.Password;
 
@@ -541,7 +542,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
-        public async Task<WebApiResult<AccountMenuInfo>> GetAccountMenu(Guid id)
+        public async Task<WebApiResult<AccountMenuInfo>> GetAccountMenu1(Guid id)
         {
             var result = new WebApiResult<AccountMenuInfo>();
             try
@@ -571,12 +572,59 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             return result;
         }
 
+        public WebApiResult<AccountMenuInfo> GetAccountMenu(Guid roleId)
+        {
+            var result = new WebApiResult<AccountMenuInfo>();
+            try
+            {
+                var pageSql = @"SELECT * FROM [ViewRolePageList] WHERE [RoleId] = @Id";
+                var views = _dapperContext.Conn.Query<ViewRolePageList>(pageSql, new { Id = roleId }).ToList();
+                if (!views.Any())
+                {
+                    return result;
+                }
+
+                var menuIds = views.Select(x => x.MenuId.ToString()).ToList();
+                var distinctMenuIds = menuIds.Distinct();
+                var menusStrs = distinctMenuIds.ToArray();
+                var paramsStr = "'" + menusStrs.Join("','") + "'";
+
+                var menuSql = @"SELECT * FROM [dbo].[SystemMenu] WHERE [Id] IN (" + paramsStr + ")";
+                var menuEntitis = _dapperContext.Conn.Query<SystemMenu>(menuSql, new { Ids = menuIds }).OrderBy(x=>x.Order).ToList();
+
+                var menus = _mapper.Map<List<SystemMenu>, List<AccountMenu>>(menuEntitis);
+
+                foreach (var menu in menus)
+                {
+                    var pageViews = views.Where(x => x.MenuId == menu.Key).OrderByDescending(x => x.Order).ToList();
+                    menu.Children = _mapper.Map<List<ViewRolePageList>, List<AccountPage>>(pageViews);
+                }
+
+                var menuInfo = new AccountMenuInfo
+                {
+                    Text = "主导航",
+                    Group = true,
+                    HideInBreadcrumb = true,
+                };
+
+                menuInfo.Children = menus;
+                result.Data = menuInfo;
+            }
+            catch (Exception ex)
+            {
+                result.AddError("获取菜单时出现异常");
+                result.AddError(ex.Message);
+                result.AddError(ex.InnerException?.Message);
+            }
+            return result;
+        }
+
         public WebApiResult<string[]> GetAccountPermission(Guid roleId)
         {
             var result = new WebApiResult<string[]>();
             try
             {
-                var sql = @"SELECT TOP 1000 * FROM [ViewAuthorizationRolePermission] WHERE [RoleId] = @Id";
+                var sql = @"SELECT * FROM [ViewAuthorizationRolePermission] WHERE [RoleId] = @Id";
                 var perms = _dapperContext.Conn.Query<ViewAuthorizationRolePermission>(sql, new { Id = roleId }).ToList();
 
                 var permsStr = perms.Where(x => x.PermissionActive).Select(x => x.PermissionCode).ToArray();
@@ -625,12 +673,13 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                             ShortcutRoot = true,
                         };
 
-                        accountMenu.Children = pages.Where(x => x.MenuId == menu.Id).Select(x => new AccountPage
-                        {
-                            Key = x.Id,
-                            Text = x.Name,
-                            Link = x.Url
-                        }).ToList();
+                        accountMenu.Children = pages.Where(x => x.MenuId == menu.Id).OrderBy(x => x.Order).Select(x =>
+                            new AccountPage
+                            {
+                                Key = x.Id,
+                                Text = x.Name,
+                                Link = x.Url
+                            }).ToList();
 
                         accountMenus.Add(accountMenu);
                     }

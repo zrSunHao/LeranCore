@@ -73,6 +73,20 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.RefreshToken, x => x.MapFrom(y => y.RefreshToken))
                 .ForMember(x => x.AccessToken, x => x.Ignore());
 
+            //账号菜单
+            CreateMap<SystemMenu, AccountMenu>()
+                .ForMember(x => x.Key, x => x.MapFrom(y => y.Id))
+                .ForMember(x => x.Text, x => x.MapFrom(y => y.Name))
+                .ForMember(x => x.Icon, x => x.MapFrom(y => "anticon anticon-" + y.Icon))
+                .ForMember(x => x.ShortcutRoot, x => x.MapFrom(y => true))
+                .ForMember(x => x.Children, x => x.Ignore());
+
+            //账号菜单页面
+            CreateMap<ViewRolePageList, AccountPage>()
+                .ForMember(x => x.Key, x => x.MapFrom(y => y.PageId))
+                .ForMember(x => x.Text, x => x.MapFrom(y => y.Name))
+                .ForMember(x => x.Link, x => x.MapFrom(y => y.Url));
+
         }
     }
 }

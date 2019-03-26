@@ -124,7 +124,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<WebApiResult<AccountMenuInfo>> GetAccountMenu(Guid id);
+        WebApiResult<AccountMenuInfo> GetAccountMenu(Guid id);
 
         /// <summary>
         /// 绑定头像

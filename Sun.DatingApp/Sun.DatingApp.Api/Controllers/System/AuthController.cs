@@ -356,9 +356,18 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetAccountMenu")]
-        public async Task<WebApiResult<AccountMenuInfo>> GetAccountMenu(Guid id)
+        public WebApiResult<AccountMenuInfo> GetAccountMenu(Guid id)
         {
-            return await _service.GetAccountMenu(id);
+            var result = new WebApiResult<AccountMenuInfo>();
+            if (CurrentUserRoleId.HasValue)
+            {
+                result = _service.GetAccountMenu(CurrentUserRoleId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户角色信息获取失败");
+            }
+            return result;
         }
 
         /// <summary>
