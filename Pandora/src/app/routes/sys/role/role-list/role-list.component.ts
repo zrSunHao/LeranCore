@@ -25,7 +25,7 @@ export class SysRoleRoleListComponent implements OnInit {
   };
   loading = false;
   params = { name: '', pageName: '' };
-  dto = new PagingOptions(null, 1, 10);;
+  dto = new PagingOptions(null, 1, 10);
 
   page: STChange = { type: 'pi', pi: 1, ps: 10, total: 0 };
   searchSchema: SFSchema = {
@@ -217,22 +217,26 @@ export class SysRoleRoleListComponent implements OnInit {
   _click(event: STChange) {
     console.log(event); // PagingOptions
     if (event.type === 'pi' || event.type === 'ps' || event.type === 'sort') {
-      this.dto.pageIndex = event.pi;
-      this.dto.pageSize = event.ps;
-      if (event.sort) {
-        const sorts = [];
-        const sortStr = event.sort.value;
-        let field = '';
-        if (event.sort.column.index) {
-          field = event.sort.column.index as string;
-        } else if (event.sort.column.render) {
-          field = event.sort.column.render;
-        }
-        const sort = new PagingSort(field, sortStr);
-        sorts.push(sort);
-        this.dto.sort = sorts;
-      }
+      this.pageUtil(event);
       console.log(this.dto);
+    }
+  }
+
+  pageUtil(event: STChange) {
+    this.dto.pageIndex = event.pi;
+    this.dto.pageSize = event.ps;
+    if (event.sort) {
+      const sorts = [];
+      const sortStr = event.sort.value;
+      let field = '';
+      if (event.sort.column.index) {
+        field = event.sort.column.index as string;
+      } else if (event.sort.column.render) {
+        field = event.sort.column.render;
+      }
+      const sort = new PagingSort(field, sortStr);
+      sorts.push(sort);
+      this.dto.sort = sorts;
     }
   }
 }
