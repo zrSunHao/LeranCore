@@ -56,7 +56,7 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
                         }
 
                         var permissionName = requirement.Name;
-                        var exist = pems.Any(x => x.PermissionCode == permissionName);
+                        var exist = pems.Any(x => x.PermissionCode == permissionName && x.PermissionActive);
                         if (exist)
                         {
                             context.Succeed(requirement);

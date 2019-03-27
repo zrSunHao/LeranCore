@@ -355,19 +355,26 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
         }
 
         //TODO 分页
-        public WebApiResult<List<PageListModel>> GetAllPages(string name)
+        public WebApiResult<List<PageListModel>> GetAllPages(PagingOptions<SearchPageDto> paging)
         {
             var result = new WebApiResult<List<PageListModel>>();
             try
             {
                 var sql = @"SELECT * FROM [ViewPageList]";
+                if (paging.Filter != null)
+                {
+                    sql = sql + this.GetAllPagesQuerySql(paging.Filter);
+                }
+
+                sql = sql + this.GetPagingSql<SearchPageDto>(paging, "MenuOrder");
+
                 var views = _dapperContext.Conn.Query<ViewPageList>(sql).ToList();
                 if (!views.Any())
                 {
                     return result;
                 }
 
-                views = views.OrderBy(x => x.Order).ToList();
+                views = views.OrderBy(x => x.MenuOrder).ThenBy(x=>x.Order).ToList();
                 var data = _mapper.Map<List<ViewPageList>, List<PageListModel>>(views);
                 result.Data = data;
             }
@@ -377,6 +384,53 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 result.AddError(ex.InnerException?.Message);
             }
             return result;
+        }
+
+        public string GetAllPagesQuerySql(SearchPageDto dto)
+        {
+            try
+            {
+                var query = "";
+
+                if (!string.IsNullOrEmpty(dto.Name))
+                {
+                    query = "WHERE [Name] LIKE '%" + dto.Name + "%'";
+                }
+
+                if (!string.IsNullOrEmpty(dto.Menu))
+                {
+                    query = "WHERE [Name] LIKE '%" + dto.Menu + "%'";
+                }
+
+                if (!string.IsNullOrEmpty(dto.Name) && !string.IsNullOrEmpty(dto.Menu))
+                {
+                    query = "WHERE [Name] LIKE '%" + dto.Name + "%' AND [MenuName] LIKE '%" + dto.Menu + "%'";
+                }
+
+                return query;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public string GetPagingSql<T>(PagingOptions<T> paging,string order)
+        {
+            try
+            {
+                var pageIndex = paging.PageIndex;
+                var pageSize = paging.PageSize;
+
+                var pageSql = "ORDER BY [" + order + "] OFFSET " + pageSize * pageIndex + " rows FETCH next " +
+                              pageSize + " rows only";
+
+                return pageSql;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

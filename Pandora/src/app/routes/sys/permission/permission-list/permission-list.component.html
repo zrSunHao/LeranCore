@@ -5,19 +5,26 @@
 
 <div nz-row>
   <div nz-col nzSpan="15">
-    <nz-card>
-      <sf mode="search" [schema]="schema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
-      <st #st [data]="datas" [columns]="columns" (change)="rowClick($event)" [bordered]="true" [rowClickTime]="0">
-        <ng-template st-row="name" let-item let-index="index">
-          <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
-          </nz-tag>
-        </ng-template>
-        <ng-template st-row="menu" let-item let-index="index">
-          <nz-tag [nzColor]="item.menuTagColor"><i nz-icon [type]="item.menuIcon" theme="outline"></i>&nbsp;{{item.menuName}}
-          </nz-tag>
-        </ng-template>
-      </st>
-    </nz-card>
+    <nz-spin [nzSpinning]="loading">
+      <nz-card>
+        <sf mode="search" [schema]="schema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
+        <st #st [data]="list" [columns]="columns" (change)="_click($event)" [bordered]="true" [rowClickTime]="0"
+          [page]="stPage" [total]="total">
+          <ng-template st-row="name" let-item let-index="index">
+            <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
+            </nz-tag>
+          </ng-template>
+          <ng-template st-row="menu" let-item let-index="index">
+            <nz-tag [nzColor]="item.menuTagColor"><i nz-icon [type]="item.menuIcon"
+                theme="outline"></i>&nbsp;{{item.menuName}}
+            </nz-tag>
+          </ng-template>
+          <ng-template st-row="intro" let-item let-index="index">
+            <ellipsis length="20" tooltip>{{ item.intro }}</ellipsis>
+          </ng-template>
+        </st>
+      </nz-card>
+    </nz-spin>
   </div>
   <div nz-col nzSpan="1"></div>
   <div nz-col nzSpan="8">

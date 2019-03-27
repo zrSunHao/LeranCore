@@ -1,26 +1,32 @@
-<nz-card>
-  <nz-alert *ngIf="alertMsgShow" nzType="info" [nzMessage]="alertMsgTitle" [nzDescription]="alertMsgContent"
-    nzShowIcon>
-  </nz-alert>
-  <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
-    [nzRenderItem]="item">
-    <ng-template #item let-item>
-      <nz-list-item [nzContent]="forbidAction" [nzActions]="item.loading?[]:[editAction,deleteAction]">
-        <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
-          <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
-          <ng-template #forbidAction>
-            <nz-switch [ngModel]="true" (click)='active(item)' nzCheckedChildren="开" nzUnCheckedChildren="关">
-            </nz-switch>
-          </ng-template>
-          <ng-template #deleteAction><a [acl]="{ ability: ['Permission.DeletePermission'], mode: 'oneOf' }" (click)="delete(item)">删除</a></ng-template>
-          <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.intro">
-            <ng-template #nzTitle>
-              <!-- <a href="#">{{item.name}}</a> -->
-              <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}</nz-tag>
+<nz-spin [nzSpinning]="initLoading">
+  <nz-card>
+    <nz-alert *ngIf="alertMsgShow" nzType="info" [nzMessage]="alertMsgTitle" [nzDescription]="alertMsgContent"
+      nzShowIcon>
+    </nz-alert>
+    <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
+      [nzRenderItem]="item">
+      <ng-template #item let-item>
+        <nz-list-item [nzContent]="forbidAction" [nzActions]="item.loading?[]:[editAction,deleteAction]">
+          <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
+            <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
+            <ng-template #forbidAction>
+              <nz-switch [ngModel]="item.active" (click)='active(item)' nzCheckedChildren="开" nzUnCheckedChildren="关">
+              </nz-switch>
             </ng-template>
-          </nz-list-item-meta>
-        </nz-skeleton>
-      </nz-list-item>
-    </ng-template>
-  </nz-list>
-</nz-card>
+            <ng-template #deleteAction><a [acl]="{ ability: ['Permission.DeletePermission'], mode: 'oneOf' }"
+                (click)="delete(item)">删除</a></ng-template>
+            <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="intro">
+              <ng-template #nzTitle>
+                <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon" theme="outline"></i>&nbsp;{{item.name}}
+                </nz-tag>
+              </ng-template>
+              <ng-template #intro>
+                <ellipsis length="23" tooltip>{{ item.intro }}</ellipsis>
+              </ng-template>
+            </nz-list-item-meta>
+          </nz-skeleton>
+        </nz-list-item>
+      </ng-template>
+    </nz-list>
+  </nz-card>
+</nz-spin>

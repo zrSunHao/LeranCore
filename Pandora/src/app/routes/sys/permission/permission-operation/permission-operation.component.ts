@@ -32,18 +32,25 @@ export class PermissionOperationComponent implements OnInit {
 
   public loadData(item: any) {
     this.item = item;
+    this.initLoading = true;
 
     this.alertMsgShow = true;
     this.alertMsgTitle = `${item.name}`;
     this.alertMsgContent = `注：列表显示内容为[${item.name}]下的操作权限`;
 
-    this.http.get(GetPermissionUrl, { id: item.id }).subscribe((res: any) => {
-      if (!res.success) {
-        console.log(res);
-        return;
-      }
-      this.list = res.data;
-    });
+    this.http.get(GetPermissionUrl, { id: item.id }).subscribe(
+      (res: any) => {
+        if (!res.success) {
+          console.log(res);
+          return;
+        }
+        this.list = res.data;
+        this.initLoading = false;
+      },
+      (err: any) => {
+        this.initLoading = false;
+      },
+    );
   }
 
   onLoadMore(): void {
@@ -79,28 +86,42 @@ export class PermissionOperationComponent implements OnInit {
     } else {
       msg = '开启';
     }
+    this.initLoading = true;
 
     this.http
       .post(ActivePermissionUrl, { id: item.id, active: !active })
-      .subscribe((res: any) => {
-        if (!res.success) {
-          item.active = active;
-          this.notification.create('error', msg + '失败', res.allMessages);
-        } else {
-          this.notification.create('success', msg + '成功', res.allMessages);
-          this.loadData(this.item);
-        }
-      });
+      .subscribe(
+        (res: any) => {
+          this.initLoading = false;
+          if (!res.success) {
+            item.active = active;
+            this.notification.create('error', msg + '失败', res.allMessages);
+          } else {
+            this.notification.create('success', msg + '成功', res.allMessages);
+            this.loadData(this.item);
+          }
+        },
+        (err: any) => {
+          this.initLoading = false;
+        },
+      );
   }
 
   delete(item: any): void {
-    this.http.get(DeletePermissionUrl, { id: item.id }).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create('error', '删除失败', res.allMessages);
-      } else {
-        this.notification.create('success', '删除成功', res.allMessages);
-        this.loadData(this.item);
-      }
-    });
+    this.initLoading = true;
+    this.http.get(DeletePermissionUrl, { id: item.id }).subscribe(
+      (res: any) => {
+        this.initLoading = false;
+        if (!res.success) {
+          this.notification.create('error', '删除失败', res.allMessages);
+        } else {
+          this.notification.create('success', '删除成功', res.allMessages);
+          this.loadData(this.item);
+        }
+      },
+      (err: any) => {
+        this.initLoading = false;
+      },
+    );
   }
 }

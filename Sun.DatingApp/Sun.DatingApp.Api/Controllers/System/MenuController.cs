@@ -233,9 +233,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [HttpGet("GetAllPages")]
         [PermissionFilter(Permissions.GetAllPages)]
-        public WebApiResult<List<PageListModel>> GetAllPages(string name)
+        public WebApiResult<List<PageListModel>> GetAllPages(PagingOptions<SearchPageDto> paging)
         {
-            return _service.GetAllPages(name);
+            return _service.GetAllPages(paging);
         }
     }
 }

@@ -30,17 +30,19 @@ export class SysRoleRoleListComponent implements OnInit {
       name: {
         type: 'string',
         title: '角色名称',
+        ui: { placeholder: '支持模糊搜索' },
       },
       pageName: {
         type: 'string',
         title: '访问页面',
+        ui: { placeholder: '支持模糊搜索' },
       },
     },
   };
 
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '角色名称', render: 'name', className: 'text-center'},
+    { title: '角色名称', render: 'name', className: 'text-center' },
     { title: '访问页面', render: 'pageNames', className: 'text-center' },
     { title: '简介', render: 'intro', className: 'text-center' },
     {
@@ -96,38 +98,6 @@ export class SysRoleRoleListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadRoles();
-  }
-
-  loadRoles() {
-    this.loading = true;
-    this.http.post(GetRolesUrl, this.paging).subscribe(
-      (res: any) => {
-        if (!res.success) {
-          this.total = 0;
-        } else {
-          this.list = res.data;
-          this.total = res.rowsCount;
-        }
-        this.loading = false;
-      },
-      (err: any) => {
-        this.loading = false;
-      },
-    );
-  }
-
-  search(event) {
-    this.params.name = event.name;
-    this.params.pageName = event.pageName;
-    this.paging.filter = this.params;
-    this.loadRoles();
-  }
-
-  reset(event) {
-    this.params.name = null;
-    this.params.pageName = null;
-    this.paging.filter = this.params;
     this.loadRoles();
   }
 
@@ -205,6 +175,45 @@ export class SysRoleRoleListComponent implements OnInit {
         }
         this.notification.create('success', msg + '成功', res.allMessages);
         item.active = !active;
+      },
+      (err: any) => {
+        this.loading = false;
+      },
+    );
+  }
+
+  // ------------------------列表信息----------------------------
+
+  search(event) {
+    this.params.name = event.name;
+    this.params.pageName = event.pageName;
+    this.paging.filter = this.params;
+    this.loadRoles();
+  }
+
+  reset(event) {
+    this.params.name = null;
+    this.params.pageName = null;
+    this.paging.filter = this.params;
+    this.loadRoles();
+  }
+
+  loadRoles() {
+    this.loading = true;
+    this.http.post(GetRolesUrl, this.paging).subscribe(
+      (res: any) => {
+        if (!res.success) {
+          this.total = 0;
+          this.notification.create(
+            'error',
+            '角色列表数据加载失败',
+            res.allMessages,
+          );
+        } else {
+          this.list = res.data;
+          this.total = res.rowsCount;
+        }
+        this.loading = false;
       },
       (err: any) => {
         this.loading = false;

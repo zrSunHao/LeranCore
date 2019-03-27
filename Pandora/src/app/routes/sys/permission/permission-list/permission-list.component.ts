@@ -1,10 +1,17 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { SFSchema } from '@delon/form';
-import { STComponent, STColumn, STColumnTag } from '@delon/abc';
+import {
+  STComponent,
+  STColumn,
+  STColumnTag,
+  STChange,
+  STPage,
+} from '@delon/abc';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { PermissionAddComponent } from '../permission-add/permission-add.component';
 import { PermissionOperationComponent } from '../permission-operation/permission-operation.component';
 import { NzNotificationService } from 'ng-zorro-antd';
+import { PagingOptions, PagingSort } from '@shared/model/query-params.model';
 
 const GetAllPagesUrl = 'Menu/GetAllPages';
 
@@ -14,14 +21,26 @@ const GetAllPagesUrl = 'Menu/GetAllPages';
   styles: [],
 })
 export class PermissionListComponent implements OnInit {
+  list: Array<any> = [];
+  total = 0;
+  loading = false;
+  params = { name: '', menu: '' };
+  paging = new PagingOptions(null, 0, 10);
+
   @ViewChild('pmsopt') pmsopt: PermissionOperationComponent;
   @ViewChild('st') st: STComponent;
-  // 列表数据
-  datas: Array<any> = [];
-  // 列表搜索条件
   schema: SFSchema = {
     properties: {
-      name: { type: 'string', title: '页面名称' },
+      name: {
+        type: 'string',
+        title: '页面名称',
+        ui: { placeholder: '支持模糊搜索' },
+      },
+      menu: {
+        type: 'string',
+        title: '模块名称',
+        ui: { placeholder: '支持模糊搜索' },
+      },
     },
   };
 
@@ -29,7 +48,7 @@ export class PermissionListComponent implements OnInit {
   columns: STColumn[] = [
     { title: '页面名称', render: 'name', className: 'text-center' },
     { title: '所属模块', render: 'menu', className: 'text-center' },
-    { title: '备注', index: 'intro', className: 'text-center' },
+    { title: '备注', render: 'intro', className: 'text-center' },
     {
       title: '操作',
       className: 'text-center',
@@ -43,6 +62,14 @@ export class PermissionListComponent implements OnInit {
     },
   ];
 
+  stPage: STPage = {
+    front: false,
+    showQuickJumper: true,
+    total: true,
+    showSize: true,
+    pageSizes: [1, 10, 20, 30, 40, 50],
+  };
+
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
@@ -50,28 +77,7 @@ export class PermissionListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadDatas('');
-  }
-
-  loadDatas(name: string) {
-    this.http.get(GetAllPagesUrl, { name }).subscribe((res: any) => {
-      if (!res.success) {
-        return;
-      }
-      this.datas = res.data;
-    });
-  }
-
-  search(event) {
-    this.loadDatas(event.name);
-  }
-
-  reset(event) {
-    this.loadDatas('');
-  }
-
-  rowClick(event) {
-    this.pmsopt.loadData(event.click.item);
+    this.loadData();
   }
 
   addOperation(item: any) {
@@ -93,5 +99,72 @@ export class PermissionListComponent implements OnInit {
         this.pmsopt.loadData(item);
         console.log(res);
       });
+  }
+
+  // ------------------------列表信息----------------------------
+
+  search(event) {
+    this.params.name = event.name;
+    this.params.menu = event.menu;
+    this.paging.filter = this.params;
+    this.loadData();
+  }
+
+  reset(event) {
+    this.params.name = null;
+    this.params.menu = null;
+    this.paging.filter = this.params;
+    this.loadData();
+  }
+
+  loadData() {
+    this.loading = true;
+    this.http.post(GetAllPagesUrl, this.paging).subscribe(
+      (res: any) => {
+        if (!res.success) {
+          this.notification.create(
+            'error',
+            '页面列表数据加载失败',
+            res.allMessages,
+          );
+        } else {
+          this.list = res.data;
+          this.total = res.rowsCount;
+        }
+        this.loading = false;
+      },
+      (err: any) => {
+        this.loading = false;
+      },
+    );
+  }
+
+  _click(event: STChange) {
+    if (event.type === 'pi' || event.type === 'ps' || event.type === 'sort') {
+      this.pageUtil(event);
+      this.loadData();
+    }
+
+    if (event.type === 'click') {
+      this.pmsopt.loadData(event.click.item);
+    }
+  }
+
+  pageUtil(event: STChange) {
+    this.paging.pageIndex = event.pi - 1;
+    this.paging.pageSize = event.ps;
+    if (event.sort) {
+      const sorts = [];
+      const sortStr = event.sort.value;
+      let field = '';
+      if (event.sort.column.index) {
+        field = event.sort.column.index as string;
+      } else if (event.sort.column.render) {
+        field = event.sort.column.render;
+      }
+      const sort = new PagingSort(field, sortStr);
+      sorts.push(sort);
+      this.paging.sort = sorts;
+    }
   }
 }
