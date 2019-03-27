@@ -67,7 +67,7 @@ export class PermissionListComponent implements OnInit {
     showQuickJumper: true,
     total: true,
     showSize: true,
-    pageSizes: [1, 10, 20, 30, 40, 50],
+    pageSizes: [5, 10, 20, 30, 40, 50],
   };
 
   constructor(

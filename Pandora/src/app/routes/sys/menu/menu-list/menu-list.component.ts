@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { STComponent, STColumn } from '@delon/abc';
+import { STComponent, STColumn, STChange, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService, isTemplateRef } from 'ng-zorro-antd';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
 import { ACLType } from '@delon/acl';
+import { PagingOptions, PagingSort } from '@shared/model/query-params.model';
 
 const GetPagesUrl = 'Menu/GetPages';
 const ActivePageUrl = 'Menu/ActivePage';
@@ -18,21 +19,30 @@ const DeletePageUrl = 'Menu/DeletePage';
 export class MenuListComponent implements OnInit {
   @ViewChild('st') st: STComponent;
 
-  menu: any;
+  list: Array<any> = [];
+  total = 0;
+  loading = false;
+  params = { id: null, name: '' };
+  paging = new PagingOptions(null, 0, 10);
 
-  // 列表数据
-  datas: Array<any> = [];
-  // 列表搜索条件
   searchSchema: SFSchema = {
     properties: {
-      name: { type: 'string', title: '模块名称' },
+      name: {
+        type: 'string',
+        title: '页面名称',
+        ui: { placeholder: '支持模糊搜索' },
+      },
     },
   };
+
+  menu: any;
+  msgTitle = '暂无数据';
+  msgDes = '点击左侧菜单即可加载该菜单下的页面数据；';
 
   // 列表行列格式
   columns: STColumn[] = [
     { title: '页面名称', render: 'name', className: 'text-center' },
-    { title: '备注', index: 'intro', className: 'text-center' },
+    { title: '备注', render: 'intro', className: 'text-center' },
     {
       title: '是否启用',
       render: 'custom',
@@ -58,6 +68,14 @@ export class MenuListComponent implements OnInit {
     },
   ];
 
+  stPage: STPage = {
+    front: false,
+    showQuickJumper: true,
+    total: true,
+    showSize: true,
+    pageSizes: [5, 10, 20, 30, 40, 50],
+  };
+
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
@@ -65,22 +83,6 @@ export class MenuListComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
-
-  loadData(menu: any) {
-    console.log(menu);
-    this.menu = menu;
-    this.http.get(GetPagesUrl, { id: menu.id }).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create(
-          'error',
-          menu.name + '下的页面列表数据加载失败',
-          res.allMessages,
-        );
-      } else {
-        this.datas = res.data;
-      }
-    });
-  }
 
   active(item) {
     const active = item.active;
@@ -136,5 +138,71 @@ export class MenuListComponent implements OnInit {
         this.loadData(this.menu);
       }
     });
+  }
+
+  search(event) {
+    this.params.name = event.name;
+    this.loadData(this.menu);
+  }
+
+  reset(event) {
+    this.params.name = null;
+    this.loadData(this.menu);
+  }
+
+  loadData(menu: any) {
+    this.menu = menu;
+    this.msgTitle = `【${menu.name}】`;
+    this.msgDes = '页面数据管理列表';
+    this.params.id = menu.id;
+    this.paging.filter = this.params;
+    this.loading = true;
+
+    this.http.post(GetPagesUrl, this.paging).subscribe(
+      (res: any) => {
+        if (!res.success) {
+          this.notification.create(
+            'error',
+            menu.name + '下的页面列表数据加载失败',
+            res.allMessages,
+          );
+          this.list = [];
+          this.total = 0;
+        } else {
+          this.list = res.data;
+          this.total = res.rowsCount;
+        }
+        this.loading = false;
+      },
+      (err: any) => {
+        this.loading = false;
+      },
+    );
+  }
+
+  _click(event: STChange) {
+    console.log(event); // PagingOptions
+    if (event.type === 'pi' || event.type === 'ps' || event.type === 'sort') {
+      this.pageUtil(event);
+      this.loadData(this.menu);
+    }
+  }
+
+  pageUtil(event: STChange) {
+    this.paging.pageIndex = event.pi - 1;
+    this.paging.pageSize = event.ps;
+    if (event.sort) {
+      const sorts = [];
+      const sortStr = event.sort.value;
+      let field = '';
+      if (event.sort.column.index) {
+        field = event.sort.column.index as string;
+      } else if (event.sort.column.render) {
+        field = event.sort.column.render;
+      }
+      const sort = new PagingSort(field, sortStr);
+      sorts.push(sort);
+      this.paging.sort = sorts;
+    }
   }
 }

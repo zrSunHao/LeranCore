@@ -22,7 +22,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
         Task<WebApiResult> DeleteMenu(Guid id, Guid accountId);
 
 
-        WebApiResult<List<PageListModel>> GetPages(Guid id);
+        WebApiPagingResult<List<PageListModel>> GetPages(PagingOptions<SearchMenuPageDto> paging);
 
         Task<WebApiResult> CreatePage(PageEditDto dto, Guid accountId);
 

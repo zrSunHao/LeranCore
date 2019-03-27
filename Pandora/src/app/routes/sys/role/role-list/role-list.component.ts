@@ -24,7 +24,6 @@ export class SysRoleRoleListComponent implements OnInit {
   params = { name: '', pageName: '' };
   paging = new PagingOptions(null, 0, 10);
 
-  page: STChange = { type: 'pi', pi: 1, ps: 10, total: 0 };
   searchSchema: SFSchema = {
     properties: {
       name: {
@@ -87,7 +86,7 @@ export class SysRoleRoleListComponent implements OnInit {
     showQuickJumper: true,
     total: true,
     showSize: true,
-    pageSizes: [1, 10, 20, 30, 40, 50],
+    pageSizes: [5, 10, 20, 30, 40, 50],
   };
 
   constructor(

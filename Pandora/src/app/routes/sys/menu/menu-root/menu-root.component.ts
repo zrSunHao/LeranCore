@@ -18,7 +18,7 @@ export class MenuRootComponent implements OnInit {
   @ViewChild('menulist') menulist: MenuListComponent;
 
   list = [];
-  initLoading = false;
+  loading = false;
 
   constructor(
     private modal: ModalHelper,
@@ -31,17 +31,24 @@ export class MenuRootComponent implements OnInit {
   }
 
   loadData() {
-    this.http.get(GetMenusUrl).subscribe((res: any) => {
-      if (!res.success) {
-        this.notification.create(
-          'error',
-          '菜单列表数据加载失败',
-          res.allMessages,
-        );
-      } else {
-        this.list = res.data;
-      }
-    });
+    this.loading = true;
+    this.http.get(GetMenusUrl).subscribe(
+      (res: any) => {
+        if (!res.success) {
+          this.notification.create(
+            'error',
+            '菜单列表数据加载失败',
+            res.allMessages,
+          );
+        } else {
+          this.list = res.data;
+        }
+        this.loading = false;
+      },
+      (err: any) => {
+        this.loading = false;
+      },
+    );
   }
 
   add() {

@@ -122,12 +122,12 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <summary>
         /// 获取页面列表数据
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="paging"></param>
         /// <returns></returns>
-        [HttpGet("GetPages")]
-        public WebApiResult<List<PageListModel>> GetPages(Guid id)
+        [HttpPost("GetPages")]
+        public WebApiResult<List<PageListModel>> GetPages(PagingOptions<SearchMenuPageDto> paging)
         {
-            return _service.GetPages(id);
+            return _service.GetPages(paging);
         }
 
         /// <summary>

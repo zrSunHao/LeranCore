@@ -180,18 +180,24 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        //TODO 分页
-        public WebApiResult<List<PageListModel>> GetPages(Guid id)
+        public WebApiPagingResult<List<PageListModel>> GetPages(PagingOptions<SearchMenuPageDto> paging)
         {
-            var result = new WebApiResult<List<PageListModel>>();
+            var result = new WebApiPagingResult<List<PageListModel>>();
             try
             {
-                var sql = @"SELECT TOP 1000 * FROM [dbo].[SystemPage] WHERE [MenuId] = @MenuId AND [Deleted] = N'0'";
-                var entitis = _dapperContext.Conn.Query<SystemPage>(sql,new { MenuId = id }).ToList();
+                var sql = @"SELECT * ";
+                var countSql = @"SELECT COUNT(*)";
+
+                sql = sql + this.GetPagesQuerySql(paging.Filter) + GetPagingSql<SearchMenuPageDto>(paging, "Order");
+                countSql = countSql + this.GetPagesQuerySql(paging.Filter);
+
+                var entitis = _dapperContext.Conn.Query<SystemPage>(sql,new { MenuId = paging.Filter.Id }).ToList();
                 if (!entitis.Any())
                 {
                     return result;
                 }
+
+                result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 var data = _mapper.Map<List<SystemPage>, List<PageListModel>>(entitis);
                 result.Data = data;
@@ -390,7 +396,10 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        public string GetAllPagesQuerySql(SearchPageDto dto)
+
+
+
+        private string GetAllPagesQuerySql(SearchPageDto dto)
         {
             try
             {
@@ -419,7 +428,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             }
         }
 
-        public string GetPagingSql<T>(PagingOptions<T> paging,string order)
+        private string GetPagingSql<T>(PagingOptions<T> paging,string order)
         {
             try
             {
@@ -430,6 +439,31 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                               pageSize + " rows only";
 
                 return pageSql;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private string GetPagesQuerySql(SearchMenuPageDto dto)
+        {
+            try
+            {
+                var query = "";
+
+                if (!string.IsNullOrEmpty(dto.Name))
+                {
+                    query = "FROM [dbo].[SystemPage] WHERE [MenuId] = '" + dto.Id +
+                            "' AND [Deleted] = N'0' AND [Name] LIKE '%" + dto.Name + "%'";
+                }
+                else
+                {
+                    query = "FROM [dbo].[SystemPage] WHERE [MenuId] = '" + dto.Id +
+                            "' AND [Deleted] = N'0'";
+                }
+
+                return query;
             }
             catch (Exception ex)
             {

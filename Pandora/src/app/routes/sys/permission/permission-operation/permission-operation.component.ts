@@ -35,7 +35,7 @@ export class PermissionOperationComponent implements OnInit {
     this.initLoading = true;
 
     this.alertMsgShow = true;
-    this.alertMsgTitle = `${item.name}`;
+    this.alertMsgTitle = `【${item.name}】`;
     this.alertMsgContent = `注：列表显示内容为[${item.name}]下的操作权限`;
 
     this.http.get(GetPermissionUrl, { id: item.id }).subscribe(
