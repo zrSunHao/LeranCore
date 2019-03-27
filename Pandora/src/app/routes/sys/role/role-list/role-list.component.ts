@@ -204,6 +204,7 @@ export class SysRoleRoleListComponent implements OnInit {
       (res: any) => {
         if (!res.success) {
           this.total = 0;
+          this.list = [];
           this.notification.create(
             'error',
             '角色列表数据加载失败',

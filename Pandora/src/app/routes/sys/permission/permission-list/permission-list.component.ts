@@ -122,6 +122,7 @@ export class PermissionListComponent implements OnInit {
     this.http.post(GetAllPagesUrl, this.paging).subscribe(
       (res: any) => {
         if (!res.success) {
+          this.list = [];
           this.notification.create(
             'error',
             '页面列表数据加载失败',

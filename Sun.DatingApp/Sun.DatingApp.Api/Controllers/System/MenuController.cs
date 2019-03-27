@@ -231,9 +231,9 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// 权限列表页获取全部的页面数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetAllPages")]
+        [HttpPost("GetAllPages")]
         [PermissionFilter(Permissions.GetAllPages)]
-        public WebApiResult<List<PageListModel>> GetAllPages(PagingOptions<SearchPageDto> paging)
+        public WebApiPagingResult<List<PageListModel>> GetAllPages(PagingOptions<SearchPageDto> paging)
         {
             return _service.GetAllPages(paging);
         }

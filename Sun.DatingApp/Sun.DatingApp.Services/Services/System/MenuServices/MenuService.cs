@@ -354,16 +354,18 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             return result;
         }
 
-        //TODO 分页
-        public WebApiResult<List<PageListModel>> GetAllPages(PagingOptions<SearchPageDto> paging)
+        public WebApiPagingResult<List<PageListModel>> GetAllPages(PagingOptions<SearchPageDto> paging)
         {
-            var result = new WebApiResult<List<PageListModel>>();
+            var result = new WebApiPagingResult<List<PageListModel>>();
             try
             {
                 var sql = @"SELECT * FROM [ViewPageList]";
+                var countSql = @"SELECT COUNT(*) FROM [ViewPageList]";
+
                 if (paging.Filter != null)
                 {
                     sql = sql + this.GetAllPagesQuerySql(paging.Filter);
+                    countSql = countSql + this.GetAllPagesQuerySql(paging.Filter);
                 }
 
                 sql = sql + this.GetPagingSql<SearchPageDto>(paging, "MenuOrder");
@@ -373,6 +375,8 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 {
                     return result;
                 }
+
+                result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 views = views.OrderBy(x => x.MenuOrder).ThenBy(x=>x.Order).ToList();
                 var data = _mapper.Map<List<ViewPageList>, List<PageListModel>>(views);
@@ -399,7 +403,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 
                 if (!string.IsNullOrEmpty(dto.Menu))
                 {
-                    query = "WHERE [Name] LIKE '%" + dto.Menu + "%'";
+                    query = "WHERE [MenuName] LIKE '%" + dto.Menu + "%'";
                 }
 
                 if (!string.IsNullOrEmpty(dto.Name) && !string.IsNullOrEmpty(dto.Menu))
