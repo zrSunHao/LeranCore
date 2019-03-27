@@ -15,5 +15,7 @@ namespace Sun.DatingApp.Model.System.Roles.Model
         public string Intro { get; set; }
 
         public string PageNames { get; set; }
+
+        public int Rank { get; set; }
     }
 }

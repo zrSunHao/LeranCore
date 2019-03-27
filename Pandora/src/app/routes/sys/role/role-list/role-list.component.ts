@@ -25,7 +25,7 @@ export class SysRoleRoleListComponent implements OnInit {
   };
   loading = false;
   params = { name: '', pageName: '' };
-  dto = new PagingOptions(null, 1, 10);
+  paging = new PagingOptions(null, 0, 10);
 
   page: STChange = { type: 'pi', pi: 1, ps: 10, total: 0 };
   searchSchema: SFSchema = {
@@ -104,7 +104,7 @@ export class SysRoleRoleListComponent implements OnInit {
 
   loadRoles() {
     this.loading = true;
-    this.http.post(GetRolesUrl, { name: '' }).subscribe(
+    this.http.post(GetRolesUrl, this.paging).subscribe(
       (res: any) => {
         if (!res.success) {
         } else {
@@ -122,15 +122,15 @@ export class SysRoleRoleListComponent implements OnInit {
   search(event) {
     this.params.name = event.name;
     this.params.pageName = event.pageName;
-    this.dto.filters = this.params;
-    console.log(this.dto);
+    this.paging.filter = this.params;
+    this.loadRoles();
   }
 
   reset(event) {
     this.params.name = null;
     this.params.pageName = null;
-    this.dto.filters = this.params;
-    console.log(this.dto);
+    this.paging.filter = this.params;
+    this.loadRoles();
   }
 
   add() {
@@ -218,13 +218,13 @@ export class SysRoleRoleListComponent implements OnInit {
     console.log(event); // PagingOptions
     if (event.type === 'pi' || event.type === 'ps' || event.type === 'sort') {
       this.pageUtil(event);
-      console.log(this.dto);
+      console.log(this.paging);
     }
   }
 
   pageUtil(event: STChange) {
-    this.dto.pageIndex = event.pi;
-    this.dto.pageSize = event.ps;
+    this.paging.pageIndex = event.pi - 1;
+    this.paging.pageSize = event.ps;
     if (event.sort) {
       const sorts = [];
       const sortStr = event.sort.value;
@@ -236,7 +236,7 @@ export class SysRoleRoleListComponent implements OnInit {
       }
       const sort = new PagingSort(field, sortStr);
       sorts.push(sort);
-      this.dto.sort = sorts;
+      this.paging.sort = sorts;
     }
   }
 }

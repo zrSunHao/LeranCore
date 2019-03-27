@@ -15,6 +15,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Name, x => x.MapFrom(y => y.Name))
                 .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
                 .ForMember(x => x.Intro, x => x.MapFrom(y => y.Intro))
+                .ForMember(x => x.Rank, x => x.MapFrom(y => y.Rank))
                 .ForMember(x => x.PageNames, x => x.Ignore());
 
             CreateMap<ViewRolePageList, PageItem>()

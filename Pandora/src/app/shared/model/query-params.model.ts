@@ -1,6 +1,6 @@
 export class PagingOptions<T> {
   // fields
-  filters: T;
+  filter: T;
   pageIndex: number;
   pageSize: number;
   sort: Array<PagingSort>;
@@ -12,7 +12,7 @@ export class PagingOptions<T> {
     pageSize: number = 10,
     sort: Array<PagingSort> = [],
   ) {
-    this.filters = filters;
+    this.filter = filters;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.sort = sort;

@@ -30,9 +30,9 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         /// <summary>
         /// 获取角色列表
         /// </summary>
-        /// <param name="dto"></param>
+        /// <param name="paging"></param>
         /// <returns></returns>
-        public WebApiResult<List<RoleListModel>> GetRoles(SearchRoleDto dto)
+        public WebApiResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging)
         {
             var result = new WebApiResult<List<RoleListModel>>();
             try
@@ -67,7 +67,19 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     }
                 }
 
-                result.Data = roles;
+                var data = roles;
+                if (paging.Filter != null && !string.IsNullOrEmpty(paging.Filter.Name))
+                {
+                    data = data.Where(x => x.Name.Contains(paging.Filter.Name)).ToList();
+                }
+
+                if (paging.Filter != null && !string.IsNullOrEmpty(paging.Filter.PageName))
+                {
+                    data = data.Where(x => x.PageNames.Contains(paging.Filter.PageName)).ToList();
+                }
+
+                data = data.OrderBy(x => x.Rank).Skip(paging.PageIndex * paging.PageSize).Take(paging.PageSize).ToList();
+                result.Data = data;
             }
             catch (Exception ex)
             {

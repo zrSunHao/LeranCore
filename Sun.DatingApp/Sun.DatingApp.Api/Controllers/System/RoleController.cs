@@ -24,13 +24,13 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <summary>
         /// 获取角色列表
         /// </summary>
-        /// <param name="dto"></param>
+        /// <param name="paging"></param>
         /// <returns></returns>
         [HttpPost("GetRoles")]
         [PermissionFilter(Permissions.GetRoles)]
-        public WebApiResult<List<RoleListModel>> GetRoles(SearchRoleDto dto)
+        public WebApiResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging)
         {
-            return _service.GetRoles(dto);
+            return _service.GetRoles(paging);
         }
 
         /// <summary>
