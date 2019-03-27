@@ -202,24 +202,21 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
 
         #region 账号管理
-        //TODO 分页
-        public WebApiPagingResult<List<AccountListModel>> Accounts(PagingOptions<AccountListQueryDto> opt)
+        
+        public WebApiPagingResult<List<AccountListModel>> Accounts(PagingOptions<AccountListQueryDto> paging)
         {
             var result = new WebApiPagingResult<List<AccountListModel>>();
             try
             {
-                if (opt == null)
-                {
-                    result.AddError("传递的查询条件为空");
-                    return result;
-                }
-
-                var sql = @"SELECT * FROM [ViewAccountList]";
+                var sql = @"SELECT * FROM [ViewAccountList]" + this.GetAccountQuerySql(paging) + this.GetPagingSql<AccountListQueryDto>(paging, "CreatedAt");
+                var countSql = @"SELECT COUNT(*) FROM [ViewAccountList]" + this.GetAccountQuerySql(paging);
                 var views = _dapperContext.Conn.Query<ViewAccountList>(sql).ToList();
                 if (!views.Any())
                 {
                     return result;
                 }
+
+                result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 views = views.OrderBy(x => x.RoleRank).ThenByDescending(x => x.LatestLoginAt).ToList();
                 var data = _mapper.Map<List<ViewAccountList>, List<AccountListModel>>(views);
@@ -521,7 +518,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
 
 
         #region 账号登录信息
-        //TODO 分页
         public WebApiResult<AccountInfo> GetAccountInfo(Guid id)
         {
             var result = new WebApiResult<AccountInfo>();
@@ -715,6 +711,95 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 return url;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private string GetPagingSql<T>(PagingOptions<T> paging, string order)
+        {
+            try
+            {
+                var pageIndex = paging.PageIndex;
+                var pageSize = paging.PageSize;
+
+                var pageSql = "ORDER BY [" + order + "] OFFSET " + pageSize * pageIndex + " rows FETCH next " +
+                              pageSize + " rows only";
+
+                return pageSql;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private string GetAccountQuerySql(PagingOptions<AccountListQueryDto> paging)
+        {
+            try
+            {
+                var query = "";
+                if (paging.Filter == null)
+                {
+                    return "";
+                }
+
+                var dto = paging.Filter;
+                if (!string.IsNullOrEmpty(dto.Email))
+                {
+                    query = query + "AND [Email] LIKE '%" + dto.Email + "%' ";
+                }
+
+                if (!string.IsNullOrEmpty(dto.Nickname))
+                {
+                    query = query + "AND [Nickname] LIKE '%" + dto.Nickname + "%' ";
+                }
+
+                if (!string.IsNullOrEmpty(dto.Role))
+                {
+                    query = query + "AND [RoleName] LIKE '%" + dto.Role + "%' ";
+                }
+
+                if (dto.Active.HasValue)
+                {
+                    if (dto.Active.Value)
+                    {
+                        query = query + "AND [Active] = N'1' ";
+                    }
+                    else
+                    {
+                        query = query + "AND [Active] = N'0' ";
+                    }
+                }
+
+                if (dto.LatestLoginAtStart.HasValue)
+                {
+                    query = query + "AND [LatestLoginAt] > N'" + dto.LatestLoginAtStart.Value + "' ";
+                }
+
+                if (dto.LatestLoginAtEnd.HasValue)
+                {
+                    query = query + "AND [LatestLoginAt] < N'" + dto.LatestLoginAtEnd.Value + "' ";
+                }
+
+                if (dto.CreatedAtStart.HasValue)
+                {
+                    query = query + "AND [CreatedAt] > N'" + dto.CreatedAtStart.Value + "' ";
+                }
+
+                if (dto.CreatedAtEnd.HasValue)
+                {
+                    query = query + "AND [CreatedAt] < N'" + dto.CreatedAtEnd.Value + "' ";
+                }
+
+                if (!string.IsNullOrEmpty(query))
+                {
+                    query = "WHERE " + query.Substring(3, query.Length-3);
+                }
+
+                return query;
             }
             catch (Exception ex)
             {

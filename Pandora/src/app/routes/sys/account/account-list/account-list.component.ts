@@ -1,10 +1,10 @@
 import { AccountLockoutComponent } from './../account-lockout/account-lockout.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { STComponent, STColumn, STChange } from '@delon/abc';
+import { STComponent, STColumn, STChange, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
 import { NzNotificationService } from 'ng-zorro-antd';
-import { PagingOptions } from '@shared/model/query-params.model';
+import { PagingOptions, PagingSort } from '@shared/model/query-params.model';
 import { AccountAddComponent } from '../account-add/account-add.component';
 import { AccountStatusComponent } from '../account-status/account-status.component';
 import { ACLType } from '@delon/acl';
@@ -29,39 +29,35 @@ const activeItem = [
 export class AccountListComponent implements OnInit {
   @ViewChild('st') st: STComponent;
   // 列表数据
-  datas: Array<any> = [];
+  list: Array<any> = [];
+  total = 0;
   loading = false;
+  params = {
+    nickname: null,
+    email: null,
+    role: null,
+    active: null,
+  };
+  paging = new PagingOptions(null, 0, 10);
   // 选中的列表行
   selectRows: Array<any> = [];
   // 列表搜索条件
   searchSchema: SFSchema = {
     properties: {
-      userName: {
+      nickname: {
         type: 'string',
-        title: '用户名',
-        ui: { autosize: true, grid: { span: 6 } },
+        title: '昵称',
+        ui: { autosize: true, grid: { span: 6 }, placeholder: '支持模糊搜索' },
       },
       email: {
         type: 'string',
         title: '邮箱',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      CreatedAtStart: {
-        type: 'string',
-        title: '创建时间-开始',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      CreatedAtEnd: {
-        type: 'string',
-        title: '创建时间-结束',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
+        ui: { autosize: true, grid: { span: 6 }, placeholder: '支持模糊搜索' },
       },
       role: {
         type: 'string',
         title: '角色',
-        ui: { autosize: true, grid: { span: 6 } },
+        ui: { autosize: true, grid: { span: 6 }, placeholder: '支持模糊搜索' },
       },
       active: {
         type: 'string',
@@ -69,18 +65,6 @@ export class AccountListComponent implements OnInit {
         enum: activeItem,
         default: 2,
         ui: { widget: 'select', grid: { span: 6 } },
-      },
-      LatestLoginAtStart: {
-        type: 'string',
-        title: '最近登录时间-开始',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
-      },
-      LatestLoginAtEnd: {
-        type: 'string',
-        title: '最近登录时间-结束',
-        format: 'date',
-        ui: { autosize: true, grid: { span: 6 } },
       },
     },
     ui: {
@@ -94,9 +78,10 @@ export class AccountListComponent implements OnInit {
   // 列表行列格式
   columns: STColumn[] = [
     { title: 'ID', index: 'id', type: 'checkbox', selections: [] },
+    { title: '头像', type: 'img', width: '50px', index: 'avatarUrl' },
     { title: '用户名', index: 'userName', className: 'text-center' },
     { title: '邮箱', index: 'email', className: 'text-center' },
-    { title: '角色', index: 'roleName', className: 'text-center' },
+    { title: '角色', render: 'roleName', className: 'text-center' },
     {
       title: '创建时间',
       index: 'createdAt',
@@ -104,18 +89,18 @@ export class AccountListComponent implements OnInit {
       className: 'text-center',
     },
     {
-      title: '最近登录时间',
+      title: '最近登录',
       index: 'latestLoginAt',
       type: 'date',
       className: 'text-center',
     },
     {
-      title: '登陆失败次数',
+      title: '登陆失败',
       index: 'accessFailedCount',
       className: 'text-center',
     },
     {
-      title: '是否启用',
+      title: '启用',
       render: 'custom',
       className: 'text-center',
       click: (item: any) => this.activeAccount(item),
@@ -147,6 +132,14 @@ export class AccountListComponent implements OnInit {
     },
   ];
 
+  stPage: STPage = {
+    front: false,
+    showQuickJumper: true,
+    total: true,
+    showSize: true,
+    pageSizes: [5, 10, 20, 30, 40, 50],
+  };
+
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
@@ -154,53 +147,8 @@ export class AccountListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadData({});
+    this.loadData();
     this.loadRoleItem();
-  }
-
-  loadData(dto: any) {
-    this.loading = true;
-    const entity = this.getQueryParams(dto);
-    const queryParams = new PagingOptions<any>(entity);
-    this.selectRows = [];
-
-    this.http
-      .post(GetAccountsUrl, queryParams)
-      .pipe((res: any) => {
-        return res;
-      })
-      .subscribe((res: any) => {
-        this.loading = false;
-        if (!res.success) {
-          this.notification.create('error', '列表数据加载失败', res.errMsg);
-        }
-        this.datas = res.data;
-      });
-  }
-
-  getQueryParams(dto: any): any {
-    const entity = {
-      email: dto.email,
-      userName: dto.userName,
-      role: dto.role,
-      active: dto.active,
-      latestLoginAtStart: dto.latestLoginAtStart,
-      latestLoginAtEnd: dto.latestLoginAtEnd,
-      createdAtStart: dto.createdAtStart,
-      createdAtEnd: dto.createdAtEnd,
-    };
-
-    const queryParams = new PagingOptions<any>(entity);
-    return queryParams;
-  }
-
-  search(event) {
-    console.log(event);
-    this.loadData(event);
-  }
-
-  reset(event) {
-    this.loadData(event);
   }
 
   addAccount() {
@@ -218,7 +166,7 @@ export class AccountListComponent implements OnInit {
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         if (res != null) {
-          this.loadData({});
+          this.loadData();
         }
       });
   }
@@ -287,7 +235,7 @@ export class AccountListComponent implements OnInit {
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
         if (res != null) {
-          this.loadData({});
+          this.loadData();
         }
       });
   }
@@ -319,7 +267,7 @@ export class AccountListComponent implements OnInit {
         // tslint:disable-next-line:no-shadowed-variable
         .subscribe(res => {
           if (res != null) {
-            this.loadData({});
+            this.loadData();
           }
         });
     }
@@ -332,12 +280,10 @@ export class AccountListComponent implements OnInit {
         return;
       } else {
         this.notification.create('success', '删除成功', res.allMessages);
-        this.loadData({});
+        this.loadData();
       }
     });
   }
-
-  rowClick(event) {}
 
   change(event: STChange) {
     // console.log('change', event);
@@ -370,13 +316,14 @@ export class AccountListComponent implements OnInit {
               '批量删除成功',
               res.allMessages,
             );
-            this.loadData({});
+            this.loadData();
           }
         });
     }
   }
 
   loadRoleItem() {
+    localStorage.setItem('roleItems', JSON.stringify([]));
     this.http.get(GetRoleItemsUrl).subscribe((res: any) => {
       if (!res.success) {
         this.notification.create(
@@ -390,5 +337,78 @@ export class AccountListComponent implements OnInit {
         localStorage.setItem('roleItems', JSON.stringify(this.roleItems));
       }
     });
+  }
+
+  // ------------------------列表信息----------------------------
+
+  search(event) {
+    this.initQueryParams(event);
+  }
+
+  reset(event) {
+    this.initQueryParams(event);
+  }
+
+  loadData() {
+    this.loading = true;
+    this.selectRows = [];
+    this.paging.filter = this.params;
+    this.http
+      .post(GetAccountsUrl, this.paging)
+      .pipe((res: any) => {
+        return res;
+      })
+      .subscribe((res: any) => {
+        this.loading = false;
+        if (!res.success) {
+          this.list = [];
+          this.notification.create('error', '列表数据加载失败', res.errMsg);
+        } else {
+          this.list = res.data;
+          if (res.data == null) {
+            this.list = [];
+          }
+          this.total = res.rowsCount;
+          console.log(this.list);
+          console.log(res.data);
+        }
+      });
+  }
+
+  initQueryParams(dto: any): any {
+    this.params.email = dto.email;
+    this.params.nickname = dto.nickname;
+    this.params.role = dto.role;
+    this.params.active = dto.active;
+    this.loadData();
+  }
+
+  _click(event: STChange) {
+    console.log(event); // PagingOptions
+    if (event.type === 'pi' || event.type === 'ps' || event.type === 'sort') {
+      this.pageUtil(event);
+      this.loadData();
+    }
+    if (event.type === 'checkbox') {
+      this.selectRows = event.checkbox;
+    }
+  }
+
+  pageUtil(event: STChange) {
+    this.paging.pageIndex = event.pi - 1;
+    this.paging.pageSize = event.ps;
+    if (event.sort) {
+      const sorts = [];
+      const sortStr = event.sort.value;
+      let field = '';
+      if (event.sort.column.index) {
+        field = event.sort.column.index as string;
+      } else if (event.sort.column.render) {
+        field = event.sort.column.render;
+      }
+      const sort = new PagingSort(field, sortStr);
+      sorts.push(sort);
+      this.paging.sort = sorts;
+    }
   }
 }

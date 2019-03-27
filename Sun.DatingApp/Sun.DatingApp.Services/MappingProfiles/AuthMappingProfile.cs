@@ -52,6 +52,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
             CreateMap<ViewAccountList, AccountListModel>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
+                .ForMember(x => x.AvatarUrl, x => x.MapFrom(y => this.GetAvatarUrl(y.AvatarUrl)))
                 .ForMember(x => x.UserName, x => x.MapFrom(y => y.Nickname))
                 .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
                 .ForMember(x => x.RoleId, x => x.MapFrom(y => y.RoleId))
@@ -87,6 +88,17 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Text, x => x.MapFrom(y => y.Name))
                 .ForMember(x => x.Link, x => x.MapFrom(y => y.Url));
 
+        }
+
+        private string GetAvatarUrl(string url)
+        {
+            var avatarUrl = "http://zeus-dev.oss-cn-qingdao.aliyuncs.com/2feb9e5b-1179-5e96-ecaf-db11347bd998.jpg";
+            if (!string.IsNullOrEmpty(url))
+            {
+                avatarUrl = url;
+            }
+
+            return avatarUrl;
         }
     }
 }

@@ -10,7 +10,7 @@
       <nz-alert nzType="warning" nzMessage="【菜单管理列表】" nzDescription="系统关键配置，请慎重操作！！！" nzShowIcon>
       </nz-alert>
       <br />
-      <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
+      <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="loading"
         [nzRenderItem]="item">
         <ng-template #item let-item>
           <nz-list-item [nzContent]="" [nzActions]="item.loading?[]:[forbidAction,editAction,addAction,deleteAction]"
@@ -27,7 +27,6 @@
                   (click)="delete(item)">删除</a></ng-template>
               <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="intro">
                 <ng-template #nzTitle>
-                  <!-- <a href="#">{{item.name}}</a> -->
                   <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon"
                       theme="outline"></i>&nbsp;{{item.name}}
                   </nz-tag>
