@@ -1,4 +1,14 @@
-SELECT
+
+GO
+
+/****** Object:  View [dbo].[ViewPageList]    Script Date: 2019/3/27 17:41:11 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[ViewPageList] AS SELECT
 dbo.SystemPage.Id,
 dbo.SystemPage.Name,
 dbo.SystemPage.Url,
@@ -20,3 +30,6 @@ dbo.SystemPage
 INNER JOIN dbo.SystemMenu ON dbo.SystemPage.MenuId = dbo.SystemMenu.Id
 WHERE
 dbo.SystemMenu.Deleted = 0
+GO
+
+
