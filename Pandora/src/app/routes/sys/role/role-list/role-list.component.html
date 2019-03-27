@@ -6,7 +6,7 @@
 <nz-spin [nzSpinning]="loading">
   <nz-card>
     <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
-    <st #st [data]="data.list" [columns]="columns" [bordered]="true" [page]="stPage" (change)="_click($event)" [total]="10">
+    <st #st [data]="list" [columns]="columns" [bordered]="true" [page]="stPage" (change)="_click($event)" [total]="total">
       <ng-template st-row="name" let-item let-index="index">
         <nz-tag [nzColor]="'#2db7f5'">{{item.name}}</nz-tag>
       </ng-template>

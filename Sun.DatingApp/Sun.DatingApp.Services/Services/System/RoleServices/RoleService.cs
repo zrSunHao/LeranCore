@@ -26,15 +26,15 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         {
         }
 
-        //TODO 分页
         /// <summary>
         /// 获取角色列表
         /// </summary>
         /// <param name="paging"></param>
+        /// <param name="accountId"></param>
         /// <returns></returns>
-        public WebApiResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging)
+        public WebApiPagingResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging)
         {
-            var result = new WebApiResult<List<RoleListModel>>();
+            var result = new WebApiPagingResult<List<RoleListModel>>();
             try
             {
                 var roleSql = @"SELECT * FROM [SystemRole] WHERE [Deleted] = N'0'";
@@ -68,6 +68,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 }
 
                 var data = roles;
+
                 if (paging.Filter != null && !string.IsNullOrEmpty(paging.Filter.Name))
                 {
                     data = data.Where(x => x.Name.Contains(paging.Filter.Name)).ToList();
@@ -78,6 +79,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     data = data.Where(x => x.PageNames.Contains(paging.Filter.PageName)).ToList();
                 }
 
+                result.RowsCount = data.Count();
                 data = data.OrderBy(x => x.Rank).Skip(paging.PageIndex * paging.PageSize).Take(paging.PageSize).ToList();
                 result.Data = data;
             }
@@ -232,12 +234,11 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
         }
 
 
-        //TODO 分页
         /// <summary>
         /// 获取角色权限数据
         /// </summary>
         /// <returns></returns>
-        public async Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id)
+        public async Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id, Guid accountId)
         {
             var result = new WebApiResult<List<RolePageModel>>();
             try
@@ -248,9 +249,15 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     return result;
                 }
-
+                
                 views = views.OrderBy(x => x.Order).ToList();
                 var pages = _mapper.Map<List<ViewPageList>, List<RolePageModel>>(views);
+
+                var accountInfo = this.GetUserInfo(accountId);
+                if (accountInfo.RoleRank != 0)
+                {
+                    pages = pages.Where(x => x.Name != "菜单管理" && x.Name != "权限管理").ToList();
+                }
 
                 if (pages.Any())
                 {

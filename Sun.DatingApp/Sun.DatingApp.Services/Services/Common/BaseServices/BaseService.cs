@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Utility.Dapper;
 
 namespace Sun.DatingApp.Services.Services.Common.BaseServices
@@ -104,6 +106,46 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             }
             return entitys;
 
+        }
+
+        public SystemRole GetRoleInfo(Guid id)
+        {
+            try
+            {
+                var sql = "SELECT TOP 1 * FROM [SystemRole] WHERE [Id] = @Id";
+                var role =  _dapperContext.Conn.QueryFirstOrDefault<SystemRole>(sql,new {Id = id});
+
+                if (role == null)
+                {
+                    throw new ArgumentException("未获取到角色信息");
+                }
+
+                return role;
+            }
+            catch (Exception ex )
+            {
+                throw ex;
+            }
+        }
+
+        public ViewAccountList GetUserInfo(Guid id)
+        {
+            try
+            {
+                var sql = "SELECT TOP 1 * FROM [ViewAccountList] WHERE [Id] = @Id";
+                var role = _dapperContext.Conn.QueryFirstOrDefault<ViewAccountList>(sql, new { Id = id });
+
+                if (role == null)
+                {
+                    throw new ArgumentException("未获取到用户信息");
+                }
+
+                return role;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

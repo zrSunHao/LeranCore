@@ -18,11 +18,8 @@ const DeleteRoleUrl = 'Role/DeleteRole';
   templateUrl: './role-list.component.html',
 })
 export class SysRoleRoleListComponent implements OnInit {
-  datas: Array<any> = [];
-  data: any = {
-    list: [],
-    total: 0,
-  };
+  list: Array<any> = [];
+  total = 0;
   loading = false;
   params = { name: '', pageName: '' };
   paging = new PagingOptions(null, 0, 10);
@@ -43,7 +40,7 @@ export class SysRoleRoleListComponent implements OnInit {
 
   @ViewChild('st') st: STComponent;
   columns: STColumn[] = [
-    { title: '角色名称', render: 'name', className: 'text-center', sort: true },
+    { title: '角色名称', render: 'name', className: 'text-center'},
     { title: '访问页面', render: 'pageNames', className: 'text-center' },
     { title: '简介', render: 'intro', className: 'text-center' },
     {
@@ -107,9 +104,10 @@ export class SysRoleRoleListComponent implements OnInit {
     this.http.post(GetRolesUrl, this.paging).subscribe(
       (res: any) => {
         if (!res.success) {
+          this.total = 0;
         } else {
-          this.data.list = res.data;
-          this.data.total = this.data.list.length;
+          this.list = res.data;
+          this.total = res.rowsCount;
         }
         this.loading = false;
       },
@@ -218,7 +216,7 @@ export class SysRoleRoleListComponent implements OnInit {
     console.log(event); // PagingOptions
     if (event.type === 'pi' || event.type === 'ps' || event.type === 'sort') {
       this.pageUtil(event);
-      console.log(this.paging);
+      this.loadRoles();
     }
   }
 

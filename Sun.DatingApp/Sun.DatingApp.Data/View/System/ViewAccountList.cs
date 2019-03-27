@@ -34,7 +34,7 @@ namespace Sun.DatingApp.Data.View.System
 
         public string RoleName { get; set; }
 
-        public string RoleRank { get; set; }
+        public int RoleRank { get; set; }
 
         public string RoleActive { get; set; }
 

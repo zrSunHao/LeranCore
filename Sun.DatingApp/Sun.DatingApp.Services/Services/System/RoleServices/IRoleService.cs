@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 {
     public interface IRoleService
     {
-        WebApiResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging);
+        WebApiPagingResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging);
 
         Task<WebApiResult> CreateRole(CreateOrEditRoleDto dto, Guid accountId);
 
@@ -23,7 +23,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
         
 
-        Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id);
+        Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id, Guid accountId);
 
         Task<WebApiResult> EditRolePermission(EditRolePermissionDto dto, Guid accountId);
 

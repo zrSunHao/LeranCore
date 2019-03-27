@@ -28,7 +28,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <returns></returns>
         [HttpPost("GetRoles")]
         [PermissionFilter(Permissions.GetRoles)]
-        public WebApiResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging)
+        public WebApiPagingResult<List<RoleListModel>> GetRoles(PagingOptions<SearchRoleDto> paging)
         {
             return _service.GetRoles(paging);
         }
@@ -119,7 +119,16 @@ namespace Sun.DatingApp.Api.Controllers.System
         [PermissionFilter(Permissions.GetRolePermissions)]
         public async Task<WebApiResult<List<RolePageModel>>> GetRolePermissions(Guid id)
         {
-            return await _service.GetRolePermissions(id);
+            var result = new WebApiResult<List<RolePageModel>>();
+            if (CurrentUserId.HasValue)
+            {
+                result = await _service.GetRolePermissions(id, CurrentUserId.Value);
+            }
+            else
+            {
+                result.AddError("当前用户信息获取失败");
+            }
+            return result;
         }
 
         /// <summary>
