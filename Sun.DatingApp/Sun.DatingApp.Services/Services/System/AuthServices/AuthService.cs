@@ -49,7 +49,7 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 var role = await _dataContext.SystemRoles.AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Name == "用户" && !x.Deleted);
+                    .FirstOrDefaultAsync(x => x.Name == "普通用户" && !x.Deleted);
                 if (role == null)
                 {
                     result.AddError("当前系统未设置默认用户角色，请联系管理员");
@@ -242,23 +242,20 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     return result;
                 }
 
+                var mobileExist = await _dataContext.SystemAccounts.AsNoTracking().AnyAsync(x => x.Email == dto.Email && !x.Deleted);
+                if (mobileExist)
+                {
+                    result.AddError(dto.Email + "该手机号码已被注册");
+                    return result;
+                }
+
                 byte[] passwordHash, passwordSalt;
                 PasswordUtility.CreatePasswordHash("pandora", out passwordHash, out passwordSalt);
 
-                var entity = new SystemAccount
-                {
-                    Id = Guid.NewGuid(),
-                    Email = dto.Email,
-                    Nickname = dto.UserName,
-                    RoleId = dto.RoleId,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    Active = true,
-                    AccessFailedCount = 0,
-                    CreatedAt = DateTime.Now,
-                    CreatedById = accountId,
-                    Deleted = false
-                };
+                var entity = _mapper.Map<EditAccountDto, SystemAccount>(dto);
+                entity.CreatedById = accountId;
+                entity.PasswordHash = passwordHash;
+                entity.PasswordSalt = passwordSalt;
 
                 _dataContext.SystemAccounts.Add(entity);
                 await _dataContext.SaveChangesAsync();

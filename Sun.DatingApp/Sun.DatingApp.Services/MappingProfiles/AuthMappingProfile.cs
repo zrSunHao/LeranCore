@@ -2,6 +2,7 @@
 using Sun.DatingApp.Data.Entities.System;
 using System;
 using Sun.DatingApp.Data.View.System;
+using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Model;
 using Sun.DatingApp.Model.System.Auth.Info;
 using Sun.DatingApp.Model.System.Auth.Login.Model;
@@ -28,6 +29,19 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
                 .ForMember(x => x.Mobile, x => x.MapFrom(y => y.Mobile))
                 .ForMember(x => x.RoleId, x => x.Ignore())
+                .ForMember(x => x.PasswordSalt, x => x.Ignore())
+                .ForMember(x => x.PasswordHash, x => x.Ignore())
+                .ForMember(x => x.AccessFailedCount, x => x.MapFrom(y => 0))
+                .ForMember(x => x.Active, x => x.MapFrom(y => true))
+                .ForMember(x => x.CreatedAt, x => x.MapFrom(y => DateTime.Now))
+                .ForMember(x => x.Deleted, x => x.MapFrom(y => false))
+                .ForMember(x => x.LatestLoginAt, x => x.MapFrom(y => DateTime.Now));
+
+            CreateMap<EditAccountDto, SystemAccount>()
+                .ForMember(x => x.Id, x => x.MapFrom(y => Guid.NewGuid()))
+                .ForMember(x => x.Email, x => x.MapFrom(y => y.Email))
+                .ForMember(x => x.Mobile, x => x.MapFrom(y => y.Mobile))
+                .ForMember(x => x.RoleId, x => x.MapFrom(y => y.RoleId))
                 .ForMember(x => x.PasswordSalt, x => x.Ignore())
                 .ForMember(x => x.PasswordHash, x => x.Ignore())
                 .ForMember(x => x.AccessFailedCount, x => x.MapFrom(y => 0))
