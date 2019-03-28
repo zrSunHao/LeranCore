@@ -11,11 +11,11 @@ using Sun.DatingApp.Model.System.Menus.Dto;
 using Sun.DatingApp.Model.System.Menus.Model;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using Sun.DatingApp.Utility.SqlUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sun.DatingApp.Utility.SqlUtility;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -381,7 +381,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 {
                     return result;
                 }
-
                 result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 views = views.OrderBy(x => x.MenuOrder).ThenBy(x=>x.Order).ToList();

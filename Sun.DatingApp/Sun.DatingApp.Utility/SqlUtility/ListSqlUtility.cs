@@ -72,9 +72,9 @@ namespace Sun.DatingApp.Utility.SqlUtility
                 pageIndex = 0;
             }
             var pageSize = paging.PageSize;
-            if (pageIndex < 1)
+            if (pageSize < 1)
             {
-                pageIndex = 10;
+                pageSize = 10;
             }
 
             var page = " ORDER BY [" + order + "] OFFSET " + pageSize * pageIndex + " rows FETCH next " +
@@ -90,9 +90,9 @@ namespace Sun.DatingApp.Utility.SqlUtility
                 pageIndex = 0;
             }
             var pageSize = paging.PageSize;
-            if (pageIndex < 1)
+            if (pageSize < 1)
             {
-                pageIndex = 10;
+                pageSize = 10;
             }
 
             var page = " ORDER BY [" + order + "] OFFSET " + pageSize * pageIndex + " rows FETCH next " +

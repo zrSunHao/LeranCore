@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { PermissionAddComponent } from '../permission-add/permission-add.component';
+import { PagingOptions } from '@shared/model/query-params.model';
 
 const GetPermissionUrl = 'Permission/GetPermission';
 const ActivePermissionUrl = 'Permission/ActivePermission';
@@ -21,6 +22,8 @@ export class PermissionOperationComponent implements OnInit {
   alertMsgContent = '';
 
   list = [];
+  total = 0;
+  paging = new PagingOptions(null, 0, 5);
 
   constructor(
     private http: _HttpClient,
@@ -33,18 +36,30 @@ export class PermissionOperationComponent implements OnInit {
   public loadData(item: any) {
     this.item = item;
     this.initLoading = true;
+    this.paging.filter = item.id;
 
     this.alertMsgShow = true;
     this.alertMsgTitle = `【${item.name}】`;
     this.alertMsgContent = `注：列表显示内容为[${item.name}]下的操作权限`;
 
-    this.http.get(GetPermissionUrl, { id: item.id }).subscribe(
+    this.http.post(GetPermissionUrl, this.paging).subscribe(
       (res: any) => {
         if (!res.success) {
-          console.log(res);
-          return;
+          this.notification.create(
+            'error',
+            '权限列表数据加载失败',
+            res.allMessages,
+          );
+          this.list = [];
+          this.total = 0;
+        } else {
+          this.total = res.rowsCount;
+          if (res.data == null) {
+            res.data = [];
+          } else {
+            this.list = res.data;
+          }
         }
-        this.list = res.data;
         this.initLoading = false;
       },
       (err: any) => {
@@ -123,5 +138,15 @@ export class PermissionOperationComponent implements OnInit {
         this.initLoading = false;
       },
     );
+  }
+
+  pageIndexChange(event) {
+    this.paging.pageIndex = event;
+    this.loadData(this.item);
+  }
+
+  pageSizeChange(event) {
+    this.paging.pageSize = event;
+    this.loadData(this.item);
   }
 }

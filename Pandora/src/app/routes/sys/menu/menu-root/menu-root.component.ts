@@ -159,9 +159,11 @@ export class MenuRootComponent implements OnInit {
 
   pageIndexChange(event) {
     this.paging.pageIndex = event;
+    this.loadData();
   }
 
   pageSizeChange(event) {
     this.paging.pageSize = event;
+    this.loadData();
   }
 }

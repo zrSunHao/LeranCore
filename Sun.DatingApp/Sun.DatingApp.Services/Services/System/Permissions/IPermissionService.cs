@@ -14,9 +14,9 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         /// <summary>
         /// 获取对应模块下的操作权限
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="paging"></param>
         /// <returns></returns>
-        WebApiResult<List<PermissionListModel>> GetPermission(Guid id);
+        WebApiPagingResult<List<PermissionListModel>> GetPermission(PagingOptions<Guid> paging);
 
         /// <summary>
         /// 新建权限树节点

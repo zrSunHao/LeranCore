@@ -24,10 +24,10 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// 获取对应模块下的操作权限
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetPermission")]
-        public WebApiResult<List<PermissionListModel>> GetPermission(Guid id)
+        [HttpPost("GetPermission")]
+        public WebApiPagingResult<List<PermissionListModel>> GetPermission(PagingOptions<Guid> paging)
         {
-            return  _service.GetPermission(id);
+            return  _service.GetPermission(paging);
         }
 
         /// <summary>

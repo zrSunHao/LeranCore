@@ -4,7 +4,7 @@
       nzShowIcon>
     </nz-alert>
     <nz-list class="demo-loadmore-list" [nzDataSource]="list" [nzItemLayout]="'horizontal'" [nzLoading]="initLoading"
-      [nzRenderItem]="item">
+      [nzRenderItem]="item" [nzPagination]="pagination">
       <ng-template #item let-item>
         <nz-list-item [nzContent]="forbidAction" [nzActions]="item.loading?[]:[editAction,deleteAction]">
           <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
@@ -26,6 +26,11 @@
             </nz-list-item-meta>
           </nz-skeleton>
         </nz-list-item>
+      </ng-template>
+      <ng-template #pagination>
+        <nz-pagination [nzTotal]="total" [nzPageSize]="10" nzShowSizeChanger [nzSize]="'small'"
+          (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)">
+        </nz-pagination>
       </ng-template>
     </nz-list>
   </nz-card>

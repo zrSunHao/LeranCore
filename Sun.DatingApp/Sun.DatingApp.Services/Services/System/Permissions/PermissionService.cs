@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Sun.DatingApp.Utility.SqlUtility;
 
 namespace Sun.DatingApp.Services.Services.System.Permissions
 {
@@ -24,17 +25,27 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
         }
 
         //TODO 分页
-        public WebApiResult<List<PermissionListModel>> GetPermission(Guid id)
+        public WebApiPagingResult<List<PermissionListModel>> GetPermission(PagingOptions<Guid> paging)
         {
-            var result = new WebApiResult<List<PermissionListModel>>();
+            var result = new WebApiPagingResult<List<PermissionListModel>>();
             try
             {
-                var sql = @"SELECT TOP 1000 * FROM [dbo].[SystemPermission] WHERE [PageId] = @PageId AND [Deleted] = N'0'";
-                var entitis = _dapperContext.Conn.Query<SystemPermission>(sql,new { PageId  = id}).ToList();
+                if (paging.Filter == Guid.Empty)
+                {
+                    result.AddError("页面信息未传递");
+                    return result;
+                }
+
+                var query = "WHERE [PageId] = '" + paging.Filter + "' ";
+                var sql = ListSqlUtility.GetListSql("SystemPermission", query, paging, "Rank");
+                var countSql = ListSqlUtility.GetListCountSql("SystemPermission", query);
+
+                var entitis = _dapperContext.Conn.Query<SystemPermission>(sql).ToList();
                 if (!entitis.Any())
                 {
                     return result;
                 }
+                result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 entitis = entitis.OrderBy(x => x.Rank).ToList();
                 var data = _mapper.Map<List<SystemPermission>, List<PermissionListModel>>(entitis);
