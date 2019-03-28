@@ -15,6 +15,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.TagColor, x => x.MapFrom(y => y.TagColor))
                 .ForMember(x => x.Icon, x => x.MapFrom(y => y.Icon))
                 .ForMember(x => x.Active, x => x.MapFrom(y => y.Active))
+                .ForMember(x => x.Order, x => x.MapFrom(y => y.Order))
                 .ForMember(x => x.Intro, x => x.MapFrom(y => y.Intro));
 
             CreateMap<SystemPage, PageListModel>()

@@ -18,4 +18,19 @@ namespace Sun.DatingApp.Model.Common
             this.PageSize = 10;
         }
     }
+
+    public class PagingOptions
+    {
+        public int PageIndex { get; set; }
+
+        public int PageSize { get; set; }
+
+        public List<PagingSort> Sort { get; set; }
+
+        public PagingOptions()
+        {
+            this.PageIndex = 1;
+            this.PageSize = 10;
+        }
+    }
 }

@@ -11,7 +11,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
     public interface IMenuService
     {
-        WebApiResult<List<MenuListModel>> GetMenus();
+        WebApiPagingResult<List<MenuListModel>> GetMenus(PagingOptions paging);
 
         Task<WebApiResult> CreateMenu(MenuEditDto dto, Guid accountId);
 

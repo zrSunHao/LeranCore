@@ -25,11 +25,11 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// 获取菜单列表数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetMenus")]
+        [HttpPost("GetMenus")]
         [PermissionFilter(Permissions.GetMenus)]
-        public WebApiResult<List<MenuListModel>> GetMenus()
+        public WebApiResult<List<MenuListModel>> GetMenus(PagingOptions paging)
         {
-            return _service.GetMenus();
+            return _service.GetMenus(paging);
         }
 
         /// <summary>

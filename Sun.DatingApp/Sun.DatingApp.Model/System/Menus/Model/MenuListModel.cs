@@ -14,6 +14,8 @@ namespace Sun.DatingApp.Model.System.Menus.Model
 
         public bool Active { get; set; }
 
+        public int Order { get; set; }
+
         public string Intro { get; set; }
     }
 }

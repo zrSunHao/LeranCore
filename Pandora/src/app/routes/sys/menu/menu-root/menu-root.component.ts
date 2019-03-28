@@ -4,6 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd';
 import { MenuAddComponent } from '../menu-add/menu-add.component';
 import { MenuListComponent } from '../menu-list/menu-list.component';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
+import { PagingOptions } from '@shared/model/query-params.model';
 
 const GetMenusUrl = 'Menu/GetMenus';
 const ActiveMenuUrl = 'Menu/ActiveMenu';
@@ -12,13 +13,15 @@ const DeleteMenuUrl = 'Menu/DeleteMenu';
 @Component({
   selector: 'app-menu-root',
   templateUrl: './menu-root.component.html',
-  styles: [],
+  styles: ['./menu-root.component.less'],
 })
 export class MenuRootComponent implements OnInit {
   @ViewChild('menulist') menulist: MenuListComponent;
 
   list = [];
+  total = 0;
   loading = false;
+  paging = new PagingOptions(null, 0, 5);
 
   constructor(
     private modal: ModalHelper,
@@ -32,7 +35,7 @@ export class MenuRootComponent implements OnInit {
 
   loadData() {
     this.loading = true;
-    this.http.get(GetMenusUrl).subscribe(
+    this.http.post(GetMenusUrl, this.paging).subscribe(
       (res: any) => {
         if (!res.success) {
           this.notification.create(
@@ -40,8 +43,15 @@ export class MenuRootComponent implements OnInit {
             '菜单列表数据加载失败',
             res.allMessages,
           );
+          this.list = [];
+          this.total = 0;
         } else {
-          this.list = res.data;
+          this.total = res.rowsCount;
+          if (res.data == null) {
+            res.data = [];
+          } else {
+            this.list = res.data;
+          }
         }
         this.loading = false;
       },
@@ -145,5 +155,13 @@ export class MenuRootComponent implements OnInit {
       .subscribe(res => {
         this.menulist.loadData(item);
       });
+  }
+
+  pageIndexChange(event) {
+    this.paging.pageIndex = event;
+  }
+
+  pageSizeChange(event) {
+    this.paging.pageSize = event;
   }
 }

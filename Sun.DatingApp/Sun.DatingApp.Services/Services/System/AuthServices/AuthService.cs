@@ -21,6 +21,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore.Internal;
 using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Utility.Password;
+using Sun.DatingApp.Utility.SqlUtility;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -208,14 +209,15 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             var result = new WebApiPagingResult<List<AccountListModel>>();
             try
             {
-                var sql = @"SELECT * FROM [ViewAccountList]" + this.GetAccountQuerySql(paging) + this.GetPagingSql<AccountListQueryDto>(paging, "CreatedAt");
-                var countSql = @"SELECT COUNT(*) FROM [ViewAccountList]" + this.GetAccountQuerySql(paging);
+                var query = this.GetAccountQuerySql(paging);
+                var sql = ListSqlUtility.GetListSql("ViewAccountList", query, paging, "CreatedAt");
+                var countSql = ListSqlUtility.GetListCountSql("ViewAccountList", query);
+
                 var views = _dapperContext.Conn.Query<ViewAccountList>(sql).ToList();
                 if (!views.Any())
                 {
                     return result;
                 }
-
                 result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 views = views.OrderBy(x => x.RoleRank).ThenByDescending(x => x.LatestLoginAt).ToList();
@@ -711,24 +713,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 return url;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private string GetPagingSql<T>(PagingOptions<T> paging, string order)
-        {
-            try
-            {
-                var pageIndex = paging.PageIndex;
-                var pageSize = paging.PageSize;
-
-                var pageSql = "ORDER BY [" + order + "] OFFSET " + pageSize * pageIndex + " rows FETCH next " +
-                              pageSize + " rows only";
-
-                return pageSql;
             }
             catch (Exception ex)
             {

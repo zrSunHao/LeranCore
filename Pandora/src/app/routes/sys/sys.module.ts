@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { SysRoutingModule } from './sys-routing.module';
 
@@ -60,7 +61,7 @@ const COMPONENTS_NOROUNT = [
 ];
 
 @NgModule({
-  imports: [SharedModule, SysRoutingModule],
+  imports: [SharedModule, ScrollingModule, SysRoutingModule],
   declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
   entryComponents: COMPONENTS_NOROUNT,
   providers: [

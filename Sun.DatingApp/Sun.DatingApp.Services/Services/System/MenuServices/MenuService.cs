@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sun.DatingApp.Utility.SqlUtility;
 
 namespace Sun.DatingApp.Services.Services.System.MenuServices
 {
@@ -24,17 +25,21 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
         {
         }
 
-        public WebApiResult<List<MenuListModel>> GetMenus()
+        public WebApiPagingResult<List<MenuListModel>> GetMenus(PagingOptions paging)
         {
-            var result = new WebApiResult<List<MenuListModel>>();
+            var result = new WebApiPagingResult<List<MenuListModel>>();
             try
             {
-                var sql = @"SELECT * FROM [SystemMenu] WHERE [Deleted] = N'0'";
+                var query = " WHERE [Deleted] = N'0'";
+                var sql = ListSqlUtility.GetListSql("SystemMenu", query, paging, "Order");
+                var countSql = ListSqlUtility.GetListCountSql("SystemMenu", query);
+
                 var entitis = _dapperContext.Conn.Query<SystemMenu>(sql).ToList();
                 if (!entitis.Any())
                 {
                     return result;
                 }
+                result.RowsCount = _dapperContext.Conn.QueryFirstOrDefault<int>(countSql);
 
                 entitis = entitis.OrderBy(x => x.Order).ToList();
                 var data = _mapper.Map<List<SystemMenu>, List<MenuListModel>>(entitis);
@@ -184,13 +189,11 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiPagingResult<List<PageListModel>>();
             try
             {
-                var sql = @"SELECT * ";
-                var countSql = @"SELECT COUNT(*)";
+                var query = this.GetPagesQuerySql(paging.Filter);
+                var sql = ListSqlUtility.GetListSql("SystemPage", query, paging, "Order");
+                var countSql = ListSqlUtility.GetListCountSql("SystemPage", query);
 
-                sql = sql + this.GetPagesQuerySql(paging.Filter) + GetPagingSql<SearchMenuPageDto>(paging, "Order");
-                countSql = countSql + this.GetPagesQuerySql(paging.Filter);
-
-                var entitis = _dapperContext.Conn.Query<SystemPage>(sql,new { MenuId = paging.Filter.Id }).ToList();
+                var entitis = _dapperContext.Conn.Query<SystemPage>(sql).ToList();
                 if (!entitis.Any())
                 {
                     return result;
@@ -364,16 +367,14 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiPagingResult<List<PageListModel>>();
             try
             {
-                var sql = @"SELECT * FROM [ViewPageList]";
-                var countSql = @"SELECT COUNT(*) FROM [ViewPageList]";
-
+                var query = "";
                 if (paging.Filter != null)
                 {
-                    sql = sql + this.GetAllPagesQuerySql(paging.Filter);
-                    countSql = countSql + this.GetAllPagesQuerySql(paging.Filter);
+                    query = query + this.GetAllPagesQuerySql(paging.Filter);
                 }
 
-                sql = sql + this.GetPagingSql<SearchPageDto>(paging, "MenuOrder");
+                var sql = ListSqlUtility.GetListSql("ViewPageList", query, paging, "MenuOrder");
+                var countSql = ListSqlUtility.GetListCountSql("ViewPageList", query);
 
                 var views = _dapperContext.Conn.Query<ViewPageList>(sql).ToList();
                 if (!views.Any())
@@ -427,24 +428,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             }
         }
 
-        private string GetPagingSql<T>(PagingOptions<T> paging,string order)
-        {
-            try
-            {
-                var pageIndex = paging.PageIndex;
-                var pageSize = paging.PageSize;
-
-                var pageSql = "ORDER BY [" + order + "] OFFSET " + pageSize * pageIndex + " rows FETCH next " +
-                              pageSize + " rows only";
-
-                return pageSql;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         private string GetPagesQuerySql(SearchMenuPageDto dto)
         {
             try
@@ -453,12 +436,12 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
 
                 if (!string.IsNullOrEmpty(dto.Name))
                 {
-                    query = "FROM [dbo].[SystemPage] WHERE [MenuId] = '" + dto.Id +
+                    query = " WHERE [MenuId] = '" + dto.Id +
                             "' AND [Deleted] = N'0' AND [Name] LIKE '%" + dto.Name + "%'";
                 }
                 else
                 {
-                    query = "FROM [dbo].[SystemPage] WHERE [MenuId] = '" + dto.Id +
+                    query = " WHERE [MenuId] = '" + dto.Id +
                             "' AND [Deleted] = N'0'";
                 }
 
