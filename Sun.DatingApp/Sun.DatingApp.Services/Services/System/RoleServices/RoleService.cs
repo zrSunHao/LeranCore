@@ -91,7 +91,6 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
-        //TODO Rank
         /// <summary>
         /// 新建角色
         /// </summary>
@@ -103,6 +102,20 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
+                var exist = await _dataContext.SystemRoles.AnyAsync(x => x.Name == dto.Name);
+                if (exist)
+                {
+                    result.AddError("角色名已存在！");
+                    return result;
+                }
+
+                var account = this.GetUserInfo(accountId);
+                if (account.RoleRank >= dto.Rank)
+                {
+                    result.AddError("根据您的角色权限，只能新建等级大于【" + account.RoleRank + "】的角色！" );
+                    return result;
+                }
+
                 var entity = _mapper.Map<CreateOrEditRoleDto, SystemRole>(dto);
                 entity.CreatedById = accountId;
 
@@ -117,7 +130,6 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
-        //TODO Rank
         /// <summary>
         /// 修改角色
         /// </summary>
@@ -133,6 +145,19 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                 {
                     result.AddError("数据为空");
                     return result;
+                }
+
+                var exist = await _dataContext.SystemRoles.AnyAsync(x => x.Name == dto.Name && x.Id != dto.Id.Value);
+                if (exist)
+                {
+                    result.AddError("角色名已存在！");
+                    return result;
+                }
+
+                var account = this.GetUserInfo(accountId);
+                if (account.RoleRank >= dto.Rank)
+                {
+                    result.AddError("根据您的角色权限，只能修改等级大于【" + account.RoleRank + "】的角色！");
                 }
 
                 var role = await _dataContext.SystemRoles.FirstOrDefaultAsync(x => x.Id == dto.Id.Value);

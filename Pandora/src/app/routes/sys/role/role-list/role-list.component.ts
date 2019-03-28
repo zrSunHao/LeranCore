@@ -103,7 +103,7 @@ export class SysRoleRoleListComponent implements OnInit {
   add() {
     const isEdit = false;
     const title = '添加角色';
-    const entity = { id: null, name: null, intro: null };
+    const entity = { id: null, name: null, intro: null, rank: null };
 
     this.modal
       .createStatic(
@@ -119,9 +119,14 @@ export class SysRoleRoleListComponent implements OnInit {
   }
 
   edit(item: any) {
-    const isEdit = false;
+    const isEdit = true;
     const title = '修改角色';
-    const entity = { id: item.id, name: item.name, intro: item.intro };
+    const entity = {
+      id: item.id,
+      name: item.name,
+      intro: item.intro,
+      rank: item.rank,
+    };
 
     this.modal
       .createStatic(

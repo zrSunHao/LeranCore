@@ -23,7 +23,7 @@ export class PermissionAddComponent implements OnInit {
       code: { type: 'string', title: '编码', maxLength: 100 },
       rank: {
         type: 'string',
-        title: '排序',
+        title: '等级',
         maxLength: 10,
         format: 'regex',
         pattern: '^[0-9]*$',
@@ -42,7 +42,7 @@ export class PermissionAddComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'code', 'icon', 'intro', 'tagColor'],
+    required: ['name', 'code', 'icon', 'intro', 'tagColor', 'rank'],
     ui: {
       spanLabelFixed: 100,
       grid: { span: 12 },

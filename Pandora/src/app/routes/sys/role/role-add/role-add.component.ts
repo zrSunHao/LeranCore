@@ -22,11 +22,25 @@ export class SysRoleListRoleAddComponent implements OnInit {
   record: any = {};
   schema: SFSchema = {
     properties: {
-      name: { type: 'string', title: '名称', maxLength: 50 },
+      name: {
+        type: 'string',
+        title: '名称',
+        maxLength: 50,
+        ui: { placeholder: '角色名称' },
+      },
+      rank: {
+        type: 'string',
+        title: '等级',
+        maxLength: 10,
+        format: 'regex',
+        pattern: '^[0-9]*$',
+        ui: { placeholder: '角色等级' },
+      },
       intro: {
         type: 'string',
-        title: '描述',
+        title: '备注',
         ui: {
+          placeholder: '角色备注',
           widget: 'textarea',
           grid: { span: 24 },
           autosize: { minRows: 2, maxRows: 6 },
@@ -34,7 +48,7 @@ export class SysRoleListRoleAddComponent implements OnInit {
         maxLength: 200,
       },
     },
-    required: ['name', 'code', 'intro'],
+    required: ['name', 'rank', 'intro'],
     ui: {
       spanLabelFixed: 70,
       grid: { span: 24 },
