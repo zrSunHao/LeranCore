@@ -22,9 +22,18 @@ export class MenuPageAddComponent implements OnInit {
       menuName: { type: 'string', title: '菜单', readOnly: true },
       tagColor: { type: 'string', title: '标签颜色', maxLength: 100 },
       url: { type: 'string', title: 'URL', maxLength: 100 },
+      order: {
+        type: 'string',
+        title: '排序',
+        maxLength: 10,
+        format: 'regex',
+        pattern: '^[0-9]*$',
+      },
       icon: { type: 'string', title: '图标', maxLength: 100 },
       intro: {
-        type: 'string', title: '备注', maxLength: 200,
+        type: 'string',
+        title: '备注',
+        maxLength: 200,
         ui: {
           widget: 'textarea',
           grid: { span: 24 },
@@ -32,7 +41,7 @@ export class MenuPageAddComponent implements OnInit {
         },
       },
     },
-    required: ['name', 'url', 'icon', 'intro', 'tagColor'],
+    required: ['name', 'url', 'icon', 'intro', 'tagColor', 'order'],
     ui: {
       spanLabelFixed: 100,
       grid: { span: 12 },
@@ -43,9 +52,9 @@ export class MenuPageAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   save(value: any) {
     if (this.isEdit) {

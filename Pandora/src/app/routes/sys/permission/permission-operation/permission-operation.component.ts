@@ -142,11 +142,15 @@ export class PermissionOperationComponent implements OnInit {
 
   pageIndexChange(event) {
     this.paging.pageIndex = event;
-    this.loadData(this.item);
+    if (this.item != null) {
+      this.loadData(this.item);
+    }
   }
 
   pageSizeChange(event) {
     this.paging.pageSize = event;
-    this.loadData(this.item);
+    if (this.item != null) {
+      this.loadData(this.item);
+    }
   }
 }

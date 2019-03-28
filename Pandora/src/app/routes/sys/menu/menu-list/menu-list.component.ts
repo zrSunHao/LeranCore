@@ -116,6 +116,7 @@ export class MenuListComponent implements OnInit {
       icon: item.icon,
       tagColor: item.tagColor,
       intro: item.intro,
+      order: item.order,
       moduleId: item.moduleId,
       menuId: this.menu.id,
       menuName: this.menu.name,

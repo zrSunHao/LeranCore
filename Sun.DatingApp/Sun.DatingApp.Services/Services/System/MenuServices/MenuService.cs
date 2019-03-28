@@ -58,18 +58,8 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = new SystemMenu
-                {
-                    Id = Guid.NewGuid(),
-                    Name = dto.Name,
-                    TagColor = dto.TagColor,
-                    Icon = dto.Icon,
-                    Active = true,
-                    Intro = dto.Intro,
-                    Deleted = false,
-                    CreatedAt = DateTime.Now,
-                    CreatedById = CurrentUserId
-                };
+                var entity = _mapper.Map<MenuEditDto, SystemMenu>(dto);
+                entity.CreatedById = accountId;
 
                 _dataContext.SystemMenus.Add(entity);
                 await _dataContext.SaveChangesAsync();
@@ -106,6 +96,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.Intro = dto.Intro;
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdatedById = accountId;
+                entity.Order = dto.Order;
 
                 await _dataContext.SaveChangesAsync();
             }
@@ -217,20 +208,8 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
-                var entity = new SystemPage
-                {
-                    Id = Guid.NewGuid(),
-                    Name = dto.Name,
-                    Url = dto.Url,
-                    TagColor = dto.TagColor,
-                    Icon = dto.Icon,
-                    Active = true,
-                    Intro = dto.Intro,
-                    MenuId = dto.MenuId,
-                    Deleted = false,
-                    CreatedAt = DateTime.Now,
-                    CreatedById = CurrentUserId
-                };
+                var entity = _mapper.Map<PageEditDto, SystemPage>(dto);
+                entity.CreatedById = accountId;
 
                 _dataContext.SystemPages.Add(entity);
                 await _dataContext.SaveChangesAsync();
@@ -269,6 +248,7 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.MenuId = dto.MenuId;
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdatedById = accountId;
+                entity.Order = dto.Order;
 
                 await _dataContext.SaveChangesAsync();
             }

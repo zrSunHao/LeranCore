@@ -13,5 +13,7 @@ namespace Sun.DatingApp.Model.System.Menus.Dto
         public string Icon { get; set; }
 
         public string Intro { get; set; }
+
+        public int Order { get; set; }
     }
 }

@@ -6,8 +6,10 @@ using Sun.DatingApp.Utility.CacheUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Utility.Dapper;
 
@@ -139,7 +141,6 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
                 {
                     throw new ArgumentException("未获取到用户信息");
                 }
-
                 return role;
             }
             catch (Exception ex)
@@ -147,5 +148,7 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
                 throw ex;
             }
         }
+
+
     }
 }

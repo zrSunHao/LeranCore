@@ -70,6 +70,7 @@ export class MenuRootComponent implements OnInit {
       icon: null,
       tagColor: null,
       intro: null,
+      order: null,
     };
 
     this.modal
@@ -88,6 +89,7 @@ export class MenuRootComponent implements OnInit {
       icon: item.icon,
       tagColor: item.tagColor,
       intro: item.intro,
+      order: item.order,
     };
 
     this.modal
@@ -144,6 +146,7 @@ export class MenuRootComponent implements OnInit {
       icon: null,
       tagColor: item.tagColor,
       intro: null,
+      order: null,
       moduleId: null,
       menuId: item.id,
       menuName: item.name,

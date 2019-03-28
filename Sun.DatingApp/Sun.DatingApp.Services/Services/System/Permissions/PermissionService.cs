@@ -24,7 +24,6 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
 
         }
 
-        //TODO 分页
         public WebApiPagingResult<List<PermissionListModel>> GetPermission(PagingOptions<Guid> paging)
         {
             var result = new WebApiPagingResult<List<PermissionListModel>>();
