@@ -379,7 +379,14 @@ export class AccountListComponent implements OnInit {
     this.params.email = dto.email;
     this.params.nickname = dto.nickname;
     this.params.role = dto.role;
-    this.params.active = dto.active;
+    this.params.active = null;
+    if (dto.active === 1) {
+      this.params.active = true;
+    }
+    if (dto.active === 0) {
+      this.params.active = false;
+    }
+
     this.loadData();
   }
 

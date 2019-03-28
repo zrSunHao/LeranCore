@@ -169,7 +169,11 @@ export class MenuListComponent implements OnInit {
           this.list = [];
           this.total = 0;
         } else {
-          this.list = res.data;
+          if (res.data == null) {
+            this.list = [];
+          } else {
+            this.list = res.data;
+          }
           this.total = res.rowsCount;
         }
         this.loading = false;

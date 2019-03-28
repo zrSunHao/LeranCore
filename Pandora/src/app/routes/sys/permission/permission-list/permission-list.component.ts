@@ -129,7 +129,11 @@ export class PermissionListComponent implements OnInit {
             res.allMessages,
           );
         } else {
-          this.list = res.data;
+          if (res.data == null) {
+            this.list = [];
+          } else {
+            this.list = res.data;
+          }
           this.total = res.rowsCount;
         }
         this.loading = false;

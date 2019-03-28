@@ -774,26 +774,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                     }
                 }
 
-                if (dto.LatestLoginAtStart.HasValue)
-                {
-                    query = query + "AND [LatestLoginAt] > N'" + dto.LatestLoginAtStart.Value + "' ";
-                }
-
-                if (dto.LatestLoginAtEnd.HasValue)
-                {
-                    query = query + "AND [LatestLoginAt] < N'" + dto.LatestLoginAtEnd.Value + "' ";
-                }
-
-                if (dto.CreatedAtStart.HasValue)
-                {
-                    query = query + "AND [CreatedAt] > N'" + dto.CreatedAtStart.Value + "' ";
-                }
-
-                if (dto.CreatedAtEnd.HasValue)
-                {
-                    query = query + "AND [CreatedAt] < N'" + dto.CreatedAtEnd.Value + "' ";
-                }
-
                 if (!string.IsNullOrEmpty(query))
                 {
                     query = "WHERE " + query.Substring(3, query.Length-3);
