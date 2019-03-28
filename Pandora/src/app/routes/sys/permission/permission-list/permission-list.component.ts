@@ -89,6 +89,7 @@ export class PermissionListComponent implements OnInit {
       icon: null,
       tagColor: item.tagColor,
       intro: null,
+      rank: null,
       pageId: item.id,
     };
 

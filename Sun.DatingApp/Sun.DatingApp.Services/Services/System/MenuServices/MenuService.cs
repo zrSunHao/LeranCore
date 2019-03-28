@@ -147,6 +147,13 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
             var result = new WebApiResult();
             try
             {
+                var existPage = await _dataContext.SystemPages.AnyAsync(x=>x.MenuId == id && !x.Deleted);
+                if (existPage)
+                {
+                    result.AddError("当前菜单下存在页面，不能删除！");
+                    return result;
+                }
+
                 var entity = await _dataContext.SystemMenus.FirstOrDefaultAsync(x => x.Id == id);
                 if (entity == null)
                 {
@@ -157,13 +164,6 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.Deleted = true;
                 entity.DeletedAt = DateTime.Now;
                 entity.DeletedById = accountId;
-
-                await _dataContext.SystemPages.Where(x => x.MenuId == entity.Id).ForEachAsync(c =>
-                {
-                    c.Deleted = true;
-                    c.DeletedAt = DateTime.Now;
-                    c.DeletedById = accountId;
-                });
 
                 await _dataContext.SaveChangesAsync();
             }
@@ -309,6 +309,22 @@ namespace Sun.DatingApp.Services.Services.System.MenuServices
                 entity.Deleted = true;
                 entity.DeletedAt = DateTime.Now;
                 entity.DeletedById = accountId;
+
+                //删除角色关联的该页面权限
+                await _dataContext.SystemRolePermissions.Where(x => x.PageId == id).ForEachAsync(x =>
+                {
+                    x.Deleted = true;
+                    x.DeletedAt = DateTime.Now;
+                    x.DeletedById = accountId;
+                });
+
+                //删除页面下权限
+                await _dataContext.SystemPermissions.Where(x => x.PageId == id).ForEachAsync(x =>
+                {
+                    x.Deleted = true;
+                    x.DeletedAt = DateTime.Now;
+                    x.DeletedById = accountId;
+                });
 
                 await _dataContext.SaveChangesAsync();
             }

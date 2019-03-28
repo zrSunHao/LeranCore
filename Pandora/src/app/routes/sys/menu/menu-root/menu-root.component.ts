@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalHelper, _HttpClient } from '@delon/theme';
-import { NzNotificationService } from 'ng-zorro-antd';
+import { NzNotificationService, NzModalService } from 'ng-zorro-antd';
 import { MenuAddComponent } from '../menu-add/menu-add.component';
 import { MenuListComponent } from '../menu-list/menu-list.component';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
@@ -26,6 +26,7 @@ export class MenuRootComponent implements OnInit {
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
+    private modalService: NzModalService,
     private notification: NzNotificationService,
   ) {}
 
@@ -119,6 +120,14 @@ export class MenuRootComponent implements OnInit {
           item.active = !active;
         }
       });
+  }
+
+  deleteConfirm(item) {
+    this.modalService.confirm({
+      nzTitle: `<i>真的要删除【${item.name}】吗？</i>`,
+      nzContent: '<b></b>',
+      nzOnOk: () => this.delete(item),
+    });
   }
 
   delete(item) {

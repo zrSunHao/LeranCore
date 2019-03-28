@@ -18,6 +18,8 @@ namespace Sun.DatingApp.Model.System.Permissions.Model
 
         public string Intro { get; set; }
 
+        public int Rank { get; set; }
+
         public Guid PageId { get; set; } 
     }
 }

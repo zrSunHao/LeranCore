@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Sun.DatingApp.Data.Entities.System;
 using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.System.Menus.Model;
+using Sun.DatingApp.Model.System.Roles.Dto;
 using Sun.DatingApp.Model.System.Roles.Model;
 
 namespace Sun.DatingApp.Services.MappingProfiles
@@ -10,6 +12,15 @@ namespace Sun.DatingApp.Services.MappingProfiles
     {
         public RoleMappingProfile()
         {
+            CreateMap<CreateOrEditRoleDto, SystemRole>()
+                .ForMember(x => x.Id, x => x.MapFrom(y => Guid.NewGuid()))
+                .ForMember(x => x.Name, x => x.MapFrom(y => y.Name))
+                .ForMember(x => x.Active, x => x.MapFrom(y => true))
+                .ForMember(x => x.Intro, x => x.MapFrom(y => y.Intro))
+                .ForMember(x => x.Rank, x => x.MapFrom(y => y.Rank))
+                .ForMember(x => x.Deleted, x => x.MapFrom(y => false))
+                .ForMember(x => x.CreatedAt, x => x.MapFrom(y => DateTime.Now));
+
             CreateMap<SystemRole, RoleListModel>()
                 .ForMember(x => x.Id, x => x.MapFrom(y => y.Id))
                 .ForMember(x => x.Name, x => x.MapFrom(y => y.Name))

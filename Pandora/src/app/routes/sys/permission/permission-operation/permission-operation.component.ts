@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd';
+import { NzNotificationService, NzModalService } from 'ng-zorro-antd';
 import { _HttpClient, ModalHelper } from '@delon/theme';
 import { PermissionAddComponent } from '../permission-add/permission-add.component';
 import { PagingOptions } from '@shared/model/query-params.model';
@@ -28,6 +28,7 @@ export class PermissionOperationComponent implements OnInit {
   constructor(
     private http: _HttpClient,
     private modal: ModalHelper,
+    private modalService: NzModalService,
     private notification: NzNotificationService,
   ) {}
 
@@ -82,6 +83,7 @@ export class PermissionOperationComponent implements OnInit {
       icon: item.icon,
       tagColor: item.tagColor,
       intro: item.intro,
+      rank: item.rank,
       parentId: item.parentId,
     };
 
@@ -120,6 +122,14 @@ export class PermissionOperationComponent implements OnInit {
           this.initLoading = false;
         },
       );
+  }
+
+  deleteConfirm(item) {
+    this.modalService.confirm({
+      nzTitle: `<i>真的要删除【${item.name}】吗？</i>`,
+      nzContent: '<b></b>',
+      nzOnOk: () => this.delete(item),
+    });
   }
 
   delete(item: any): void {

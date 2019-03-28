@@ -9,5 +9,7 @@ namespace Sun.DatingApp.Model.System.Roles.Dto
         public string Name { get; set; }
 
         public string Intro { get; set; }
+
+        public int Rank { get; set; }
     }
 }

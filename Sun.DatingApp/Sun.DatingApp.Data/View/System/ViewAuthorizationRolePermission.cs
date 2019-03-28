@@ -18,5 +18,9 @@ namespace Sun.DatingApp.Data.View.System
 
         public int PermissionRank { get; set; }
 
+        public Guid PageId { get; set; }
+
+        public bool PageActive { get; set; }
+
     }
 }

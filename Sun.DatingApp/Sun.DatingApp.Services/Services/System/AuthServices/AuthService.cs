@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
+using Sun.DatingApp.Data.View.System;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.Common.Dto;
 using Sun.DatingApp.Model.System.Auth.Accounts.Dto;
@@ -11,17 +14,12 @@ using Sun.DatingApp.Model.System.Auth.Login.Model;
 using Sun.DatingApp.Model.System.Auth.Register.Dto;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using Sun.DatingApp.Utility.Password;
+using Sun.DatingApp.Utility.SqlUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using Dapper;
-using Microsoft.EntityFrameworkCore.Internal;
-using Sun.DatingApp.Data.View.System;
-using Sun.DatingApp.Utility.Password;
-using Sun.DatingApp.Utility.SqlUtility;
 
 namespace Sun.DatingApp.Services.Services.System.AuthServices
 {
@@ -534,36 +532,6 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
             catch (Exception ex)
             {
                 result.AddError("获取账号基本信息时出现异常");
-                result.AddError(ex.Message);
-                result.AddError(ex.InnerException?.Message);
-            }
-            return result;
-        }
-
-        public async Task<WebApiResult<AccountMenuInfo>> GetAccountMenu1(Guid id)
-        {
-            var result = new WebApiResult<AccountMenuInfo>();
-            try
-            {
-                var account = await _dataContext.SystemAccounts.FirstOrDefaultAsync(x => x.Id == id);
-                if (account == null)
-                {
-                    result.AddError("未找到对应的用户");
-                    return result;
-                }
-
-                var permsItems = await _dataContext.SystemRolePermissions.Where(x=>x.RoleId == account.RoleId && !x.Deleted).ToListAsync();
-                var pageIds = permsItems.Select(x => x.PageId).ToList();
-
-                if (pageIds.Any())
-                {
-                    var info = await this.GetAccountPermission(pageIds);
-                    result.Data = info;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.AddError("获取账号权限时出现异常");
                 result.AddError(ex.Message);
                 result.AddError(ex.InnerException?.Message);
             }

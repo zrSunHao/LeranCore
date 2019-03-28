@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { STComponent, STColumn, STChange, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
-import { NzNotificationService, isTemplateRef } from 'ng-zorro-antd';
+import { NzNotificationService, NzModalService } from 'ng-zorro-antd';
 import { MenuPageAddComponent } from '../menu-page-add/menu-page-add.component';
 import { ACLType } from '@delon/acl';
 import { PagingOptions, PagingSort } from '@shared/model/query-params.model';
@@ -44,10 +44,9 @@ export class MenuListComponent implements OnInit {
     { title: '页面名称', render: 'name', className: 'text-center' },
     { title: '备注', render: 'intro', className: 'text-center' },
     {
-      title: '是否启用',
+      title: '启用',
       render: 'custom',
       className: 'text-center',
-      click: (item: any) => this.active(item),
     },
     {
       title: '操作',
@@ -62,7 +61,7 @@ export class MenuListComponent implements OnInit {
           text: '删除',
           icon: 'anticon anticon-delete',
           acl: { ability: [10, 'Menu.DeletePage'], mode: 'oneOf' } as ACLType,
-          click: (item: any) => this.delete(item),
+          click: (item: any) => this.deleteConfirm(item),
         },
       ],
     },
@@ -79,6 +78,7 @@ export class MenuListComponent implements OnInit {
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
+    private modalService: NzModalService,
     private notification: NzNotificationService,
   ) {}
 
@@ -138,6 +138,39 @@ export class MenuListComponent implements OnInit {
         this.notification.create('success', '删除成功', res.allMessages);
         this.loadData(this.menu);
       }
+    });
+  }
+
+  deleteConfirm(item) {
+    this.modalService.confirm({
+      nzTitle: `<i>真的要删除【${item.name}】吗？</i>`,
+      nzContent: '<b></b>',
+      nzOnOk: () => this.delete(item),
+    });
+  }
+
+  activeConfirm(item) {
+    let msg = '';
+    const active = item.active;
+    console.log(active);
+    if (active) {
+      msg = '关闭';
+    } else {
+      msg = '开启';
+    }
+
+    this.modalService.confirm({
+      nzTitle: `<i>真的要${msg}【${item.name}】吗？</i>`,
+      nzContent: '<b></b>',
+      nzOnOk: () => this.active(item),
+      nzOnCancel: () => {
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < this.list.length; i++) {
+          if (this.list[i].id === item.id) {
+            this.list[i].active = active;
+          }
+        }
+      },
     });
   }
 

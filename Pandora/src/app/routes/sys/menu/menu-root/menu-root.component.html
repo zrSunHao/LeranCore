@@ -24,7 +24,7 @@
               <ng-template #editAction><a (click)="edit(item)">编辑</a></ng-template>
               <ng-template #addAction><a (click)="addPage(item)">添加页面</a></ng-template>
               <ng-template #deleteAction><a [acl]="{ ability: [10, 'Menu.DeleteMenu'], mode: 'oneOf' }"
-                  (click)="delete(item)">删除</a></ng-template>
+                  (click)="deleteConfirm(item)">删除</a></ng-template>
               <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="intro">
                 <ng-template #nzTitle>
                   <nz-tag [nzColor]="item.tagColor"><i nz-icon [type]="item.icon"

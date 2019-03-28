@@ -91,6 +91,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
+        //TODO Rank
         /// <summary>
         /// 新建角色
         /// </summary>
@@ -102,16 +103,10 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             var result = new WebApiResult();
             try
             {
-                var role = new SystemRole()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = dto.Name,
-                    Intro = dto.Intro,
-                    Deleted = false,
-                    CreatedAt = DateTime.Now,
-                    CreatedById = accountId,
-                };
-                _dataContext.SystemRoles.Add(role);
+                var entity = _mapper.Map<CreateOrEditRoleDto, SystemRole>(dto);
+                entity.CreatedById = accountId;
+
+                _dataContext.SystemRoles.Add(entity);
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -122,6 +117,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
             return result;
         }
 
+        //TODO Rank
         /// <summary>
         /// 修改角色
         /// </summary>
@@ -148,6 +144,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
 
                 role.Name = dto.Name;
                 role.Intro = dto.Intro;
+                role.Rank = dto.Rank;
                 role.UpdatedAt = DateTime.Now;
                 role.UpdatedById = accountId;
 

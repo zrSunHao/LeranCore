@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Sun.DatingApp.Data.Database;
 using Sun.DatingApp.Data.Entities.System;
@@ -8,12 +9,11 @@ using Sun.DatingApp.Model.System.Permissions.Dto;
 using Sun.DatingApp.Model.System.Permissions.Model;
 using Sun.DatingApp.Services.Services.Common.BaseServices;
 using Sun.DatingApp.Utility.CacheUtility;
+using Sun.DatingApp.Utility.SqlUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using Sun.DatingApp.Utility.SqlUtility;
 
 namespace Sun.DatingApp.Services.Services.System.Permissions
 {
@@ -63,20 +63,8 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
             var result = new WebApiResult<PermissionListModel>();
             try
             {
-                var entity = new SystemPermission
-                {
-                    Id = Guid.NewGuid(),
-                    Name = dto.Name,
-                    Code = dto.Code,
-                    Intro = dto.Intro,
-                    Icon = dto.Icon,
-                    TagColor = dto.TagColor,
-                    PageId = dto.PageId,
-                    Active = true,
-                    CreatedAt = DateTime.Now,
-                    CreatedById = accountId,
-                    Deleted = false
-                };
+                var entity = _mapper.Map<PermissionEditDto, SystemPermission>(dto);
+                entity.CreatedById = accountId;
 
                 _dataContext.SystemPermissions.Add(entity);
 
@@ -119,6 +107,7 @@ namespace Sun.DatingApp.Services.Services.System.Permissions
                 entity.Code = dto.Code;
                 entity.Intro = dto.Intro;
                 entity.Icon = dto.Icon;
+                entity.Rank = dto.Rank;
                 entity.TagColor = dto.TagColor;
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdatedById = accountId;
