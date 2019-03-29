@@ -22,6 +22,7 @@ namespace Sun.DatingApp.Data.Database
         public DbSet<SystemRole> SystemRoles { get; set; }
         public DbSet<SystemMenu> SystemMenus { get; set; }
         public DbSet<SystemPage> SystemPages { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
 
         #endregion
 
@@ -53,6 +54,7 @@ namespace Sun.DatingApp.Data.Database
             modelBuilder.ApplyConfiguration(new SystemRoleCfg());
             modelBuilder.ApplyConfiguration(new SystemMenuCfg());
             modelBuilder.ApplyConfiguration(new SystemPageCfg());
+            modelBuilder.ApplyConfiguration(new SystemSettingCfg());
 
             #endregion
 

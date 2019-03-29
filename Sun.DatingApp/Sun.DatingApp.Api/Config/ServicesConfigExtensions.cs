@@ -7,6 +7,7 @@ using Sun.DatingApp.Services.Services.System.AuthServices;
 using Sun.DatingApp.Services.Services.System.MenuServices;
 using Sun.DatingApp.Services.Services.System.Permissions;
 using Sun.DatingApp.Services.Services.System.RoleServices;
+using Sun.DatingApp.Services.Services.System.SettingServices;
 using Sun.DatingApp.Services.Services.System.UserServices;
 
 namespace Sun.DatingApp.Api.Config
@@ -22,6 +23,7 @@ namespace Sun.DatingApp.Api.Config
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<ISettingService, SettingService>();
         }
 
         public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
