@@ -1,3 +1,4 @@
+import { SettingListComponent } from './setting/setting-list/setting-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ACLGuard, ACLType, ACLCanType } from '@delon/acl';
@@ -12,7 +13,6 @@ import { UserNotificationComponent } from './user/user-notification/user-notific
 import { UserBindingComponent } from './user/user-binding/user-binding.component';
 import { AccountListComponent } from './account/account-list/account-list.component';
 import { PermissionListComponent } from './permission/permission-list/permission-list.component';
-
 
 const routes: Routes = [
   {
@@ -38,7 +38,10 @@ const routes: Routes = [
     component: RolePermissionComponent,
     data: {
       title: '角色权限管理列表',
-      guard: { ability: [10, 'Role.GetRolePermissions'], mode: 'oneOf' } as ACLType,
+      guard: {
+        ability: [10, 'Role.GetRolePermissions'],
+        mode: 'oneOf',
+      } as ACLType,
     },
   },
   {
@@ -57,6 +60,15 @@ const routes: Routes = [
     data: {
       title: '账号管理列表',
       guard: { ability: [10, 'Auth.Accounts'], mode: 'oneOf' } as ACLType,
+    },
+  },
+  {
+    path: 'setting-list',
+    component: SettingListComponent,
+    canActivate: [ACLGuard],
+    data: {
+      title: '系统设置管理',
+      guard: { ability: [10, 'Setting.GetSettings'], mode: 'oneOf' } as ACLType,
     },
   },
   {

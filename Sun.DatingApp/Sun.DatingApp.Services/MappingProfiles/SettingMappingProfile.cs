@@ -30,7 +30,7 @@ namespace Sun.DatingApp.Services.MappingProfiles
                 .ForMember(x => x.Value, x => x.MapFrom(y => y.Value))
                 .ForMember(x => x.CreatedById, x => x.Ignore())
                 .ForMember(x => x.CreatedAt, x => x.MapFrom(y => DateTime.Now))
-                .ForMember(x => x.CreatedAt, x => x.MapFrom(y => false));
+                .ForMember(x => x.Deleted, x => x.MapFrom(y => false));
         }
     }
 }

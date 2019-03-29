@@ -36,6 +36,10 @@ import { UserNotificationComponent } from './user/user-notification/user-notific
 import { UserSecurityComponent } from './user/user-security/user-security.component';
 import { UserComponent } from './user/user.component';
 
+// 系统设置
+import { SettingAddComponent } from './setting/setting-add/setting-add.component';
+import { SettingListComponent } from './setting/setting-list/setting-list.component';
+
 const COMPONENTS = [];
 
 const COMPONENTS_NOROUNT = [
@@ -58,6 +62,8 @@ const COMPONENTS_NOROUNT = [
   UserBindingComponent,
   UserNotificationComponent,
   UserSecurityComponent,
+  SettingListComponent,
+  SettingAddComponent,
 ];
 
 @NgModule({

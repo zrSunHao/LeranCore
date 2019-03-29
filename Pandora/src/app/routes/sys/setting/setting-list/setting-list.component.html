@@ -1,0 +1,19 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>
+    <button (click)="add()" nz-button nzType="primary"><i nz-icon type="plus" theme="outline"></i>添加配置</button>
+  </ng-template>
+</page-header>
+<nz-spin [nzSpinning]="loading">
+  <nz-card>
+    <sf mode="search" [schema]="searchSchema" (formSubmit)="search($event)" (formReset)="reset($event)"></sf>
+    <st #st [data]="list" [columns]="columns" [bordered]="true" [page]="stPage" (change)="_click($event)"
+      [total]="total">
+      <ng-template st-row="key" let-item let-index="index">
+        <nz-tag [nzColor]="'#2db7f5'">{{item.key}}</nz-tag>
+      </ng-template>
+      <ng-template st-row="value" let-item let-index="index">
+        <ellipsis length="20" tooltip>{{ item.value }}</ellipsis>
+      </ng-template>
+    </st>
+  </nz-card>
+</nz-spin>
