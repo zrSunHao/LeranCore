@@ -1,13 +1,14 @@
-import { AccountLockoutComponent } from './../account-lockout/account-lockout.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ACLType } from '@delon/acl';
 import { STComponent, STColumn, STChange, STPage } from '@delon/abc';
 import { SFSchema } from '@delon/form';
 import { ModalHelper, _HttpClient } from '@delon/theme';
-import { NzNotificationService } from 'ng-zorro-antd';
+import { NzNotificationService, NzModalService } from 'ng-zorro-antd';
 import { PagingOptions, PagingSort } from '@shared/model/query-params.model';
+
+import { AccountLockoutComponent } from './../account-lockout/account-lockout.component';
 import { AccountAddComponent } from '../account-add/account-add.component';
 import { AccountStatusComponent } from '../account-status/account-status.component';
-import { ACLType } from '@delon/acl';
 
 const GetAccountsUrl = 'Auth/Accounts';
 const ActiveAccountUrl = 'Auth/ActiveAccount';
@@ -79,7 +80,7 @@ export class AccountListComponent implements OnInit {
   columns: STColumn[] = [
     { title: 'ID', index: 'id', type: 'checkbox', selections: [] },
     { title: '头像', type: 'img', width: '50px', index: 'avatarUrl' },
-    { title: '用户名', index: 'userName', className: 'text-center' },
+    { title: '用户名', index: 'nickname', className: 'text-center' },
     { title: '邮箱', index: 'email', className: 'text-center' },
     { title: '角色', render: 'roleName', className: 'text-center' },
     {
@@ -143,6 +144,7 @@ export class AccountListComponent implements OnInit {
   constructor(
     private modal: ModalHelper,
     private http: _HttpClient,
+    private modalService: NzModalService,
     private notification: NzNotificationService,
   ) {}
 
@@ -155,7 +157,7 @@ export class AccountListComponent implements OnInit {
     const isEdit = false;
     const title = '添加账号';
     const warningMsg = '添加账号的正常途径是用户自行注册，请慎重考虑';
-    const entity = { userName: null, email: null, roleId: null };
+    const entity = { nickame: null, email: null, roleId: null, mobile: null };
 
     this.modal
       .createStatic(
@@ -199,8 +201,9 @@ export class AccountListComponent implements OnInit {
     const warningMsg = '添加账号的正常途径是用户自行修改，请慎重考虑';
     const entity = {
       id: item.id,
-      userName: item.userName,
+      nickname: item.nickname,
       email: item.email,
+      mobile: item.mobile,
       roleId: item.roleId,
     };
 
@@ -212,7 +215,9 @@ export class AccountListComponent implements OnInit {
       )
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(res => {
-        // TODO 加载列表数据
+        if (res != null) {
+          this.loadData();
+        }
       });
   }
 
@@ -271,6 +276,14 @@ export class AccountListComponent implements OnInit {
           }
         });
     }
+  }
+
+  deleteConfirm(item) {
+    this.modalService.confirm({
+      nzTitle: `<i>真的要删除【${item.name}】吗？</i>`,
+      nzContent: '<b></b>',
+      nzOnOk: () => this.deleteAccount(item),
+    });
   }
 
   deleteAccount(item) {

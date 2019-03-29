@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef, NzNotificationService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
@@ -19,14 +20,21 @@ export class AccountAddComponent implements OnInit {
 
   schema: SFSchema = {
     properties: {
-      userName: { type: 'string', title: '用户名', maxLength: 50 },
-      email: { type: 'string', title: '邮箱', maxLength: 100 },
+      nickname: { type: 'string', title: '用户名', maxLength: 50 },
+      email: { type: 'string', title: '邮箱', maxLength: 100, format: 'email' },
+      mobile: {
+        type: 'string',
+        title: '手机号',
+        maxLength: 11,
+        format: 'mobile',
+      },
       roleId: {
-        type: 'string', title: '角色',
+        type: 'string',
+        title: '角色',
         enum: JSON.parse(localStorage.getItem('roleItems')),
       },
     },
-    required: ['name', 'email', 'roleId'],
+    required: ['nickname', 'mobile', 'email', 'roleId'],
     ui: {
       spanLabelFixed: 80,
       // grid: { span: 12 },
@@ -36,9 +44,9 @@ export class AccountAddComponent implements OnInit {
     private modal: NzModalRef,
     public http: _HttpClient,
     private notification: NzNotificationService,
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   save(value: any) {
     if (this.isEdit) {

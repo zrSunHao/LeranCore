@@ -288,7 +288,8 @@ namespace Sun.DatingApp.Services.Services.System.AuthServices
                 }
 
                 entity.Email = dto.Email;
-                entity.Nickname = dto.UserName;
+                entity.Nickname = dto.Nickname;
+                entity.Mobile = dto.Mobile;
                 entity.RoleId = dto.RoleId;
 
                 await _dataContext.SaveChangesAsync();

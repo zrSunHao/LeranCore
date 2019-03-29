@@ -1,7 +1,7 @@
-import { AccountListComponent } from './account/account-list/account-list.component';
-import { PermissionListComponent } from './permission/permission-list/permission-list.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ACLGuard, ACLType, ACLCanType } from '@delon/acl';
+
 import { SysRoleRoleListComponent } from './role/role-list/role-list.component';
 import { RolePermissionComponent } from './role/role-permission/role-permission.component';
 import { MenuRootComponent } from './menu/menu-root/menu-root.component';
@@ -10,7 +10,9 @@ import { UserInfoComponent } from './user/user-info/user-info.component';
 import { UserSecurityComponent } from './user/user-security/user-security.component';
 import { UserNotificationComponent } from './user/user-notification/user-notification.component';
 import { UserBindingComponent } from './user/user-binding/user-binding.component';
-import { ACLGuard, ACLType, ACLCanType } from '@delon/acl';
+import { AccountListComponent } from './account/account-list/account-list.component';
+import { PermissionListComponent } from './permission/permission-list/permission-list.component';
+
 
 const routes: Routes = [
   {

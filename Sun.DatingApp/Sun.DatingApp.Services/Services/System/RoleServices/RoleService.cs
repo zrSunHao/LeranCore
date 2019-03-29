@@ -147,7 +147,7 @@ namespace Sun.DatingApp.Services.Services.System.RoleServices
                     return result;
                 }
 
-                var exist = await _dataContext.SystemRoles.AnyAsync(x => x.Name == dto.Name && x.Id != dto.Id.Value);
+                var exist = await _dataContext.SystemRoles.AnyAsync(x => !x.Deleted && x.Name == dto.Name && x.Id != dto.Id.Value);
                 if (exist)
                 {
                     result.AddError("角色名已存在！");
