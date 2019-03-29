@@ -149,6 +149,25 @@ namespace Sun.DatingApp.Services.Services.Common.BaseServices
             }
         }
 
+        public string GetAppSetting(string key)
+        {
+            var settingValue = "";
+            var exist = this._catchHandler.Exists(key);
+            if (exist)
+            {
+                settingValue = this._catchHandler.Get<string>(key);
+            }
+            else
+            {
+                var sql = "SELECT TOP 1 * FROM [SystemSetting] WHERE [Key] LIKE '%" + key + "%'";
+                var entity = _dapperContext.Conn.QueryFirstOrDefault<SystemSetting>(sql);
+                if (entity!=null)
+                {
+                    this._catchHandler.Add(key, entity.Value);
+                }
+            }
 
+            return settingValue;
+        }
     }
 }

@@ -99,6 +99,13 @@ namespace Sun.DatingApp.Services.Services.System.SettingServices
                 entity.UpdatedById = accountId;
 
                 await _dataContext.SaveChangesAsync();
+
+                var value = dto.Value;
+                if (string.IsNullOrEmpty(value))
+                {
+                    value = "";
+                }
+                this._catchHandler.Replace(dto.Key, value);
             }
             catch (Exception ex)
             {
