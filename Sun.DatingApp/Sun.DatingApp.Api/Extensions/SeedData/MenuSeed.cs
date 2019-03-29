@@ -544,6 +544,9 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 CreatedAt = DateTime.Now,
                 CreatedById = Guid.Empty,
             };
+
+            context.SystemPermissions.Add(getSettings);
+            context.SystemPermissions.Add(editSetting);
         }
     }
 }
