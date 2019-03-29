@@ -175,7 +175,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
                 Name = "账号管理",
                 Url = "/sys/account-list",
                 MenuId = module.Id,
-                Order = 3,
+                Order = 4,
                 Active = true,
                 Intro = "账号的管理、角色配置，当前账号只能查看低于所属角色等级下的账号；只有【系统超级管理员】和【业务超级管理员】才有此页面的权限；",
                 TagColor = "#2db7f5",
@@ -186,11 +186,31 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
             };
             AccountPagePerms(context,accountPage.Id);//添加权限
 
+            //设置管理页
+            var settingPage = new SystemPage
+            {
+                Id = Guid.NewGuid(),
+                Name = "设置管理",
+                Url = "/sys/setting-list",
+                MenuId = module.Id,
+                Order = 3,
+                Active = true,
+                Intro = "系统动态配置管理；只有【系统超级管理员】才有此页面的权限；",
+                TagColor = "#FFA500",
+                Icon = "setting",
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+                Deleted = false,
+            };
+            SettingPagePerms(context, settingPage.Id);
+
             context.SystemMenus.Add(module);
+
             context.SystemPages.Add(accountPage);
             context.SystemPages.Add(rolePage);
             context.SystemPages.Add(menuPage);
             context.SystemPages.Add(permissionPage);
+            context.SystemPages.Add(settingPage);
 
             //保存
             context.SaveChanges();
@@ -482,6 +502,48 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
             context.SystemPermissions.Add(getRoles);
             context.SystemPermissions.Add(getRolePermissions);
             context.SystemPermissions.Add(deleteRole);
+        }
+
+        /// <summary>
+        /// 设置管理页添加权限
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="pageId"></param>
+        private static void SettingPagePerms(DataContext context, Guid pageId)
+        {
+            //加载列表数据
+            var getSettings = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "列表数据加载",
+                Code = "Setting.GetSettings",
+                Intro = "最重要的权限，只有加载设置列表数据之后，才能进行其他的操作；",
+                Icon = "eye",
+                TagColor = "#f50",
+                Active = true,
+                PageId = pageId,
+                Rank = 0,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
+
+            //编辑
+            var editSetting = new SystemPermission
+            {
+                Id = Guid.NewGuid(),
+                Name = "编辑Setting",
+                Code = "Setting.EditSetting",
+                Intro = "修改Setting；",
+                Icon = "edit",
+                TagColor = "magenta",
+                Active = true,
+                PageId = pageId,
+                Rank = 1,
+                Deleted = false,
+                CreatedAt = DateTime.Now,
+                CreatedById = Guid.Empty,
+            };
         }
     }
 }

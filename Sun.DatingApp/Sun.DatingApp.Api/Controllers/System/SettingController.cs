@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Sun.DatingApp.Api.Extensions.Authorization;
 using Sun.DatingApp.Model.Common;
 using Sun.DatingApp.Model.System.Setting.Dto;
 using Sun.DatingApp.Model.System.Setting.Model;
@@ -24,6 +25,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="paging"></param>
         /// <returns></returns>
         [HttpPost("GetSettings")]
+        [PermissionFilter(Permissions.GetSettings)]
         public WebApiPagingResult<List<SettingListModel>> GetSettings(PagingOptions<SettingSearchDto> paging)
         {
             return _service.GetSettings(paging);
@@ -55,6 +57,7 @@ namespace Sun.DatingApp.Api.Controllers.System
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost("EditSetting")]
+        [PermissionFilter(Permissions.EditSetting)]
         public async Task<WebApiResult> EditSetting(EditSettingDto dto)
         {
             var result = new WebApiResult();

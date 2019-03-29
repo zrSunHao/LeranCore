@@ -106,7 +106,7 @@ namespace Sun.DatingApp.Api.Extensions.SeedData
             var perms = context.SystemPermissions.ToList();
             if (!perms.Any()) return;
 
-            var besidePages = new List<string>{"菜单管理","权限管理","角色管理"};
+            var besidePages = new List<string> {"菜单管理", "权限管理", "角色管理", "设置管理"};
             var besidePageIds = context.SystemPages.Where(x => !besidePages.Contains(x.Name)).Select(x => x.Id).ToList();
 
             var rPerms = new List<SystemRolePermission>();

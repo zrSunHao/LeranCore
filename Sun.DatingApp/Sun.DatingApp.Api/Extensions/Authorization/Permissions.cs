@@ -58,6 +58,15 @@ namespace Sun.DatingApp.Api.Extensions.Authorization
         #endregion
 
 
+        #region 设置管理
+
+        //账号列表数据加载
+        public const string GetSettings = "Setting.GetSettings";
+        //添加账号
+        public const string EditSetting = "Setting.EditSetting";
+
+        #endregion
+
         #region 起始页1
 
         //数据加载
